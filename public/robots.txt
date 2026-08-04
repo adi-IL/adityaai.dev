@@ -1,0 +1,5 @@
+# adityaai.dev
+User-agent: *
+Allow: /
+
+Sitemap: https://www.adityaai.dev/sitemap.xml

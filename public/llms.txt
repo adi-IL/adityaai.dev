@@ -1,0 +1,47 @@
+# adityaai.dev
+
+Personal lab site for Aditya Gaurav — AI Engineer & Systems Architect.
+Focus: decision tools for people who design production AI systems
+(agents, memory, inference economics, MCP, architecture).
+
+## Person
+- Name: Aditya Gaurav
+- Role: AI Engineer & Systems Architect
+- Location: Sonipat, Haryana, India
+- Site: https://www.adityaai.dev
+- GitHub: https://github.com/adityaidev
+- LinkedIn: https://www.linkedin.com/in/adityaai/
+- X: https://x.com/adityaaidev
+
+## Pages
+- Home: https://www.adityaai.dev/
+- About: https://www.adityaai.dev/about
+- Essays: https://www.adityaai.dev/articles (7 curated; not a high-volume blog)
+- Projects: https://www.adityaai.dev/projects
+
+## Lab products
+- FRIDAY — https://friday.adityaai.dev — generative 3D engineering visualization
+- Sentinel — https://sentinel.adityaai.dev — multi-agent competitive intelligence
+- OpalServe — https://opalserve.adityaai.dev — MCP registry & team gateway
+- Ohh-my-excel — https://github.com/adityaidev/Ohh-my-excel
+- mt5-quant-windows — https://github.com/adityaidev/mt5-quant-windows
+
+## Essays (shelf)
+Forms: Framework | Architecture | Principle. Prefer permanent decision tools over news.
+- [Framework] "Memory Stacks for Agents: A Deep Dive into Episodic, Semantic, and Procedural Architecture" (Apr 2026)
+  https://www.adityaai.dev/articles/memory-stacks-for-agents
+- [Framework] "Inference Economics for Agents: A Research Framework for Why Token Cost Is the Wrong Metric" (Apr 2026)
+  https://www.adityaai.dev/articles/inference-economics-for-agents
+- [Architecture] "Software 3.0: What It Actually Means to Architect AI Systems" (Jan 2026)
+  https://www.adityaai.dev/articles/software-3-architecting-ai
+- [Principle] "The "Product Is the Model" Principle - And How to Actually Apply It" (Nov 2025)
+  https://www.adityaai.dev/articles/product-is-the-model
+- [Framework] "The MCP Security Paradox: How the Protocol That Connects Everything Also Exposes Everything" (May 2026)
+  https://www.adityaai.dev/articles/mcp-security-paradox
+- [Architecture] "The Big AI Systems Architecture Comparison" (Mar 2026)
+  https://www.adityaai.dev/articles/ai-systems-architecture-comparison
+- [Architecture] "The 6 Paradigm Shifts Nobody Told You About (2026 Edition)" (Jan 2026)
+  https://www.adityaai.dev/articles/six-paradigm-shifts
+
+## Stack
+React 19, TypeScript, Vite, Tailwind, Vercel, Resend, Gemini, MCP, Three.js

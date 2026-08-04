@@ -1,0 +1,155 @@
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+
+@theme {
+  --font-sans: "Satoshi", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Cabinet Grotesk", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+
+  --color-electric-lime: #CAFF4A;
+  --color-electric-lime-dim: rgba(202, 255, 74, 0.1);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Compositor-only reveal used by the /articles grid cards in place of the
+   old `whileInView` Motion animation. Pure CSS keyframes run off the main
+   thread, so 40+ cards can stagger in without firing IntersectionObservers
+   or Motion state updates during scroll. */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translate3d(0, 20px, 0); }
+  to { opacity: 1; transform: translate3d(0, 0, 0); }
+}
+
+@utility animate-fade-up {
+  animation: fadeUp 0.6s cubic-bezier(0.32, 0.72, 0, 1) both;
+}
+
+@keyframes floatGlow1 {
+  0% { transform: translate(0, 0) scale(1); opacity: 0.5; }
+  33% { transform: translate(30px, -50px) scale(1.1); opacity: 0.8; }
+  66% { transform: translate(-20px, 20px) scale(0.9); opacity: 0.6; }
+  100% { transform: translate(0, 0) scale(1); opacity: 0.5; }
+}
+
+@keyframes floatGlow2 {
+  0% { transform: translate(0, 0) scale(1); opacity: 0.5; }
+  33% { transform: translate(-30px, 40px) scale(0.9); opacity: 0.7; }
+  66% { transform: translate(40px, -20px) scale(1.1); opacity: 0.8; }
+  100% { transform: translate(0, 0) scale(1); opacity: 0.5; }
+}
+
+@keyframes floatGlow3 {
+  0% { transform: translate(0, 0) scale(1); opacity: 0.3; }
+  50% { transform: translate(50px, 50px) scale(1.2); opacity: 0.6; }
+  100% { transform: translate(0, 0) scale(1); opacity: 0.3; }
+}
+
+@utility animate-float-glow-1 {
+  animation: floatGlow1 15s ease-in-out infinite;
+}
+
+@utility animate-float-glow-2 {
+  animation: floatGlow2 18s ease-in-out infinite;
+}
+
+@utility animate-float-glow-3 {
+  animation: floatGlow3 20s ease-in-out infinite;
+}
+
+html {
+  scrollbar-gutter: stable;
+  scroll-behavior: smooth;
+  height: 100%;
+}
+
+/* Honor reduced-motion users for scroll only. We deliberately don't nuke
+   every CSS animation/transition here because:
+   - The Motion library already respects prefers-reduced-motion on JS
+     animations (hero intro, marquee, carousel, magnetic buttons).
+   - A universal `*` animation override with !important was killing the
+     carefully-tuned CSS keyframes (floatGlow blobs, electric-lime pulse
+     dots) even for users who just wanted scroll to be less aggressive. */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+body {
+  background-color: #000000;
+  color: var(--color-zinc-50);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  overscroll-behavior-y: none;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Custom minimal scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-zinc-800);
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-electric-lime);
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display);
+}
+
+::selection {
+  background-color: var(--color-electric-lime);
+  color: var(--color-zinc-950);
+}
+
+/* Promote heavy animated elements onto their own GPU layer so the Home
+   marquee and SVG signatures don't trigger layout thrash
+   on low-end phones. Opt-in via className so we don't over-promote. */
+.gpu {
+  transform: translateZ(0);
+  will-change: transform;
+  backface-visibility: hidden;
+  /* Isolates paint so scroll redraws only this element, not the whole page. */
+  contain: layout paint;
+}
+
+/* Stabilises `backdrop-filter` (backdrop-blur-*) elements by putting them on
+   their own compositor layer. Without this, every scroll frame re-samples
+   the blurred region against the newly-scrolled content behind it, which is
+   the dominant cause of "scroll feels stuck" on long article + grid pages
+   where a fixed navbar sits above content. Apply to any fixed element that
+   uses backdrop-blur. */
+.bd-stable {
+  transform: translateZ(0);
+  will-change: backdrop-filter;
+  isolation: isolate;
+}
+
+/* Apply `contain: content` to long-form article bodies so their layout and
+   paint don't cascade into the rest of the page while scrolling. */
+.article-body {
+  contain: content;
+}
+
+/* Previously used `content-visibility: auto` here to skip off-screen
+   rendering. That win shows up on synthetic benchmarks but the real-world
+   cost - layout + paint triggering the moment the section enters the
+   viewport - is exactly the "scroll feels stuck" symptom users reported
+   while scrolling fast through Home and the articles grid. We fall back
+   to `contain: layout paint` which still isolates the section from the
+   rest of the page's paint pass without gating it on scroll position. */
+.cv-auto {
+  contain: layout paint;
+}

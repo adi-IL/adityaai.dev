@@ -1,0 +1,111 @@
+[
+  {
+    "slug": "memory-stacks-for-agents",
+    "title": "Memory Stacks for Agents: A Deep Dive into Episodic, Semantic, and Procedural Architecture",
+    "excerpt": "Memory is the layer below reasoning, and most agent teams build it wrong. A systems architect's field guide to the three kinds of memory your agent actually needs, and how to make them work together.",
+    "dateISO": "2026-04-16",
+    "date": "APR 16, 2026",
+    "form": "Framework",
+    "category": "Framework",
+    "topics": [
+      "agents",
+      "memory"
+    ],
+    "featured": true,
+    "readingTime": 7,
+    "wordCount": 1536
+  },
+  {
+    "slug": "inference-economics-for-agents",
+    "title": "Inference Economics for Agents: A Research Framework for Why Token Cost Is the Wrong Metric",
+    "excerpt": "Every team building agents in 2026 is optimizing the wrong number. Token cost tells you a fraction of the story. Here is a framework for the other four fractions.",
+    "dateISO": "2026-04-13",
+    "date": "APR 13, 2026",
+    "form": "Framework",
+    "category": "Framework",
+    "topics": [
+      "agents",
+      "economics"
+    ],
+    "featured": true,
+    "readingTime": 6,
+    "wordCount": 1288
+  },
+  {
+    "slug": "software-3-architecting-ai",
+    "title": "Software 3.0: What It Actually Means to Architect AI Systems",
+    "excerpt": "This framework is elegant and widely cited. But it stops at the naming layer. It tells you what the eras are. It doesn't tell you what it means to be a systems architect in Software 3.0.",
+    "dateISO": "2026-01-15",
+    "date": "JAN 15, 2026",
+    "form": "Architecture",
+    "category": "Architecture",
+    "topics": [
+      "architecture"
+    ],
+    "featured": true,
+    "readingTime": 6,
+    "wordCount": 1194
+  },
+  {
+    "slug": "product-is-the-model",
+    "title": "The \"Product Is the Model\" Principle - And How to Actually Apply It",
+    "excerpt": "\"The product is the model. The approach is to expose the model as directly as possible, with minimal scaffolding, and allow the model to determine the best approach.\"",
+    "dateISO": "2025-11-10",
+    "date": "NOV 10, 2025",
+    "form": "Principle",
+    "category": "Principle",
+    "topics": [
+      "product",
+      "models"
+    ],
+    "featured": true,
+    "readingTime": 5,
+    "wordCount": 1039
+  },
+  {
+    "slug": "mcp-security-paradox",
+    "title": "The MCP Security Paradox: How the Protocol That Connects Everything Also Exposes Everything",
+    "excerpt": "A critical vulnerability in the Model Context Protocol surfaced in April - 150 million downloads exposed to remote execution risk. Cloudflare published a reference architecture. AWS Bedrock…",
+    "dateISO": "2026-05-01",
+    "date": "MAY 01, 2026",
+    "form": "Framework",
+    "category": "Framework",
+    "topics": [
+      "security",
+      "mcp"
+    ],
+    "featured": false,
+    "readingTime": 6,
+    "wordCount": 1242
+  },
+  {
+    "slug": "ai-systems-architecture-comparison",
+    "title": "The Big AI Systems Architecture Comparison",
+    "excerpt": "Raschka compared LLM architectures across 7 years. This compares AI systems paradigms across 5 years of production deployment.",
+    "dateISO": "2026-03-05",
+    "date": "MAR 05, 2026",
+    "form": "Architecture",
+    "category": "Architecture",
+    "topics": [
+      "architecture"
+    ],
+    "featured": false,
+    "readingTime": 8,
+    "wordCount": 1729
+  },
+  {
+    "slug": "six-paradigm-shifts",
+    "title": "The 6 Paradigm Shifts Nobody Told You About (2026 Edition)",
+    "excerpt": "An AI Systems Architect's Year-in-Review - Inspired by Karpathy's format, written for the systems layer.",
+    "dateISO": "2026-01-02",
+    "date": "JAN 02, 2026",
+    "form": "Architecture",
+    "category": "Architecture",
+    "topics": [
+      "architecture"
+    ],
+    "featured": false,
+    "readingTime": 8,
+    "wordCount": 1595
+  }
+]
