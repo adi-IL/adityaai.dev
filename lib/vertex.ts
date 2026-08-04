@@ -1,48 +1,76 @@
 import { GoogleGenAI } from '@google/genai';
 import fs from 'node:fs';
-import os from 'node:os';
 import path from 'node:path';
 
+/**
+ * Vertex / Gemini client — same auth pattern as sentinel-main:
+ *  1) GEMINI_API_KEY / GOOGLE_API_KEY (Google AI Studio)
+ *  2) else Vertex ADC via GCP_CREDENTIALS_JSON (or aliases) written to /tmp
+ *  3) project + location from GCP_PROJECT_ID / GCP_LOCATION (with GOOGLE_* aliases)
+ */
+
 let client: GoogleGenAI | null = null;
-let credentialsPath: string | null = null;
+
+function credentialsJsonFromEnv(): string | undefined {
+  const raw =
+    process.env.GCP_CREDENTIALS_JSON?.trim() ||
+    process.env.GOOGLE_SERVICE_ACCOUNT_JSON?.trim() ||
+    process.env.GOOGLE_CREDENTIALS_JSON?.trim();
+  return raw || undefined;
+}
 
 /**
- * Ensure ADC-compatible credentials file when GOOGLE_SERVICE_ACCOUNT_JSON
- * is provided (Vercel / CI). Local gcloud ADC is used otherwise.
+ * Workaround for Vercel: write SA JSON from env to /tmp so ADC can load it.
+ * Mirrors sentinel `api/_shared/gemini.ts`.
  */
-function ensureServiceAccountCredentials(): void {
-  if (process.env.GOOGLE_APPLICATION_CREDENTIALS) return;
-  const raw = process.env.GOOGLE_SERVICE_ACCOUNT_JSON?.trim();
+function ensureGcpCredentialsFromEnv(): void {
+  if (process.env.GOOGLE_APPLICATION_CREDENTIALS) {
+    // Already pointed at a file (local ADC path or previous write)
+    return;
+  }
+  const raw = credentialsJsonFromEnv();
   if (!raw) return;
 
-  if (!credentialsPath) {
-    const file = path.join(os.tmpdir(), `adityaai-gcp-sa-${process.pid}.json`);
-    // Accept raw JSON or base64
-    let json = raw;
-    if (!raw.startsWith('{')) {
-      try {
-        json = Buffer.from(raw, 'base64').toString('utf8');
-      } catch {
-        /* keep raw */
-      }
+  let json = raw;
+  // Accept base64-encoded JSON as well
+  if (!raw.startsWith('{')) {
+    try {
+      const decoded = Buffer.from(raw, 'base64').toString('utf8');
+      if (decoded.trim().startsWith('{')) json = decoded;
+    } catch {
+      /* keep raw */
     }
-    fs.writeFileSync(file, json, { mode: 0o600 });
-    credentialsPath = file;
   }
-  process.env.GOOGLE_APPLICATION_CREDENTIALS = credentialsPath;
+
+  const tmpPath = path.join('/tmp', 'gcp_adc.json');
+  try {
+    if (!fs.existsSync(tmpPath)) {
+      fs.writeFileSync(tmpPath, json, { encoding: 'utf-8', mode: 0o600 });
+    }
+    process.env.GOOGLE_APPLICATION_CREDENTIALS = tmpPath;
+  } catch (err) {
+    console.error('Failed to write GCP credentials to /tmp', err);
+  }
 }
 
 export function getVertexProject(): string {
   return (
+    process.env.GCP_PROJECT_ID ||
     process.env.GOOGLE_CLOUD_PROJECT ||
     process.env.GCLOUD_PROJECT ||
+    process.env.VITE_GCP_PROJECT_ID ||
     process.env.GCP_PROJECT ||
     ''
   );
 }
 
 export function getVertexLocation(): string {
-  return process.env.GOOGLE_CLOUD_LOCATION || process.env.VERTEX_LOCATION || 'us-central1';
+  return (
+    process.env.GCP_LOCATION ||
+    process.env.GOOGLE_CLOUD_LOCATION ||
+    process.env.VERTEX_LOCATION ||
+    'us-central1'
+  );
 }
 
 export function getChatModel(): string {
@@ -54,23 +82,39 @@ export function isSearchEnabled(): boolean {
   return v === '1' || v === 'true' || v === 'yes';
 }
 
-export function getGenAI(): GoogleGenAI {
-  if (client) return client;
+/**
+ * Same priority as Sentinel: API key first, then Vertex + env credentials.
+ */
+export function getGenAI(userKey?: string): GoogleGenAI {
+  if (client && !userKey) return client;
 
-  ensureServiceAccountCredentials();
+  const apiKey =
+    (userKey && userKey.trim()) ||
+    process.env.GEMINI_API_KEY?.trim() ||
+    process.env.GOOGLE_API_KEY?.trim();
+
+  if (apiKey) {
+    const c = new GoogleGenAI({ apiKey });
+    if (!userKey) client = c;
+    return c;
+  }
+
+  ensureGcpCredentialsFromEnv();
+
   const project = getVertexProject();
   if (!project) {
     throw new Error(
-      'GOOGLE_CLOUD_PROJECT is not set. Set it to your GCP project id (Vertex AI).',
+      'Set GCP_PROJECT_ID (or GOOGLE_CLOUD_PROJECT) for Vertex, or set GEMINI_API_KEY.',
     );
   }
 
-  client = new GoogleGenAI({
+  const c = new GoogleGenAI({
     vertexai: true,
     project,
     location: getVertexLocation(),
   });
-  return client;
+  if (!userKey) client = c;
+  return c;
 }
 
 export function extractText(response: {

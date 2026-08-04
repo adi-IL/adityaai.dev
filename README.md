@@ -121,11 +121,25 @@ React 19 · React Router · TypeScript · Vite · Tailwind 4 · Motion · Vercel
 Floating widget (bottom-right) answers questions about the essay shelf and lab projects.
 
 - **API:** `POST /api/chat` with `{ messages: [{ role, content }] }`
-- **Model:** Vertex AI Gemini via `@google/genai` (`vertexai: true`)
+- **Model:** Gemini via `@google/genai` — **same auth pattern as `sentinel-main`**
 - **Context:** essay meta + project registry (site-first system prompt)
-- **Web research:** optional Google Search grounding when `CHAT_ENABLE_SEARCH=true` and the question looks external
-- **Local auth:** Application Default Credentials (`gcloud auth application-default login`)
-- **Production:** set `GOOGLE_SERVICE_ACCOUNT_JSON` (service account with Vertex AI User)
+- **Web research:** optional Google Search grounding when `CHAT_ENABLE_SEARCH=true`
+
+**Auth order (identical to Sentinel `api/_shared/gemini.ts`):**
+
+1. `GEMINI_API_KEY` / `GOOGLE_API_KEY` → Google AI Studio  
+2. Else Vertex: write `GCP_CREDENTIALS_JSON` to `/tmp/gcp_adc.json`, set `GOOGLE_APPLICATION_CREDENTIALS`, then  
+   `new GoogleGenAI({ vertexai: true, project: GCP_PROJECT_ID, location: GCP_LOCATION })`
+
+**Vercel env (mirror `sentinel-main` Production):**
+
+| Name | Notes |
+| --- | --- |
+| `GCP_PROJECT_ID` | Same project as Sentinel |
+| `GCP_LOCATION` | e.g. `us-central1` |
+| `GCP_CREDENTIALS_JSON` | Full service-account JSON (sensitive). Copy from Sentinel → adityaai.dev in the Vercel dashboard (CLI cannot re-export encrypted secrets). |
+
+Aliases `GOOGLE_CLOUD_*` / `GOOGLE_SERVICE_ACCOUNT_JSON` also work. Local dev can use ADC instead of the JSON.
 
 ---
 
@@ -156,11 +170,12 @@ Node.js 20+.
 | `SUBSCRIBE_SECRET` | No | HMAC for confirm links (defaults to `RESEND_API_KEY`) |
 | `APP_URL` | No | Origin in confirm emails (default `https://www.adityaai.dev`) |
 | `NOTIFY_EMAIL` | No | Your inbox for leads / feedback / confirmed subs |
-| `GOOGLE_CLOUD_PROJECT` | For chat | GCP project with Vertex AI |
-| `GOOGLE_CLOUD_LOCATION` | No | Default `us-central1` |
+| `GCP_PROJECT_ID` | For Vertex chat | Same as Sentinel |
+| `GCP_LOCATION` | No | Default `us-central1` |
+| `GCP_CREDENTIALS_JSON` | Prod Vertex | SA JSON string (copy from Sentinel dashboard) |
+| `GEMINI_API_KEY` | Optional | Skips Vertex if set (AI Studio) |
 | `GEMINI_MODEL` | No | Default `gemini-2.5-flash` |
-| `CHAT_ENABLE_SEARCH` | No | Default `true` — Google Search grounding |
-| `GOOGLE_SERVICE_ACCOUNT_JSON` | Prod chat | SA key JSON/base64 (Vercel; local uses ADC) |
+| `CHAT_ENABLE_SEARCH` | No | Default `true` |
 | `PORT` | No | Local server port (default `3000`) |
 
 **Newsletter:** double opt-in only. `POST /api/subscribe` sends a confirm email; welcome + Resend contact run after `GET /api/subscribe/confirm?token=…`. Honeypot + rate limits apply; no CAPTCHA.
