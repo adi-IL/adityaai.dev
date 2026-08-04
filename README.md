@@ -105,16 +105,27 @@ Mirror these into friday / sentinel / opalserve when they change.
 
 ## Stack
 
-React 19 · React Router · TypeScript · Vite · Tailwind 4 · Motion · Vercel · Resend.
+React 19 · React Router · TypeScript · Vite · Tailwind 4 · Motion · Vercel · Resend · Vertex AI (Gemini).
 
 | Path | Role |
 | --- | --- |
-| `src/` | SPA UI |
+| `src/` | SPA UI (includes floating **Lab guide** chat) |
 | `src/content/articles/` | Essay markdown |
-| `lib/` | Shared API logic (rate limit, email, double opt-in) |
-| `api/` | Vercel serverless entrypoints |
+| `lib/` | Shared API logic (rate limit, email, chat, Vertex client) |
+| `api/` | Vercel serverless entrypoints (`/api/chat`, subscribe, coffee, …) |
 | `server.ts` | Local Express + Vite middleware |
 | `scripts/` | Article meta generator + prerender / sitemap / `llms.txt` |
+
+### Lab guide chatbot
+
+Floating widget (bottom-right) answers questions about the essay shelf and lab projects.
+
+- **API:** `POST /api/chat` with `{ messages: [{ role, content }] }`
+- **Model:** Vertex AI Gemini via `@google/genai` (`vertexai: true`)
+- **Context:** essay meta + project registry (site-first system prompt)
+- **Web research:** optional Google Search grounding when `CHAT_ENABLE_SEARCH=true` and the question looks external
+- **Local auth:** Application Default Credentials (`gcloud auth application-default login`)
+- **Production:** set `GOOGLE_SERVICE_ACCOUNT_JSON` (service account with Vertex AI User)
 
 ---
 
@@ -145,6 +156,11 @@ Node.js 20+.
 | `SUBSCRIBE_SECRET` | No | HMAC for confirm links (defaults to `RESEND_API_KEY`) |
 | `APP_URL` | No | Origin in confirm emails (default `https://www.adityaai.dev`) |
 | `NOTIFY_EMAIL` | No | Your inbox for leads / feedback / confirmed subs |
+| `GOOGLE_CLOUD_PROJECT` | For chat | GCP project with Vertex AI |
+| `GOOGLE_CLOUD_LOCATION` | No | Default `us-central1` |
+| `GEMINI_MODEL` | No | Default `gemini-2.5-flash` |
+| `CHAT_ENABLE_SEARCH` | No | Default `true` — Google Search grounding |
+| `GOOGLE_SERVICE_ACCOUNT_JSON` | Prod chat | SA key JSON/base64 (Vercel; local uses ADC) |
 | `PORT` | No | Local server port (default `3000`) |
 
 **Newsletter:** double opt-in only. `POST /api/subscribe` sends a confirm email; welcome + Resend contact run after `GET /api/subscribe/confirm?token=…`. Honeypot + rate limits apply; no CAPTCHA.

@@ -18,6 +18,8 @@ import NotFound from './pages/NotFound';
 import ScrollToTop from './components/ScrollToTop';
 import VirtualCoffeePopup from './components/VirtualCoffeePopup';
 import FloatingCoffeeButton from './components/FloatingCoffeeButton';
+import FloatingChatButton from './components/FloatingChatButton';
+import SiteChatWidget from './components/SiteChatWidget';
 
 // Lazy load heavy Three.js backgrounds
 const AtmosphericBackground = lazy(() => import('./components/AtmosphericBackground'));
@@ -111,6 +113,8 @@ export default function App() {
         <div className="relative z-10">
           <Footer />
         </div>
+        <FloatingChatButton />
+        <SiteChatWidget />
         <FloatingCoffeeButton />
         <VirtualCoffeePopup />
       </div>

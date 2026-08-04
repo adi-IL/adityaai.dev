@@ -7,6 +7,7 @@ import path from 'path';
 import { handleSubscribe, handleSubscribeConfirm } from './lib/handlers/subscribe.js';
 import { handleFeedback } from './lib/handlers/feedback.js';
 import { handleVirtualCoffee } from './lib/handlers/virtual-coffee.js';
+import { handleChat } from './lib/handlers/chat.js';
 
 dotenv.config();
 
@@ -50,6 +51,10 @@ async function startServer() {
 
   app.post('/api/feedback', (req, res) => {
     void handleFeedback(req, res);
+  });
+
+  app.post('/api/chat', (req, res) => {
+    void handleChat(req, res);
   });
 
   if (process.env.NODE_ENV !== 'production') {

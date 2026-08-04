@@ -69,6 +69,7 @@ export const RATE_LIMITS = {
   'subscribe-email': { windowMs: 24 * 60 * 60 * 1000, max: 2 }, // 2 / day / address
   'virtual-coffee': { windowMs: 60 * 60 * 1000, max: 5 },
   feedback: { windowMs: 60 * 60 * 1000, max: 15 },
+  chat: { windowMs: 60 * 60 * 1000, max: 20 }, // lab guide chatbot
   api: { windowMs: 60 * 1000, max: 30 }, // global API burst
 } as const;
 
