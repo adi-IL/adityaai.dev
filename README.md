@@ -22,8 +22,11 @@ surface for [FRIDAY](https://friday.adityaai.dev),
 | **About** | Bio, certifications, positioning. |
 | **Newsletter** | Double opt-in via Resend (confirm link → contact + welcome). |
 | **Virtual coffee** | Lead form → notify you + confirm visitor. |
+| **Lab guide** | Floating chat (`/api/chat`) — Vertex/Gemini, site-first. |
 
 **North star for essays:** each piece should change how someone architects agents, memory, cost, security, or the product surface. If it only works as a weekly score update, it does not belong on the shelf.
+
+**Deep architecture docs:** [docs/README.md](./docs/README.md) (system map, deployment locations, flows, APIs).
 
 ---
 
