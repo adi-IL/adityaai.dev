@@ -44,6 +44,33 @@ function toGeminiContents(messages: ChatMessage[]) {
   }));
 }
 
+async function generateWithRetry(
+  ai: ReturnType<typeof getGenAI>,
+  params: Parameters<typeof ai.models.generateContent>[0],
+  maxRetries = 2,
+) {
+  let attempt = 0;
+  while (attempt <= maxRetries) {
+    try {
+      return await ai.models.generateContent(params);
+    } catch (err: any) {
+      attempt++;
+      const is429 =
+        err?.status === 429 ||
+        err?.code === 429 ||
+        (typeof err?.message === 'string' &&
+          (err.message.includes('429') || err.message.includes('RESOURCE_EXHAUSTED')));
+      if (is429 && attempt <= maxRetries) {
+        logError(`chat:429_retry_${attempt}`, err);
+        await new Promise((resolve) => setTimeout(resolve, attempt * 1200));
+        continue;
+      }
+      throw err;
+    }
+  }
+  throw new Error('Max retries exceeded');
+}
+
 export async function handleChat(req: ApiRequest, res: ApiResponse): Promise<void> {
   if (req.method !== 'POST') {
     res.status(405).json({ error: 'Method not allowed' });
@@ -79,16 +106,37 @@ export async function handleChat(req: ApiRequest, res: ApiResponse): Promise<voi
   try {
     const ai = getGenAI();
     const model = getChatModel();
-    const result = await ai.models.generateContent({
-      model,
-      contents: toGeminiContents(messages),
-      config: {
-        systemInstruction: buildSystemInstruction(searchEnabled),
-        temperature: 0.4,
-        maxOutputTokens: 1024,
-        ...(useSearch ? { tools: [{ googleSearch: {} }] } : {}),
-      },
-    });
+    let result;
+    let actualUseSearch = useSearch;
+
+    try {
+      result = await generateWithRetry(ai, {
+        model,
+        contents: toGeminiContents(messages),
+        config: {
+          systemInstruction: buildSystemInstruction(searchEnabled),
+          temperature: 0.4,
+          maxOutputTokens: 1024,
+          ...(useSearch ? { tools: [{ googleSearch: {} }] } : {}),
+        },
+      });
+    } catch (searchError: unknown) {
+      if (useSearch) {
+        logError('chat:search_fallback', searchError);
+        actualUseSearch = false;
+        result = await generateWithRetry(ai, {
+          model,
+          contents: toGeminiContents(messages),
+          config: {
+            systemInstruction: buildSystemInstruction(searchEnabled),
+            temperature: 0.4,
+            maxOutputTokens: 1024,
+          },
+        });
+      } else {
+        throw searchError;
+      }
+    }
 
     const reply = extractText(result);
     if (!reply) {
@@ -97,11 +145,11 @@ export async function handleChat(req: ApiRequest, res: ApiResponse): Promise<voi
       return;
     }
 
-    const sources: ChatSource[] = useSearch ? extractSources(result) : [];
+    const sources: ChatSource[] = actualUseSearch ? extractSources(result) : [];
     res.status(200).json({
       reply,
       ...(sources.length ? { sources } : {}),
-      usedSearch: useSearch,
+      usedSearch: actualUseSearch,
     });
   } catch (error: unknown) {
     logError('chat', error);

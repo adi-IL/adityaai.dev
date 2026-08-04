@@ -60,7 +60,7 @@ export function getVertexProject(): string {
     process.env.GCLOUD_PROJECT ||
     process.env.VITE_GCP_PROJECT_ID ||
     process.env.GCP_PROJECT ||
-    ''
+    'project-dace7531-ac79-4f81-bd2'
   );
 }
 
