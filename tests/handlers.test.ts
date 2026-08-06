@@ -61,7 +61,7 @@ describe('API Handlers - HTTP Methods & Guard Checks', () => {
   });
 
   it('handleFeedback rejects non-POST requests', async () => {
-    const { req, res, getStatus, getData } = mockReqRes('GET');
+    const { req, res, getStatus } = mockReqRes('GET');
     await handleFeedback(req, res);
     assert.equal(getStatus(), 405);
   });
