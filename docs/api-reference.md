@@ -45,13 +45,20 @@ Lab guide chatbot (Vertex AI / Gemini).
 
 ```json
 {
-  "reply": "…markdown-capable text…",
+  "reply": "Navigating to /projects...",
+  "functionCalls": [
+    {
+      "name": "navigateTo",
+      "args": { "path": "/projects" }
+    }
+  ],
   "usedSearch": false,
   "sources": [{ "title": "…", "uri": "…" }]
 }
 ```
 
-`sources` only when search grounding returned citations.
+- `functionCalls`: Optional array of client-side tool executions (e.g. `navigateTo`).
+- `sources`: Only present when search grounding returned citations.
 
 ### Errors
 

@@ -70,6 +70,8 @@ SiteChatWidget  ──POST /api/chat──►  api/chat.ts
 ```
 
 - **Site-first:** system prompt includes essay list + project cards + contact paths.
+- **Page-aware starters:** starter chips dynamically adapt based on the active route (home, `/projects`, `/about`, `/articles/*`).
+- **Client tool calling:** supports function declarations like `navigateTo` so the bot can programmatically navigate users across routes.
 - **Search:** if `CHAT_ENABLE_SEARCH` and the last user message looks external/news-like, request may include Google Search grounding; citations returned as `sources`.
 - **Session:** last messages kept in `sessionStorage` only (no server history).
 - **Abuse:** honeypot field, per-IP rate limit, max message length / history depth.
