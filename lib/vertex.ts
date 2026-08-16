@@ -69,7 +69,7 @@ export function getVertexLocation(): string {
     process.env.GCP_LOCATION ||
     process.env.GOOGLE_CLOUD_LOCATION ||
     process.env.VERTEX_LOCATION ||
-    'us-central1'
+    'global'
   );
 }
 

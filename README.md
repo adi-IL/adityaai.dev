@@ -141,7 +141,7 @@ Floating widget (bottom-right) answers questions about the essay shelf and lab p
 | Name | Notes |
 | --- | --- |
 | `GCP_PROJECT_ID` | Same project as Sentinel |
-| `GCP_LOCATION` | e.g. `us-central1` |
+| `GCP_LOCATION` | e.g. `global` |
 | `GCP_CREDENTIALS_JSON` | Full service-account JSON (sensitive). Copy from Sentinel -> adityaai.dev in the Vercel dashboard (CLI cannot re-export encrypted secrets). |
 
 Aliases `GOOGLE_CLOUD_*` / `GOOGLE_SERVICE_ACCOUNT_JSON` also work. Local dev can use ADC instead of the JSON.
@@ -181,7 +181,7 @@ Node.js 20+ (CI runs 20 / 22 / 24; Vercel production runs Node 24).
 | `APP_URL` | No | Origin in confirm emails (default `https://www.adityaai.dev`) |
 | `NOTIFY_EMAIL` | No | Your inbox for leads / feedback / confirmed subs (default `aiexpert@adityaai.dev`) |
 | `GCP_PROJECT_ID` | For Vertex chat | Same as Sentinel |
-| `GCP_LOCATION` | No | Default `us-central1` |
+| `GCP_LOCATION` | No | Default `global` |
 | `GCP_CREDENTIALS_JSON` | Prod Vertex | SA JSON string (copy from Sentinel dashboard) |
 | `GEMINI_API_KEY` | Optional | Skips Vertex if set (AI Studio) |
 | `GEMINI_MODEL` | No | Default `gemini-3.7-flash` |
