@@ -1,5 +1,5 @@
 import { Link, useLocation } from 'react-router-dom';
-import { m, AnimatePresence } from 'motion/react';
+import { m, AnimatePresence, useScroll, useMotionValueEvent } from 'motion/react';
 import { Menu, X, ChevronRight } from 'lucide-react';
 import { useState, useEffect } from 'react';
 
@@ -59,12 +59,19 @@ export default function Navbar() {
     }),
   };
 
+  const { scrollY } = useScroll();
+  const [scrolled, setScrolled] = useState(false);
+
+  useMotionValueEvent(scrollY, "change", (latest) => {
+    setScrolled(latest > 50);
+  });
+
   return (
     <>
       {/* Desktop Navigation */}
       <nav className="fixed top-6 left-1/2 -translate-x-1/2 z-50 hidden md:block group will-change-transform">
         <div className="relative p-[1px] rounded-full bg-gradient-to-r from-zinc-800/50 via-zinc-600/50 to-zinc-800/50 group-hover:from-electric-lime/40 group-hover:via-emerald-500/40 group-hover:to-electric-lime/40 transition-all duration-500 shadow-[0_0_20px_rgba(0,0,0,0.5)] group-hover:shadow-[0_0_30px_rgba(204,255,0,0.15)]">
-          <div className="bg-zinc-950/80 backdrop-blur-md bd-stable rounded-full px-6 py-2 flex items-center gap-8">
+          <div className={`backdrop-blur-md bd-stable rounded-full px-6 py-2 flex items-center gap-8 transition-colors duration-500 ${scrolled ? 'bg-black/80 shadow-lg' : 'bg-transparent'}`}>
             {links.map((link) => {
               const isActive = location.pathname === link.path || (link.path !== '/' && location.pathname.startsWith(link.path));
               return (

@@ -5,7 +5,7 @@
 
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import { useEffect, useState, lazy, Suspense } from 'react';
-import { LazyMotion, domAnimation } from 'motion/react';
+import { LazyMotion, domAnimation, m, AnimatePresence } from 'motion/react';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import Home from './pages/Home';
@@ -91,6 +91,32 @@ function GlobalBackgrounds() {
   );
 }
 
+function AnimatedRoutes() {
+  const location = useLocation();
+  return (
+    <AnimatePresence mode="wait">
+      <m.div
+        key={location.pathname}
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, y: -10 }}
+        transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+        className="w-full h-full"
+      >
+        <Routes location={location} key={location.pathname}>
+          <Route path="/" element={<Home />} />
+          <Route path="/articles" element={<Articles />} />
+          <Route path="/articles/:slug" element={<ArticleDetail />} />
+          <Route path="/projects" element={<Projects />} />
+          <Route path="/projects/:slug" element={<ProjectDetail />} />
+          <Route path="/about" element={<About />} />
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </m.div>
+    </AnimatePresence>
+  );
+}
+
 export default function App() {
   return (
     <Router>
@@ -100,15 +126,7 @@ export default function App() {
         <GlobalBackgrounds />
         <Navbar />
         <main className="flex-grow relative z-10">
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/articles" element={<Articles />} />
-            <Route path="/articles/:slug" element={<ArticleDetail />} />
-            <Route path="/projects" element={<Projects />} />
-            <Route path="/projects/:slug" element={<ProjectDetail />} />
-            <Route path="/about" element={<About />} />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
+          <AnimatedRoutes />
         </main>
         <div className="relative z-10">
           <Footer />

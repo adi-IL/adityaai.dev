@@ -1,4 +1,4 @@
-import { useEffect, useState, type FormEvent } from 'react';
+import { useEffect, useState, useRef, type FormEvent } from 'react';
 import { m } from 'motion/react';
 import { CheckCircle2, XCircle, ArrowUpRight } from 'lucide-react';
 import { Link, useSearchParams } from 'react-router-dom';
@@ -388,6 +388,35 @@ export default function Home() {
 }
 
 function ArticleCard({ article, index }: { article: ArticleMeta; index: number }) {
+  const divRef = useRef<HTMLAnchorElement>(null);
+  const [isFocused, setIsFocused] = useState(false);
+  const [position, setPosition] = useState({ x: 0, y: 0 });
+  const [opacity, setOpacity] = useState(0);
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    if (!divRef.current || isFocused) return;
+    const rect = divRef.current.getBoundingClientRect();
+    setPosition({ x: e.clientX - rect.left, y: e.clientY - rect.top });
+  };
+
+  const handleFocus = () => {
+    setIsFocused(true);
+    setOpacity(1);
+  };
+
+  const handleBlur = () => {
+    setIsFocused(false);
+    setOpacity(0);
+  };
+
+  const handleMouseEnter = () => {
+    setOpacity(1);
+  };
+
+  const handleMouseLeave = () => {
+    setOpacity(0);
+  };
+
   return (
     <m.div
       initial={{ opacity: 0, y: 20 }}
@@ -396,10 +425,23 @@ function ArticleCard({ article, index }: { article: ArticleMeta; index: number }
       transition={{ duration: 0.6, delay: index * 0.1, ease: [0.32, 0.72, 0, 1] }}
     >
       <Link
+        ref={divRef}
         to={`/articles/${article.slug}`}
-        className="block group relative p-6 md:p-8 border-t border-zinc-800 hover:border-electric-lime transition-colors duration-500"
+        onMouseMove={handleMouseMove}
+        onFocus={handleFocus}
+        onBlur={handleBlur}
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
+        className="block group relative p-6 md:p-8 border-t border-zinc-800 hover:border-electric-lime transition-colors duration-500 overflow-hidden"
       >
         <div className="absolute inset-0 bg-zinc-900/0 group-hover:bg-zinc-900/20 group-active:bg-zinc-900/30 transition-colors duration-500 -z-10" />
+        <div
+          className="pointer-events-none absolute -inset-px transition-opacity duration-300 -z-10"
+          style={{
+            opacity,
+            background: `radial-gradient(600px circle at ${position.x}px ${position.y}px, rgba(255,255,255,.05), transparent 40%)`,
+          }}
+        />
         <div className="flex justify-between items-start mb-4">
           <div className="flex items-center gap-3 flex-wrap">
             <span className="font-mono text-[10px] uppercase tracking-widest text-electric-lime">

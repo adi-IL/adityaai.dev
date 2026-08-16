@@ -1,6 +1,6 @@
 import { useParams, Link } from 'react-router-dom';
 import { useEffect, useMemo, useState, memo } from 'react';
-import { m } from 'motion/react';
+import { m, useScroll } from 'motion/react';
 import { ArrowLeft } from 'lucide-react';
 import Markdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
@@ -44,6 +44,7 @@ const ArticleMarkdown = memo(function ArticleMarkdown({ content }: { content: st
 });
 
 export default function ArticleDetail() {
+  const { scrollYProgress } = useScroll();
   const { slug } = useParams();
   const meta = slug ? getArticleMeta(slug) : undefined;
   const [article, setArticle] = useState<Article | null>(null);
@@ -118,6 +119,10 @@ export default function ArticleDetail() {
 
   return (
     <div className="min-h-screen pt-32 pb-16">
+      <m.div
+        className="fixed top-0 left-0 right-0 h-1 bg-electric-lime transform-gpu z-50 origin-left"
+        style={{ scaleX: scrollYProgress }}
+      />
       <SEO
         title={`${meta.title} | Aditya Gaurav`}
         description={meta.excerpt}

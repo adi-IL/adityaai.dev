@@ -1,3 +1,4 @@
+import { useState, useRef } from 'react';
 import { m } from 'motion/react';
 import { ArrowUpRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
@@ -5,6 +6,35 @@ import { Project } from '../lib/projects';
 import ProjectSignature from './ProjectSignature';
 
 export default function HomeProjectCard({ project, index }: { project: Project; index: number }) {
+  const divRef = useRef<HTMLAnchorElement>(null);
+  const [isFocused, setIsFocused] = useState(false);
+  const [position, setPosition] = useState({ x: 0, y: 0 });
+  const [opacity, setOpacity] = useState(0);
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    if (!divRef.current || isFocused) return;
+    const rect = divRef.current.getBoundingClientRect();
+    setPosition({ x: e.clientX - rect.left, y: e.clientY - rect.top });
+  };
+
+  const handleFocus = () => {
+    setIsFocused(true);
+    setOpacity(1);
+  };
+
+  const handleBlur = () => {
+    setIsFocused(false);
+    setOpacity(0);
+  };
+
+  const handleMouseEnter = () => {
+    setOpacity(1);
+  };
+
+  const handleMouseLeave = () => {
+    setOpacity(0);
+  };
+
   return (
     <m.div
       initial={{ opacity: 0, y: 20 }}
@@ -13,9 +43,22 @@ export default function HomeProjectCard({ project, index }: { project: Project; 
       transition={{ duration: 0.7, delay: index * 0.1, ease: [0.32, 0.72, 0, 1] }}
     >
       <Link
+        ref={divRef}
         to={`/projects/${project.slug}`}
+        onMouseMove={handleMouseMove}
+        onFocus={handleFocus}
+        onBlur={handleBlur}
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
         className="group block h-full relative rounded-2xl border border-zinc-800/60 hover:border-zinc-600 transition-colors duration-500 overflow-hidden"
       >
+        <div
+          className="pointer-events-none absolute -inset-px transition-opacity duration-300"
+          style={{
+            opacity,
+            background: `radial-gradient(600px circle at ${position.x}px ${position.y}px, rgba(255,255,255,.05), transparent 40%)`,
+          }}
+        />
         <div className="relative h-36 overflow-hidden bg-[#0a0a0a]">
           <ProjectSignature slug={project.slug} />
           <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[#050505] pointer-events-none" />
