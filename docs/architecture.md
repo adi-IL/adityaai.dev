@@ -146,7 +146,7 @@ Request  →  api/<name>.ts  (or Express route)
 | --- | --- |
 | **Vercel** | Hosting static + serverless APIs |
 | **GitHub** `adi-IL/adityaai.dev` | Source of truth (private) |
-| **Google Cloud Vertex AI** | Lab guide chat model |
+| **Google Cloud Vertex AI** | Lab guide chat model (`gemini-2.5-flash` default) |
 | **Resend** | Transactional email (subscribe, coffee, feedback) |
 | **Cloudinary** | Brand/OG images (CDN URLs in HTML) |
 | **Fontshare / Google Fonts** | Typography |
