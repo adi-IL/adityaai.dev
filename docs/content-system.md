@@ -50,7 +50,7 @@ featured: true
 | `featured` | Optional | `true` only for “Start here” (keep few) |
 | `title` / `excerpt` | Optional | Override auto extraction |
 
-Optional fallback dates: `scripts/article-dates.json` keyed by slug.
+Optional fallback dates: `scripts/article-dates.json` keyed by slug (if neither frontmatter date nor JSON override exists, generation defaults to `2026-01-01`).
 
 ---
 
@@ -97,11 +97,13 @@ then date.
 
 ## Projects content
 
-Not markdown files. Edit **`src/lib/projects.ts`** only:
+Not markdown files. Primary registry is **`src/lib/projects.ts`**:
 
 - `slug`, `name`, `tagline`, `excerpt`, `stack`, `metrics`
 - `liveUrl`, `codeUrl`, `ogImage`
 - Long-form `content` string (markdown rendered on project detail)
+
+Note: when adding a project, also verify the metadata listing in `scripts/prerender.mjs` matches for route prerendering and sitemap generation.
 
 ---
 

@@ -89,9 +89,9 @@ Keep the shelf small. Prefer updating a thesis in place over publishing a near-d
 
 | Project | Live | Source | One-line |
 | --- | --- | --- | --- |
-| **FRIDAY** | [friday.adityaai.dev](https://friday.adityaai.dev) | [friday-visual-engine](https://github.com/adi-IL/friday-visual-engine) | Generative 3D engineering visualization |
-| **Sentinel** | [sentinel.adityaai.dev](https://sentinel.adityaai.dev) | [sentinel](https://github.com/adi-IL/sentinel) | Multi-agent competitive intelligence |
-| **OpalServe** | [opalserve.adityaai.dev](https://opalserve.adityaai.dev) | [opalserve](https://github.com/adi-IL/opalserve) | MCP registry and team gateway |
+| **FRIDAY** | [friday.adityaai.dev](https://friday.adityaai.dev) | [friday-visual-engine](https://github.com/adi-IL/friday-visual-engine) | Immersive Engineering Visual Intelligence |
+| **Sentinel** | [sentinel.adityaai.dev](https://sentinel.adityaai.dev) | [sentinel](https://github.com/adi-IL/sentinel) | Autonomous Competitive Intelligence |
+| **OpalServe** | [opalserve.adityaai.dev](https://opalserve.adityaai.dev) | [opalserve](https://github.com/adi-IL/opalserve) | The control plane for your team's AI tools |
 
 ### Shared brand (do not fork)
 
@@ -165,6 +165,8 @@ Node.js 20+ (CI runs 20 / 22 / 24; Vercel production runs Node 24).
 | `npm run dev` | Meta + Express/Vite dev server |
 | `npm run start` | Express only (serves `dist/`; run `npm run build` first) |
 | `npm run build` | Meta -> Vite build -> prerender HTML + sitemap + `llms.txt` |
+| `npm run preview` | Vite preview (preview production build locally) |
+| `npm run clean` | Clean build artifacts (`rm -rf dist`) |
 | `npm run lint` | `tsc --noEmit` |
 | `npm test` | Unit tests (rate limit, email helpers, confirm tokens, errors, handlers) |
 | `npm run meta` | Regenerate `scripts/articles-meta.json` only |

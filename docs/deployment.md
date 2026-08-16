@@ -109,9 +109,9 @@ Node.js 20+ (`"engines"`). CI runs Node 20/22/24; Vercel production uses Node 24
 
 | Variable | Purpose |
 | --- | --- |
-| `GCP_PROJECT_ID` | GCP project for Vertex |
-| `GCP_LOCATION` | e.g. `us-central1` |
-| `GCP_CREDENTIALS_JSON` | Full service-account JSON string (sensitive) |
+| `GCP_PROJECT_ID` | GCP project for Vertex (or aliases: `GOOGLE_CLOUD_PROJECT`, `GCLOUD_PROJECT`, `VITE_GCP_PROJECT_ID`, `GCP_PROJECT`; falls back to default lab project if omitted) |
+| `GCP_LOCATION` | e.g. `us-central1` (or aliases: `GOOGLE_CLOUD_LOCATION`, `VERTEX_LOCATION`; defaults to `us-central1`) |
+| `GCP_CREDENTIALS_JSON` | Full service-account JSON string or base64-encoded string (or aliases: `GOOGLE_SERVICE_ACCOUNT_JSON`, `GOOGLE_CREDENTIALS_JSON`) |
 
 **Auth order in `lib/vertex.ts` (same as Sentinel):**
 
@@ -119,7 +119,7 @@ Node.js 20+ (`"engines"`). CI runs Node 20/22/24; Vercel production uses Node 24
 2. Else write `GCP_CREDENTIALS_JSON` to `/tmp/gcp_adc.json` and set `GOOGLE_APPLICATION_CREDENTIALS`  
 3. `GoogleGenAI({ vertexai: true, project, location })`
 
-Aliases also accepted: `GOOGLE_CLOUD_PROJECT`, `GOOGLE_CLOUD_LOCATION`, `GOOGLE_SERVICE_ACCOUNT_JSON`.
+Aliases also accepted: `GOOGLE_CLOUD_PROJECT`, `GOOGLE_CLOUD_LOCATION`, `GOOGLE_SERVICE_ACCOUNT_JSON`, `GOOGLE_CREDENTIALS_JSON`, `GCLOUD_PROJECT`, `VITE_GCP_PROJECT_ID`, `GCP_PROJECT`, `VERTEX_LOCATION`.
 
 ### Optional chat tuning
 

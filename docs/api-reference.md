@@ -57,7 +57,7 @@ Lab guide chatbot (Vertex AI / Gemini).
 }
 ```
 
-- `functionCalls`: Optional array of client-side tool executions (e.g. `navigateTo`).
+- `functionCalls`: Optional array of client-side tool executions (e.g. `navigateTo`). If the model emits a tool call with no text, the handler auto-generates a fallback reply (`Navigating to {path}...`).
 - `sources`: Only present when search grounding returned citations.
 
 ### Errors
@@ -65,12 +65,15 @@ Lab guide chatbot (Vertex AI / Gemini).
 | Status | Meaning |
 | --- | --- |
 | 400 | Invalid messages |
-| 429 | Rate limited |
+| 405 | Method not allowed (only POST is accepted) |
+| 429 | Rate limited (~20 req/hour/IP) |
 | 500 / 502 | Model/upstream failure (generic message) |
 
 ### Limits
 
-~20 requests / hour / IP (in-memory).
+- Rate limit: 20 requests / hour / IP (in-memory).
+- Max history: 12 messages.
+- Max content length: 2,000 characters per message.
 
 ---
 
@@ -95,6 +98,19 @@ Start newsletter double opt-in.
 
 Always generic success for valid-shaped emails (no email oracle). Sends **confirm** email only, not welcome.
 
+### Errors
+
+| Status | Meaning |
+| --- | --- |
+| 400 | Invalid email shape or format |
+| 405 | Method not allowed (only POST is accepted) |
+| 429 | Rate limited (5 req/hour/IP) |
+| 500 | Internal or email provider error |
+
+### Limits
+
+- Rate limit: 5 requests / hour / IP.
+
 ---
 
 ## `GET /api/subscribe/confirm?token=…`
@@ -118,6 +134,10 @@ Accepts `GET` or `POST` (browsers click from email as `GET`). Not a JSON API for
 
 Note: confirmation (and all email delivery) is async from the browser's perspective - no JSON is returned.
 
+### Limits
+
+- Rate limit: 2 confirmations per 24 hours per email address.
+
 ---
 
 ## `POST /api/virtual-coffee`
@@ -130,11 +150,19 @@ Lead form.
 {
   "name": "Ada",
   "email": "ada@example.com",
-  "role": "Engineer @ Acme",
-  "message": "Want to talk agents",
+  "role": "Engineer @ Acme (optional)",
+  "message": "Want to talk agents (optional)",
   "website": ""
 }
 ```
+
+| Field | Requirement | Notes |
+| --- | --- | --- |
+| `name` | Required | Truncated to 100 chars |
+| `email` | Required | Valid email shape, truncated to 150 chars |
+| `role` | Optional | Truncated to 100 chars |
+| `message` | Optional | Truncated to 2,000 chars |
+| `website` | Optional | Honeypot field |
 
 ### Response `200`
 
@@ -143,6 +171,19 @@ Lead form.
 ```
 
 Sends owner notification + visitor confirmation via Resend.
+
+### Errors
+
+| Status | Meaning |
+| --- | --- |
+| 400 | Missing name or invalid email |
+| 405 | Method not allowed (only POST is accepted) |
+| 429 | Rate limited (5 req/hour/IP) |
+| 500 | Email provider or internal failure |
+
+### Limits
+
+- Rate limit: 5 requests / hour / IP.
 
 ---
 
@@ -157,7 +198,7 @@ Article reactions.
   "slug": "memory-stacks-for-agents",
   "title": "Memory Stacks…",
   "reaction": "insightful",
-  "comment": "optional",
+  "comment": "optional feedback",
   "email": "optional@example.com",
   "website": ""
 }
@@ -170,6 +211,20 @@ Article reactions.
 ```json
 { "success": true }
 ```
+
+### Errors
+
+| Status | Meaning |
+| --- | --- |
+| 400 | Missing slug or disallowed reaction value |
+| 405 | Method not allowed (only POST is accepted) |
+| 429 | Rate limited (15 req/hour/IP) |
+| 500 | Email provider or internal failure |
+
+### Limits
+
+- Rate limit: 15 requests / hour / IP.
+- Global API burst rate limit: 30 requests / minute / IP across all endpoints.
 
 ---
 
