@@ -200,6 +200,7 @@ export async function handleChat(req: ApiRequest, res: ApiResponse): Promise<voi
     const sources: ChatSource[] = actualUseSearch ? extractSources(result as any) : [];
     res.status(200).json({
       reply,
+      model,
       functionCalls,
       ...(sources.length ? { sources } : {}),
       usedSearch: actualUseSearch,

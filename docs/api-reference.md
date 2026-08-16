@@ -46,6 +46,7 @@ Lab guide chatbot powered by Google Vertex AI / Gemini (`gemini-3.7-flash` by de
 ```json
 {
   "reply": "Navigating to /projects...",
+  "model": "gemini-3.7-flash",
   "functionCalls": [
     {
       "name": "navigateTo",
