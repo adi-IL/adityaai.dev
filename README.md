@@ -184,7 +184,7 @@ Node.js 20+ (CI runs 20 / 22 / 24; Vercel production runs Node 24).
 | `GCP_LOCATION` | No | Default `us-central1` |
 | `GCP_CREDENTIALS_JSON` | Prod Vertex | SA JSON string (copy from Sentinel dashboard) |
 | `GEMINI_API_KEY` | Optional | Skips Vertex if set (AI Studio) |
-| `GEMINI_MODEL` | No | Default `gemini-2.5-flash` |
+| `GEMINI_MODEL` | No | Default `gemini-3.7-flash` |
 | `CHAT_ENABLE_SEARCH` | No | Default `true` |
 | `PORT` | No | Local server port (default `3000`) |
 

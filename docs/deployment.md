@@ -125,7 +125,7 @@ Aliases also accepted: `GOOGLE_CLOUD_PROJECT`, `GOOGLE_CLOUD_LOCATION`, `GOOGLE_
 
 | Variable | Default | Purpose |
 | --- | --- | --- |
-| `GEMINI_MODEL` | `gemini-2.5-flash` | Model id |
+| `GEMINI_MODEL` | `gemini-3.7-flash` | Model id |
 | `CHAT_ENABLE_SEARCH` | `true` | Google Search grounding when question looks external |
 
 Set secrets in Vercel → Project → Settings → Environment Variables (Production / Preview / Development as needed).  

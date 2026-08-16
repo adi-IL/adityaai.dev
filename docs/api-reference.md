@@ -21,7 +21,7 @@ Not deployed as a Vercel function unless you add `api/health.ts`.
 
 ## `POST /api/chat`
 
-Lab guide chatbot powered by Google Vertex AI / Gemini (`gemini-2.5-flash` by default, configurable via `GEMINI_MODEL`, `temperature: 0.4`, `maxOutputTokens: 1024`).
+Lab guide chatbot powered by Google Vertex AI / Gemini (`gemini-3.7-flash` by default, configurable via `GEMINI_MODEL`, `temperature: 0.4`, `maxOutputTokens: 1024`).
 
 ### Request
 

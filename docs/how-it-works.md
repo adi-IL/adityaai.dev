@@ -69,7 +69,7 @@ SiteChatWidget  ──POST /api/chat──►  api/chat.ts
         ◄──────── { reply, sources? } ─┘
 ```
 
-- **Model:** Google Gemini (`gemini-2.5-flash` by default, configurable via `GEMINI_MODEL`; `temperature: 0.4`, `maxOutputTokens: 1024`).
+- **Model:** Google Gemini (`gemini-3.7-flash` by default, configurable via `GEMINI_MODEL`; `temperature: 0.4`, `maxOutputTokens: 1024`).
 - **Site-first:** system prompt includes essay list + project cards + contact paths.
 - **Page-aware starters:** starter chips dynamically adapt based on the active route (home, `/projects`, `/about`, `/articles/*`).
 - **Client tool calling:** supports function declarations like `navigateTo` so the bot can programmatically navigate users across routes.
