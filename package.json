@@ -14,7 +14,7 @@
     "preview": "vite preview",
     "clean": "rm -rf dist",
     "lint": "tsc --noEmit",
-    "test": "tsx --test tests/**/*.test.ts",
+    "test": "tsx --test tests/*.test.ts",
     "meta": "node scripts/generate-articles-meta.mjs"
   },
   "dependencies": {
