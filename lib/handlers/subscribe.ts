@@ -13,7 +13,7 @@ import {
 import { createConfirmToken, getSiteUrl, verifyConfirmToken } from '../subscribe-token.js';
 
 /**
- * Newsletter subscribe — double opt-in, no open relay.
+ * Newsletter subscribe - double opt-in, no open relay.
  *
  * POST /api/subscribe
  *   - Never sends a welcome blast to an unconfirmed address.
@@ -62,7 +62,7 @@ export async function handleSubscribe(req: ApiRequest, res: ApiResponse): Promis
   const ipRl = checkRateLimit('subscribe:ip', ip, ipLimit);
   applyRateLimitHeaders(res, ipRl, ipLimit.max);
   if (!ipRl.ok) {
-    // Still generic — don't teach attackers the limit shape via wording differences.
+    // Still generic - don't teach attackers the limit shape via wording differences.
     res.status(200).json(GENERIC_SUCCESS);
     return;
   }
@@ -102,7 +102,7 @@ export async function handleSubscribe(req: ApiRequest, res: ApiResponse): Promis
     const { error } = await resend.emails.send({
       from: 'Aditya Gaurav <aiexpert@adityaai.dev>',
       to: email,
-      subject: 'Confirm your subscription — adityaai.dev',
+      subject: 'Confirm your subscription - adityaai.dev',
       html: confirmEmailHtml(confirmUrl),
     });
 
@@ -299,7 +299,7 @@ function confirmEmailHtml(confirmUrl: string): string {
                           </tr>
                         </table>
                         <p style="color: #71717a; font-size: 13px; line-height: 20px; margin: 0 0 16px 0;">
-                          This link expires in 48 hours. If you didn't request this, ignore this email — nothing will be added.
+                          This link expires in 48 hours. If you didn't request this, ignore this email - nothing will be added.
                         </p>
                         <p style="color: #52525b; font-size: 12px; line-height: 18px; word-break: break-all; margin: 0; font-family: 'JetBrains Mono', monospace;">
                           ${safeUrl}
@@ -341,7 +341,7 @@ function welcomeEmailHtml(): string {
                           You're confirmed. Thanks for joining.
                         </p>
                         <p style="color: #a1a1aa; font-size: 16px; line-height: 24px; margin-top: 0; margin-bottom: 24px;">
-                          You'll receive my latest articles, research, and thoughts on AI architecture and systems design — infrequent and high-signal.
+                          You'll receive my latest articles, research, and thoughts on AI architecture and systems design - infrequent and high-signal.
                         </p>
                         <table width="100%" cellpadding="0" cellspacing="0" role="presentation" style="margin-top: 40px; margin-bottom: 40px;">
                           <tr>

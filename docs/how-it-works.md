@@ -162,8 +162,11 @@ Prerender injects correct `<title>`, description, canonical, OG, and JSON-LD per
 | --- | --- | --- |
 | API (Express global) | 1 min | 30 |
 | Chat | 1 hour | 20 / IP |
-| Subscribe | 1 hour | 5 / IP (+ per-email daily cap) |
+| Subscribe | 1 hour | 5 / IP |
+| Subscribe per-email | 24 hours | 2 / address (stops multi-IP inbox spam) |
+| Subscribe confirm | 1 hour | 10 / (IP + email) |
+| Subscribe welcome+notify | 24 hours | 1 / email (token can be re-clicked) |
 | Virtual coffee | 1 hour | 5 / IP |
 | Feedback | 1 hour | 15 / IP |
 
-In-memory store: effective per Node process (local) / per serverless isolate (Vercel). Not a global Redis limiter.
+In-memory store: effective per Node process (local) / per serverless isolate (Vercel). Not a global Redis limiter. Rate-limited subscribe calls still return the generic 200 success (no signal leak).

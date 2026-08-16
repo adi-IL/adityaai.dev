@@ -186,7 +186,7 @@ const articles = fs
       dateISO,
       date: formatDisplayDate(dateISO),
       form,
-      /** @deprecated use form — kept as alias for older consumers during transition */
+      /** @deprecated use form - kept as alias for older consumers during transition */
       category: form,
       topics,
       featured,

@@ -33,7 +33,7 @@ export default function Articles() {
             Decision tools for systems designers
           </h1>
           <p className="text-zinc-400 text-lg max-w-2xl leading-relaxed mb-3">
-            A short shelf — not a stream. Each piece is meant to change how you
+            A short shelf - not a stream. Each piece is meant to change how you
             architect agents, memory, cost, or the product surface.
           </p>
           <p className="text-zinc-600 text-sm font-mono mb-8">

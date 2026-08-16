@@ -68,7 +68,7 @@ export default function Home() {
       <div className="relative z-10">
         <SEO
           title="Aditya Gaurav - AI Engineer · Systems Architect"
-          description={`AI Engineer & Systems Architect. Decision tools for people who design production AI systems — ${articles.length} curated essays on architecture, agents, and the product surface.`}
+          description={`AI Engineer & Systems Architect. Decision tools for people who design production AI systems - ${articles.length} curated essays on architecture, agents, and the product surface.`}
         />
 
         {confirmBanner && (
@@ -318,7 +318,7 @@ export default function Home() {
             className="border-t border-zinc-800/50 pt-16 text-center"
           >
             <h2 className="font-display font-medium text-2xl text-zinc-100 mb-4">Join the Newsletter</h2>
-            <p className="text-zinc-500 font-light mb-8">Decision tools for systems designers. Infrequent — confirm your email to join.</p>
+            <p className="text-zinc-500 font-light mb-8">Decision tools for systems designers. Infrequent - confirm your email to join.</p>
 
             <form className="flex flex-col sm:flex-row gap-4 max-w-md mx-auto relative" onSubmit={handleSubscribe}>
               <label htmlFor="email" className="sr-only">Email address</label>

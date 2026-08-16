@@ -4,6 +4,7 @@ import { handleChat } from '../lib/handlers/chat.ts';
 import { handleFeedback } from '../lib/handlers/feedback.ts';
 import { handleSubscribe } from '../lib/handlers/subscribe.ts';
 import { handleVirtualCoffee } from '../lib/handlers/virtual-coffee.ts';
+import { extractFunctionCalls } from '../lib/vertex.ts';
 import type { ApiRequest, ApiResponse } from '../lib/http.ts';
 
 before(() => {
@@ -86,5 +87,29 @@ describe('API Handlers - HTTP Methods & Guard Checks', () => {
     await handleVirtualCoffee(req, res);
     assert.equal(getStatus(), 400);
     assert.equal(getData().error.includes('Name is required'), true);
+  });
+
+  it('extractFunctionCalls correctly extracts functionCall objects from model responses', () => {
+    const mockResponse = {
+      candidates: [
+        {
+          content: {
+            parts: [
+              { text: 'Navigating now.' },
+              {
+                functionCall: {
+                  name: 'navigateTo',
+                  args: { path: '/projects' },
+                },
+              },
+            ],
+          },
+        },
+      ],
+    };
+    const calls = extractFunctionCalls(mockResponse as any);
+    assert.equal(calls.length, 1);
+    assert.equal(calls[0].name, 'navigateTo');
+    assert.deepEqual(calls[0].args, { path: '/projects' });
   });
 });

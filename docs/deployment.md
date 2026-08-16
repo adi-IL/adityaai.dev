@@ -5,6 +5,7 @@
 | Layer | Location | Notes |
 | --- | --- | --- |
 | **Source** | [github.com/adi-IL/adityaai.dev](https://github.com/adi-IL/adityaai.dev) | Private repo, branch `main` |
+| **CI** | `.github/workflows/ci.yml` | Typecheck + tests + build on Node 20/22/24 |
 | **Hosting** | Vercel team **aditya-ai-architects-projects** | Project name **`adityaai.dev`** |
 | **Production URL (Vercel)** | https://adityaaidev.vercel.app | Default project alias |
 | **Canonical brand domain** | https://www.adityaai.dev | Used in SEO, emails, site context |
@@ -25,7 +26,10 @@ Related lab apps (separate deploys, not this repo):
 ## Production architecture on Vercel
 
 ```
-git push origin main
+push to main
+        │
+        ▼
+GitHub Actions CI (ci.yml): npm ci → lint → test → build
         │
         ▼
 Vercel build (Washington iad1, Node 24)
@@ -47,7 +51,18 @@ CDN static + Serverless functions
 - **Headers:** security (CSP, HSTS, X-Frame-Options DENY, etc.) + long cache for hashed assets.
 - **Framework:** Vite, `outputDirectory: dist`.
 
-Git is connected so pushes to `main` can trigger production builds (confirm in Vercel project settings).
+Git is connected, so pushes to `main` run CI then trigger production builds (confirm in Vercel project settings).
+
+---
+
+## CI / CD
+
+| Stage | Where | What runs |
+| --- | --- | --- |
+| **CI** | GitHub Actions `.github/workflows/ci.yml` | `npm ci` → `npm run lint` → `npm test` → `npm run build`, on **push to `main`** and **every PR**. Matrix: Node 20 / 22 / 24. Fails fast on type errors, test regressions, or build breakage. Also verifies generated `scripts/articles-meta.json` and `public/llms.txt` match the committed state (no drift). |
+| **CD** | Vercel Git integration | Deploys production on push to `main`; preview deploys on PRs. No `VERCEL_TOKEN` deploy step is needed. |
+
+`package.json` pins `"engines": { "node": ">=20.0.0" }`; Vercel resolves to Node 24.
 
 ---
 
@@ -58,6 +73,10 @@ npm install
 cp .env.example .env.local   # fill secrets as needed
 npm run dev                  # meta + Express on :3000
 ```
+
+`server.ts` loads env from `.env.local` then `.env` (in that order) via `dotenv.config({ path: ['.env.local', '.env'] })`. Keep personal overrides in `.env.local` and shared defaults in `.env`. Vercel env vars apply only on Vercel (never read locally).
+
+Node.js 20+ (`"engines"`). CI runs Node 20/22/24; Vercel production uses Node 24.
 
 | Script | Purpose |
 | --- | --- |
@@ -70,7 +89,7 @@ npm run dev                  # meta + Express on :3000
 **Local chat auth:** `gcloud auth application-default login` (ADC), or set the same GCP envs as production.
 
 **Local APIs** are served by Express (`server.ts`), including `GET /api/health`.  
-**Production** only has serverless files under `api/` — there is no `/api/health` unless you add `api/health.ts`.
+**Production** only has serverless files under `api/` - there is no `/api/health` unless you add `api/health.ts`.
 
 ---
 
@@ -86,7 +105,7 @@ npm run dev                  # meta + Express on :3000
 | `SUBSCRIBE_SECRET` | Optional HMAC for confirm tokens (falls back to Resend key) |
 | `APP_URL` | Origin for confirm links (default `https://www.adityaai.dev`) |
 
-### Required for lab guide chat (Vertex — Sentinel pattern)
+### Required for lab guide chat (Vertex - Sentinel pattern)
 
 | Variable | Purpose |
 | --- | --- |
@@ -119,8 +138,11 @@ After changing env vars, **redeploy** production.
 ```bash
 # From repo root (linked project)
 vercel link          # once
-git push origin main # preferred if Git integration is on
-# or manual:
+
+# Preferred: open a PR → CI runs → merge to main → Vercel deploys prod
+git push origin main
+
+# or manual (bypasses CI):
 vercel --prod
 ```
 

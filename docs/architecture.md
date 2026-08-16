@@ -84,8 +84,9 @@ adityaai.dev/
 │   ├── article-dates.json           # Optional date overrides
 │   └── prerender.mjs                # Static HTML per route + sitemap + llms.txt
 ├── public/                 # Static assets copied to dist (robots, 404, llms seed)
-├── tests/                  # Unit tests (rate limit, email helpers, tokens)
-├── server.ts               # Local Express + Vite
+├── tests/                  # Unit tests (rate limit, email helpers, tokens, errors, handlers)
+├── .github/workflows/      # CI gate (typecheck + tests + build)
+├── server.ts               # Local Express + Vite (loads .env.local then .env)
 ├── vercel.json             # Rewrites, security headers, cache
 ├── docs/                   # This documentation
 └── README.md

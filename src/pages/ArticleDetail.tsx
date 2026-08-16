@@ -82,14 +82,14 @@ export default function ArticleDetail() {
     [article],
   );
 
-  // ISO date at noon UTC — stable datePublished without timezone day-shift.
+  // ISO date at noon UTC - stable datePublished without timezone day-shift.
   const publishDate = meta ? `${meta.dateISO}T12:00:00.000Z` : '';
 
   if (!meta) {
     return (
       <div className="min-h-screen pt-40 pb-16 flex flex-col items-center justify-center text-center px-6">
         <h1 className="font-display font-semibold text-4xl text-zinc-50 mb-4">Essay Not Found</h1>
-        <p className="text-zinc-400 mb-8">This essay isn't on the shelf — the library was restarted with a smaller curated set.</p>
+        <p className="text-zinc-400 mb-8">This essay isn't on the shelf - the library was restarted with a smaller curated set.</p>
         <Link to="/articles" className="text-electric-lime hover:underline">
           Back to Essays
         </Link>

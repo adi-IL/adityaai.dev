@@ -55,7 +55,7 @@ let articles;
 if (fs.existsSync(metaPath)) {
   articles = JSON.parse(fs.readFileSync(metaPath, "utf-8"));
 } else {
-  console.warn("⚠️ articles-meta.json missing — run generate-articles-meta first");
+  console.warn("⚠️ articles-meta.json missing - run generate-articles-meta first");
   articles = [];
 }
 
@@ -124,7 +124,7 @@ const articleCount = articles.length;
 const articleCountLabel = `${articleCount} research articles`;
 const buildDate = new Date().toISOString().slice(0, 10);
 
-// Homepage — no fake SearchAction (site has no search endpoint).
+// Homepage - no fake SearchAction (site has no search endpoint).
 writePage(".", "Aditya Gaurav  -  AI Engineer · Systems Architect",
   `AI Engineer & Systems Architect specializing in agentic systems, cognitive architectures, and MCP. ${articleCountLabel} on building production-ready AI systems.`,
   `${SITE_URL}/`, "website", {
@@ -134,7 +134,7 @@ writePage(".", "Aditya Gaurav  -  AI Engineer · Systems Architect",
     description: "AI Engineer & Systems Architect. Building agentic systems, cognitive architectures, and the MCP ecosystem.",
     url: `${SITE_URL}/`, inLanguage: "en",
     author: { "@type": "Person", name: "Aditya Gaurav", url: `${SITE_URL}/`, jobTitle: "AI Researcher & Systems Architect",
-      sameAs: ["https://x.com/adityaaidev", "https://www.linkedin.com/in/adityaai/", "https://github.com/adityaidev"] },
+      sameAs: ["https://x.com/adityaaidev", "https://www.linkedin.com/in/adityaai/", "https://github.com/adi-IL"] },
   });
 count++;
 
@@ -256,7 +256,7 @@ console.log(`✅ Generated sitemap.xml (${entries.length} URLs)`);
 const recentForLlms = articles.slice(0, Math.min(8, articles.length));
 const llms = `# adityaai.dev
 
-Personal lab site for Aditya Gaurav — AI Engineer & Systems Architect.
+Personal lab site for Aditya Gaurav - AI Engineer & Systems Architect.
 Focus: decision tools for people who design production AI systems
 (agents, memory, inference economics, MCP, architecture).
 
@@ -265,7 +265,7 @@ Focus: decision tools for people who design production AI systems
 - Role: AI Engineer & Systems Architect
 - Location: Sonipat, Haryana, India
 - Site: ${SITE_URL}
-- GitHub: https://github.com/adityaidev
+- GitHub: https://github.com/adi-IL
 - LinkedIn: https://www.linkedin.com/in/adityaai/
 - X: https://x.com/adityaaidev
 
@@ -276,11 +276,11 @@ Focus: decision tools for people who design production AI systems
 - Projects: ${SITE_URL}/projects
 
 ## Lab products
-- FRIDAY — https://friday.adityaai.dev — generative 3D engineering visualization
-- Sentinel — https://sentinel.adityaai.dev — multi-agent competitive intelligence
-- OpalServe — https://opalserve.adityaai.dev — MCP registry & team gateway
-- Ohh-my-excel — https://github.com/adityaidev/Ohh-my-excel
-- mt5-quant-windows — https://github.com/adityaidev/mt5-quant-windows
+- FRIDAY - https://friday.adityaai.dev - generative 3D engineering visualization
+- Sentinel - https://sentinel.adityaai.dev - multi-agent competitive intelligence
+- OpalServe - https://opalserve.adityaai.dev - MCP registry & team gateway
+- Ohh-my-excel - https://github.com/adi-IL/Ohh-my-excel
+- mt5-quant-windows - https://github.com/adi-IL/mt5-quant-windows
 
 ## Essays (shelf)
 Forms: Framework | Architecture | Principle. Prefer permanent decision tools over news.

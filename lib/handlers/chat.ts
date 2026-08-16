@@ -5,12 +5,14 @@ import { logError } from '../errors.js';
 import {
   extractSources,
   extractText,
+  extractFunctionCalls,
   getChatModel,
   getGenAI,
   isSearchEnabled,
   type ChatSource,
 } from '../vertex.js';
 import { buildSystemInstruction } from '../site-context.js';
+import { Type } from '@google/genai';
 
 const MAX_MESSAGES = 12;
 const MAX_CONTENT_CHARS = 2000;
@@ -117,7 +119,27 @@ export async function handleChat(req: ApiRequest, res: ApiResponse): Promise<voi
           systemInstruction: buildSystemInstruction(searchEnabled),
           temperature: 0.4,
           maxOutputTokens: 1024,
-          ...(useSearch ? { tools: [{ googleSearch: {} }] } : {}),
+          tools: [
+            ...(useSearch ? [{ googleSearch: {} }] : []),
+            {
+              functionDeclarations: [
+                {
+                  name: 'navigateTo',
+                  description: 'Navigates the user to a different page on the site. Use this when the user asks to see a project, essay, or the about page.',
+                  parameters: {
+                    type: Type.OBJECT,
+                    properties: {
+                      path: {
+                        type: Type.STRING,
+                        description: 'The relative path to navigate to (e.g. /projects, /about, /articles/memory-stacks-for-agents)',
+                      },
+                    } as any,
+                    required: ['path'],
+                  } as any,
+                } as any,
+              ],
+            } as any,
+          ],
         },
       });
     } catch (searchError: unknown) {
@@ -131,6 +153,26 @@ export async function handleChat(req: ApiRequest, res: ApiResponse): Promise<voi
             systemInstruction: buildSystemInstruction(searchEnabled),
             temperature: 0.4,
             maxOutputTokens: 1024,
+            tools: [
+              {
+                functionDeclarations: [
+                  {
+                    name: 'navigateTo',
+                    description: 'Navigates the user to a different page on the site. Use this when the user asks to see a project, essay, or the about page.',
+                    parameters: {
+                      type: Type.OBJECT,
+                      properties: {
+                        path: {
+                          type: Type.STRING,
+                          description: 'The relative path to navigate to (e.g. /projects, /about, /articles/memory-stacks-for-agents)',
+                        },
+                      } as any,
+                      required: ['path'],
+                    } as any,
+                  } as any,
+                ],
+              },
+            ],
           },
         });
       } else {
@@ -138,16 +180,27 @@ export async function handleChat(req: ApiRequest, res: ApiResponse): Promise<voi
       }
     }
 
-    const reply = extractText(result);
+    let reply = extractText(result as any);
+    const functionCalls = extractFunctionCalls(result as any);
+    
+    // Auto-generate a reply if the model only returned a function call without text
+    if (!reply && functionCalls.length > 0) {
+      const call = functionCalls[0];
+      if (call.name === 'navigateTo' && call.args?.path) {
+        reply = `Navigating to ${call.args.path}...`;
+      }
+    }
+
     if (!reply) {
       logError('chat:empty', result);
       res.status(502).json({ error: 'The lab guide had nothing to say. Try again.' });
       return;
     }
 
-    const sources: ChatSource[] = actualUseSearch ? extractSources(result) : [];
+    const sources: ChatSource[] = actualUseSearch ? extractSources(result as any) : [];
     res.status(200).json({
       reply,
+      functionCalls,
       ...(sources.length ? { sources } : {}),
       usedSearch: actualUseSearch,
     });

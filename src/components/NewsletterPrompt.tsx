@@ -72,7 +72,7 @@ export default function NewsletterPrompt({
         <label htmlFor="inline-newsletter-email" className="sr-only">
           Email address
         </label>
-        {/* Honeypot — leave empty. Hidden from assistive tech and sighted users. */}
+        {/* Honeypot - leave empty. Hidden from assistive tech and sighted users. */}
         <input
           type="text"
           name="website"

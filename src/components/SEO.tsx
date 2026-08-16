@@ -35,7 +35,7 @@ const SITE_URL = 'https://www.adityaai.dev';
 const SOCIAL_LINKS = [
   'https://x.com/adityaaidev',
   'https://www.linkedin.com/in/adityaai/',
-  'https://github.com/adityaidev',
+  'https://github.com/adi-IL',
 ];
 
 export default function SEO({

@@ -1,6 +1,6 @@
 # adityaai.dev
 
-Personal lab site for Aditya Gaurav — AI Engineer & Systems Architect.
+Personal lab site for Aditya Gaurav - AI Engineer & Systems Architect.
 Focus: decision tools for people who design production AI systems
 (agents, memory, inference economics, MCP, architecture).
 
@@ -9,7 +9,7 @@ Focus: decision tools for people who design production AI systems
 - Role: AI Engineer & Systems Architect
 - Location: Sonipat, Haryana, India
 - Site: https://www.adityaai.dev
-- GitHub: https://github.com/adityaidev
+- GitHub: https://github.com/adi-IL
 - LinkedIn: https://www.linkedin.com/in/adityaai/
 - X: https://x.com/adityaaidev
 
@@ -20,11 +20,11 @@ Focus: decision tools for people who design production AI systems
 - Projects: https://www.adityaai.dev/projects
 
 ## Lab products
-- FRIDAY — https://friday.adityaai.dev — generative 3D engineering visualization
-- Sentinel — https://sentinel.adityaai.dev — multi-agent competitive intelligence
-- OpalServe — https://opalserve.adityaai.dev — MCP registry & team gateway
-- Ohh-my-excel — https://github.com/adityaidev/Ohh-my-excel
-- mt5-quant-windows — https://github.com/adityaidev/mt5-quant-windows
+- FRIDAY - https://friday.adityaai.dev - generative 3D engineering visualization
+- Sentinel - https://sentinel.adityaai.dev - multi-agent competitive intelligence
+- OpalServe - https://opalserve.adityaai.dev - MCP registry & team gateway
+- Ohh-my-excel - https://github.com/adi-IL/Ohh-my-excel
+- mt5-quant-windows - https://github.com/adi-IL/mt5-quant-windows
 
 ## Essays (shelf)
 Forms: Framework | Architecture | Principle. Prefer permanent decision tools over news.

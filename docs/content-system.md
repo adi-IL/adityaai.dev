@@ -2,7 +2,7 @@
 
 ## Essay shelf policy
 
-- **Small shelf, high signal** — not a chronological blog dump.
+- **Small shelf, high signal** - not a chronological blog dump.
 - Each piece should change how a systems designer decides something (memory, cost, MCP, product surface, architecture).
 - Taxonomy (UI filters): **Framework · Architecture · Principle**.
 - Restart snapshot: **7 essays** (see `src/content/articles/`).
@@ -37,7 +37,7 @@ featured: true
 
 # Title
 
-*Optional italic lede — preferred for SEO excerpt when long enough.*
+*Optional italic lede - preferred for SEO excerpt when long enough.*
 
 ## Sections…
 ```
@@ -69,7 +69,7 @@ npm run meta
 4. Sorts: **featured first**, then newest `dateISO`
 5. Writes `scripts/articles-meta.json`
 
-**Do not hand-edit `articles-meta.json`** for lasting changes — edit markdown / frontmatter and regenerate.
+**Do not hand-edit `articles-meta.json`** for lasting changes - edit markdown / frontmatter and regenerate.
 
 ---
 

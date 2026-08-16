@@ -9,7 +9,7 @@ import { handleFeedback } from './lib/handlers/feedback.js';
 import { handleVirtualCoffee } from './lib/handlers/virtual-coffee.js';
 import { handleChat } from './lib/handlers/chat.js';
 
-dotenv.config();
+dotenv.config({ path: ['.env.local', '.env'] });
 
 async function startServer() {
   const app = express();

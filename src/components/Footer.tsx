@@ -30,7 +30,7 @@ export default function Footer() {
             <Linkedin size={20} strokeWidth={1.5} />
             <span className="sr-only">LinkedIn</span>
           </a>
-          <a href="https://github.com/adityaidev" target="_blank" rel="noopener noreferrer" className="p-2 -m-2 text-zinc-500 hover:text-electric-lime transition-colors duration-300">
+          <a href="https://github.com/adi-IL" target="_blank" rel="noopener noreferrer" className="p-2 -m-2 text-zinc-500 hover:text-electric-lime transition-colors duration-300">
             <Github size={20} strokeWidth={1.5} />
             <span className="sr-only">GitHub</span>
           </a>

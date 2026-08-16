@@ -22,9 +22,9 @@ const PROJECTS = [
     slug: 'friday',
     tagline: 'Immersive Engineering Visual Intelligence',
     excerpt:
-      'Generative 3D engineering visualization engine — voice, sketches, or prompts into interactive mechanical assemblies.',
+      'Generative 3D engineering visualization engine - voice, sketches, or prompts into interactive mechanical assemblies.',
     liveUrl: 'https://friday.adityaai.dev',
-    codeUrl: 'https://github.com/adityaidev/friday-visual-engine',
+    codeUrl: 'https://github.com/adi-IL/friday-visual-engine',
   },
   {
     name: 'Sentinel',
@@ -33,29 +33,29 @@ const PROJECTS = [
     excerpt:
       'Multi-agent chain that hunts the web, scores SWOT dimensions, and drafts C-level briefs.',
     liveUrl: 'https://sentinel.adityaai.dev',
-    codeUrl: 'https://github.com/adityaidev/sentinel',
+    codeUrl: 'https://github.com/adi-IL/sentinel',
   },
   {
     name: 'OpalServe',
     slug: 'opalserve',
     tagline: 'MCP registry and team gateway',
     excerpt:
-      'Open-source control plane for MCP servers — register, discover tools, observe usage.',
+      'Open-source control plane for MCP servers - register, discover tools, observe usage.',
     liveUrl: 'https://opalserve.adityaai.dev',
-    codeUrl: 'https://github.com/adityaidev/opalserve',
+    codeUrl: 'https://github.com/adi-IL/opalserve',
   },
 ];
 
 /**
  * Compact site knowledge injected into every chat turn.
- * Excerpts only — keeps tokens low; deep essay bodies stay on the site.
+ * Excerpts only - keeps tokens low; deep essay bodies stay on the site.
  */
 export function buildSiteContext(): string {
   const essays = articlesMeta as EssayMeta[];
   const essayLines = essays
     .map((e) => {
       const form = e.form || e.category || 'Essay';
-      const topics = (e.topics || []).join(', ') || '—';
+      const topics = (e.topics || []).join(', ') || '-';
       return `- [${form}] ${e.title}
   slug: ${e.slug}
   url: ${SITE}/articles/${e.slug}
@@ -75,9 +75,9 @@ export function buildSiteContext(): string {
   ).join('\n');
 
   return `SITE: adityaai.dev (canonical ${SITE})
-PERSON: Aditya Gaurav — AI Engineer & Systems Architect (Sonipat, Haryana, India).
+PERSON: Aditya Gaurav - AI Engineer & Systems Architect (Sonipat, Haryana, India).
 POSITIONING: Decision tools for people who design production AI systems. Curated essay shelf (not a content firehose). Lab products FRIDAY, Sentinel, OpalServe.
-CONTACT: Virtual coffee form on the site; newsletter double opt-in; socials github.com/adityaidev, x.com/adityaaidev, linkedin.com/in/adityaai/
+CONTACT: Virtual coffee form on the site; newsletter double opt-in; socials github.com/adi-IL, x.com/adityaaidev, linkedin.com/in/adityaai/
 
 ESSAYS (${essays.length}):
 ${essayLines}
@@ -90,7 +90,7 @@ OTHER PAGES: ${SITE}/ about · ${SITE}/articles · ${SITE}/projects
 }
 
 export function buildSystemInstruction(searchEnabled: boolean): string {
-  return `You are the lab guide for adityaai.dev — Aditya Gaurav's personal AI systems lab.
+  return `You are the lab guide for adityaai.dev - Aditya Gaurav's personal AI systems lab.
 
 Your job:
 1. Help visitors understand the essay shelf, projects, and how to work with Aditya.

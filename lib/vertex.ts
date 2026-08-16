@@ -3,7 +3,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 
 /**
- * Vertex / Gemini client — same auth pattern as sentinel-main:
+ * Vertex / Gemini client - same auth pattern as sentinel-main:
  *  1) GEMINI_API_KEY / GOOGLE_API_KEY (Google AI Studio)
  *  2) else Vertex ADC via GCP_CREDENTIALS_JSON (or aliases) written to /tmp
  *  3) project + location from GCP_PROJECT_ID / GCP_LOCATION (with GOOGLE_* aliases)
@@ -119,7 +119,7 @@ export function getGenAI(userKey?: string): GoogleGenAI {
 
 export function extractText(response: {
   text?: string;
-  candidates?: Array<{ content?: { parts?: Array<{ text?: string }> } }>;
+  candidates?: Array<{ content?: { parts?: Array<{ text?: string, functionCall?: { name: string, args: Record<string, unknown> } }> } }>;
 }): string {
   if (typeof response.text === 'string' && response.text.trim()) {
     return response.text.trim();
@@ -129,6 +129,15 @@ export function extractText(response: {
     .map((p) => p.text || '')
     .join('')
     .trim();
+}
+
+export function extractFunctionCalls(response: {
+  candidates?: Array<{ content?: { parts?: Array<{ functionCall?: { name: string, args: Record<string, unknown> } }> } }>;
+}) {
+  const parts = response.candidates?.[0]?.content?.parts || [];
+  return parts
+    .map((p) => p.functionCall)
+    .filter(Boolean) as Array<{ name: string, args: Record<string, unknown> }>;
 }
 
 export type ChatSource = { title?: string; uri?: string };

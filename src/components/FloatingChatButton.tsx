@@ -3,7 +3,7 @@ import { m } from 'motion/react';
 
 /**
  * Opens the lab guide chat panel. Sits bottom-right; coffee button is
- * top-right on desktop / also bottom-right on mobile — chat sits left of
+ * top-right on desktop / also bottom-right on mobile - chat sits left of
  * coffee on mobile via bottom-6 right-20 so they don't stack.
  */
 export default function FloatingChatButton() {

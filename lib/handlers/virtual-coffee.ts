@@ -94,7 +94,7 @@ export async function handleVirtualCoffee(req: ApiRequest, res: ApiResponse): Pr
     });
 
     if (confirmResult.error) {
-      // Notification already sent — still treat as success for the visitor path.
+      // Notification already sent - still treat as success for the visitor path.
       logError('virtual-coffee:confirm', confirmResult.error);
     }
 

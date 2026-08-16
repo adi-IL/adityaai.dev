@@ -22,7 +22,7 @@ const signalQuotes = [
     slug: 'software-3-architecting-ai',
   },
   {
-    quote: 'MCP connects everything — and exposes everything.',
+    quote: 'MCP connects everything - and exposes everything.',
     slug: 'mcp-security-paradox',
   },
 ];

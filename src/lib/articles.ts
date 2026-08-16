@@ -2,7 +2,7 @@
 
 import articlesMeta from '../../scripts/articles-meta.json';
 
-/** Essay form — decision-tool taxonomy (replaces Research/Article/Blog). */
+/** Essay form - decision-tool taxonomy (replaces Research/Article/Blog). */
 export type EssayForm = 'Framework' | 'Architecture' | 'Principle';
 
 /** @deprecated Use EssayForm */
@@ -30,7 +30,7 @@ export interface Article extends ArticleMeta {
   content: string;
 }
 
-/** Listing metadata only — full markdown bodies are lazy-loaded per slug. */
+/** Listing metadata only - full markdown bodies are lazy-loaded per slug. */
 export const articles: ArticleMeta[] = (articlesMeta as ArticleMeta[]).map((a) => ({
   ...a,
   form: a.form || a.category,

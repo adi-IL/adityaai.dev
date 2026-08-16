@@ -34,7 +34,7 @@ const friday: Project = {
   year: '2026',
   stack: ['React 19', 'Three.js', 'Gemini 3.1 Pro', 'Gemini Live', 'Vercel'],
   liveUrl: 'https://friday.adityaai.dev',
-  codeUrl: 'https://github.com/adityaidev/friday-visual-engine',
+  codeUrl: 'https://github.com/adi-IL/friday-visual-engine',
   ogImage: 'https://friday.adityaai.dev/og-image.png',
   accent: 'text-cyan-300',
   metrics: [
@@ -88,7 +88,7 @@ Most AI tools for engineering stop at generating an image. FRIDAY generates an *
 ## Links
 
 - Live demo: [friday.adityaai.dev](https://friday.adityaai.dev)
-- Source: [github.com/adityaidev/friday-visual-engine](https://github.com/adityaidev/friday-visual-engine)`,
+- Source: [github.com/adi-IL/friday-visual-engine](https://github.com/adi-IL/friday-visual-engine)`,
 };
 
 const sentinel: Project = {
@@ -102,7 +102,7 @@ const sentinel: Project = {
   year: '2026',
   stack: ['React 19', 'Gemini Pro Latest', 'Gemini Flash Latest', 'Google Search', 'Supabase', 'Vercel'],
   liveUrl: 'https://sentinel.adityaai.dev',
-  codeUrl: 'https://github.com/adityaidev/sentinel',
+  codeUrl: 'https://github.com/adi-IL/sentinel',
   ogImage: 'https://sentinel.adityaai.dev/og-image.png',
   accent: 'text-blue-400',
   metrics: [
@@ -170,7 +170,7 @@ Most CI tools stop at a qualitative SWOT. That gives you bullet points but no wa
 ## Links
 
 - Live demo: [sentinel.adityaai.dev](https://sentinel.adityaai.dev)
-- Source: [github.com/adityaidev/sentinel](https://github.com/adityaidev/sentinel)`,
+- Source: [github.com/adi-IL/sentinel](https://github.com/adi-IL/sentinel)`,
 };
 
 const opalserve: Project = {
@@ -184,7 +184,7 @@ const opalserve: Project = {
   year: '2026',
   stack: ['Node.js', 'Fastify', 'MCP SDK', 'SQLite', 'React', 'TypeScript'],
   liveUrl: 'https://opalserve.adityaai.dev',
-  codeUrl: 'https://github.com/adityaidev/opalserve',
+  codeUrl: 'https://github.com/adi-IL/opalserve',
   ogImage: 'https://opalserve.adityaai.dev/og-image.svg',
   accent: 'text-orange-400',
   metrics: [
@@ -281,7 +281,7 @@ The MCP ecosystem is growing faster than any team's ability to govern it. Every 
 ## Links
 
 - Landing: [opalserve.adityaai.dev](https://opalserve.adityaai.dev)
-- Source: [github.com/adityaidev/opalserve](https://github.com/adityaidev/opalserve)
+- Source: [github.com/adi-IL/opalserve](https://github.com/adi-IL/opalserve)
 - npm: \`npm install -g opalserve\``,
 };
 

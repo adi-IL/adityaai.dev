@@ -96,10 +96,20 @@ Always generic success for valid-shaped emails (no email oracle). Sends **confir
 
 - Verifies HMAC token (email + expiry).
 - Creates Resend contact (optional audience).
-- Sends welcome + owner notify.
-- **Redirects** to site `/?subscribed=1` (or invalid/expired flags).
+- Sends welcome + owner notify (at most once per email / 24h).
+- **Redirects** to site `/?subscribed=1` (or `invalid` / `expired` flags) with `Cache-Control: no-store`.
 
-Not a JSON API for browsers — users click from email.
+Accepts `GET` or `POST` (browsers click from email as `GET`). Not a JSON API for browsers.
+
+### Redirect targets
+
+| Token state | Redirect |
+| --- | --- |
+| Valid | `/?subscribed=1` |
+| Expired (>48h) | `/?subscribed=expired` |
+| Invalid / rate-limited / config error | `/?subscribed=invalid` |
+
+Note: confirmation (and all email delivery) is async from the browser's perspective - no JSON is returned.
 
 ---
 

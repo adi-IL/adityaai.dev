@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState, type FormEvent, type KeyboardEvent } from 'react';
+import { useLocation, useNavigate } from 'react-router';
 import { m, AnimatePresence } from 'motion/react';
 import { MessageCircle, Send, X, XCircle } from 'lucide-react';
 import Markdown from 'react-markdown';
@@ -8,11 +9,36 @@ type Msg = { role: Role; content: string };
 type Source = { title?: string; uri?: string };
 
 const STORAGE_KEY = 'adityaai:lab-chat-v1';
-const STARTERS = [
+const DEFAULT_STARTERS = [
   "What's Memory Stacks about?",
   'What is FRIDAY?',
   'How do I reach Aditya?',
 ];
+
+function getStartersForPath(pathname: string): string[] {
+  if (pathname === '/projects') {
+    return [
+      'Tell me about FRIDAY',
+      'What stack does Sentinel use?',
+      'How does OpalServe work?',
+    ];
+  }
+  if (pathname.startsWith('/articles/')) {
+    return [
+      'Summarize this essay',
+      'What are the main takeaways?',
+      'Who is the target audience for this?',
+    ];
+  }
+  if (pathname === '/about') {
+    return [
+      'What are Aditya\'s certifications?',
+      'What is Aditya\'s background?',
+      'How do I contact Aditya?',
+    ];
+  }
+  return DEFAULT_STARTERS;
+}
 
 function loadSession(): Msg[] {
   try {
@@ -40,6 +66,10 @@ function saveSession(messages: Msg[]) {
 }
 
 export default function SiteChatWidget() {
+  const location = useLocation();
+  const navigate = useNavigate();
+  const starters = getStartersForPath(location.pathname);
+
   const [open, setOpen] = useState(false);
   const [messages, setMessages] = useState<Msg[]>([]);
   const [input, setInput] = useState('');
@@ -108,16 +138,32 @@ export default function SiteChatWidget() {
         reply?: string;
         error?: string;
         sources?: Source[];
+        functionCalls?: Array<{ name: string, args: Record<string, unknown> }>;
       };
       if (!res.ok) {
         setError(typeof data.error === 'string' ? data.error : 'Something went wrong.');
         return;
       }
+      
       const reply = (data.reply || '').trim();
-      if (!reply) {
+      if (!reply && !data.functionCalls?.length) {
         setError('Empty reply. Try again.');
         return;
       }
+      
+      // Handle client-side tool execution
+      if (data.functionCalls && data.functionCalls.length > 0) {
+        for (const call of data.functionCalls) {
+          if (call.name === 'navigateTo' && typeof call.args?.path === 'string') {
+            // Close the chat widget slightly after navigating so they see the new page
+            setTimeout(() => {
+              navigate(call.args.path as string);
+              setOpen(false);
+            }, 600);
+          }
+        }
+      }
+
       const withAssistant: Msg[] = [...next, { role: 'assistant', content: reply }];
       setMessages(withAssistant);
       saveSession(withAssistant);
@@ -185,7 +231,7 @@ export default function SiteChatWidget() {
                   Ask about the essay shelf, FRIDAY / Sentinel / OpalServe, or how to get in touch.
                 </p>
                 <div className="flex flex-wrap gap-2">
-                  {STARTERS.map((s) => (
+                  {starters.map((s) => (
                     <button
                       key={s}
                       type="button"
