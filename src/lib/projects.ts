@@ -99,9 +99,9 @@ Most AI tools for engineering stop at generating an image. FRIDAY generates an *
 
 ## Recognition & awards
 
-- **Winner — Google DeepMind × Kaggle: Vibe Code with Gemini 3 Pro Hackathon (Developer Tools Category)**  
-  Selected as one of the 50 winning projects globally out of thousands of submissions worldwide. Recognized for multimodal generative 3D visual intelligence, voice-native mechanical assembly manipulation, and two-phase geometric reasoning.
-  - [Official Winning Kaggle Writeup](https://www.kaggle.com/competitions/gemini-3/writeups/new-writeup-1765520565551)
+- **Winner: Google DeepMind × Kaggle Vibe Code with Gemini 3 Pro Hackathon (Developer Tools)**  
+  Selected as one of 50 winning projects worldwide. Built for generative 3D CAD visualization, voice-driven spatial assembly, and two-phase geometric reasoning.
+  - [Winning Kaggle Writeup](https://www.kaggle.com/competitions/gemini-3/writeups/new-writeup-1765520565551)
   - [Google DeepMind Hackathon Winners](https://www.kaggle.com/competitions/gemini-3/hackathon-winners)
 
 ## Links

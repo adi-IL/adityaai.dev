@@ -144,7 +144,7 @@ export default function About() {
                     Kaggle × Google DeepMind Gemini 3 Pro Hackathon
                   </h3>
                   <p className="text-zinc-400 text-base font-light max-w-2xl leading-relaxed">
-                    Awarded for F.R.I.D.A.Y — generative 3D visual intelligence engine built on Gemini 3 Pro, Three.js, and spatial assembly synthesis.
+                    Awarded for F.R.I.D.A.Y, a generative 3D visual engine built on Gemini 3 Pro, Three.js, and spatial assembly synthesis.
                   </p>
                 </div>
               </div>
