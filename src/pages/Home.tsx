@@ -158,7 +158,7 @@ export default function Home() {
         {/* Signal Section (rotating pull-quote from real articles) */}
         <SignalSection />
 
-        {/* Terminal Section */}
+        {/* Lab Architecture Stack Section */}
         <section className="max-w-6xl mx-auto px-6 md:px-8 lg:px-12 py-24 relative">
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80%] h-[50%] bg-zinc-800/20 blur-[120px] rounded-full pointer-events-none" />
 
@@ -167,30 +167,194 @@ export default function Home() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: '-100px' }}
             transition={{ duration: 0.8, ease: [0.32, 0.72, 0, 1] }}
-            className="rounded-xl overflow-hidden border border-zinc-800 bg-[#0a0a0a] shadow-2xl relative z-10 max-w-3xl mx-auto"
+            className="rounded-2xl overflow-hidden border border-zinc-800 bg-[#0a0a0a] shadow-2xl relative z-10 max-w-4xl mx-auto"
           >
-            <div className="flex items-center px-4 py-3 border-b border-zinc-800 bg-[#111]">
+            {/* Window chrome header */}
+            <div className="flex items-center px-5 py-3.5 border-b border-zinc-800/80 bg-[#111]">
               <div className="flex gap-2">
-                <div className="size-3 rounded-full bg-zinc-700" />
-                <div className="size-3 rounded-full bg-zinc-700" />
-                <div className="size-3 rounded-full bg-zinc-700" />
+                <div className="size-3 rounded-full bg-zinc-700/80" />
+                <div className="size-3 rounded-full bg-zinc-700/80" />
+                <div className="size-3 rounded-full bg-zinc-700/80" />
               </div>
-              <div className="mx-auto text-xs font-mono text-zinc-500">sentinel · agents.ts</div>
+              <div className="mx-auto text-xs font-mono uppercase tracking-widest text-zinc-500">
+                systems architecture · production stack
+              </div>
+              <div className="text-[11px] font-mono text-zinc-600 hidden sm:block">
+                Software 3.0
+              </div>
             </div>
-            <div className="p-6 md:p-8 overflow-x-auto">
-              <pre className="font-mono text-[13px] md:text-[15px] leading-[1.85]">
-                <code className="text-zinc-300">
-                  <span className="text-zinc-500">{"// 5-agent chain - 47s end-to-end - scored SWOT out"}</span><br/>
-                  <br/>
-                  <span className="text-pink-500">const</span> {'{ intent  }'}  = <span className="text-pink-500">await</span> <span className="text-blue-400">router</span>(query);<br/>
-                  <span className="text-pink-500">const</span> {'{ urls    }'}  = <span className="text-pink-500">await</span> <span className="text-blue-400">hunter</span>(intent.target);<br/>
-                  <span className="text-pink-500">const</span> {'{ sheet   }'}  = <span className="text-pink-500">await</span> <span className="text-blue-400">scraper</span>(urls);<br/>
-                  <span className="text-pink-500">const</span> {'{ swot    }'}  = <span className="text-pink-500">await</span> <span className="text-blue-400">analyst</span>(sheet);  <span className="text-zinc-500">{"// Gemini Pro"}</span><br/>
-                  <span className="text-pink-500">const</span> {'{ report  }'}  = <span className="text-pink-500">await</span> <span className="text-blue-400">reporter</span>(swot);<br/>
-                  <br/>
-                  <span className="text-pink-500">return</span> report;  <span className="text-zinc-500">{"// 5 dimensions scored 0-100"}</span>
-                </code>
-              </pre>
+
+            {/* Architecture stack body */}
+            <div className="p-6 md:p-8 space-y-4">
+              
+              {/* Layer 3: Production Surfaces */}
+              <div className="rounded-xl border border-zinc-800/80 bg-zinc-950/60 p-5 hover:border-zinc-700 transition-colors">
+                <div className="flex items-center justify-between mb-3 flex-wrap gap-2">
+                  <div className="flex items-center gap-2">
+                    <span className="font-mono text-[10px] uppercase tracking-widest text-electric-lime font-semibold">
+                      Layer 3
+                    </span>
+                    <span className="text-zinc-700">•</span>
+                    <span className="font-mono text-xs uppercase tracking-wider text-zinc-300">
+                      Autonomous Production Surfaces
+                    </span>
+                  </div>
+                  <span className="font-mono text-[10px] text-zinc-500 uppercase tracking-widest">
+                    Multi-Modal · Live Workforces
+                  </span>
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                  <Link
+                    to="/projects/friday"
+                    className="p-3 rounded-lg border border-zinc-800/60 bg-zinc-900/30 hover:border-cyan-400/50 hover:bg-zinc-900/60 transition-all group"
+                  >
+                    <div className="flex items-center justify-between mb-1">
+                      <span className="font-display font-medium text-sm text-zinc-100 group-hover:text-cyan-300 transition-colors">
+                        F.R.I.D.A.Y
+                      </span>
+                      <ArrowUpRight size={13} className="text-zinc-600 group-hover:text-cyan-300 transition-colors" />
+                    </div>
+                    <p className="text-xs text-zinc-500 font-light">
+                      Generative 3D CAD engine · DeepMind winner
+                    </p>
+                  </Link>
+
+                  <Link
+                    to="/projects/sentinel"
+                    className="p-3 rounded-lg border border-zinc-800/60 bg-zinc-900/30 hover:border-blue-400/50 hover:bg-zinc-900/60 transition-all group"
+                  >
+                    <div className="flex items-center justify-between mb-1">
+                      <span className="font-display font-medium text-sm text-zinc-100 group-hover:text-blue-300 transition-colors">
+                        Sentinel
+                      </span>
+                      <ArrowUpRight size={13} className="text-zinc-600 group-hover:text-blue-300 transition-colors" />
+                    </div>
+                    <p className="text-xs text-zinc-500 font-light">
+                      Autonomous competitive intelligence FSM
+                    </p>
+                  </Link>
+
+                  <Link
+                    to="/projects/midsphere"
+                    className="p-3 rounded-lg border border-zinc-800/60 bg-zinc-900/30 hover:border-emerald-400/50 hover:bg-zinc-900/60 transition-all group"
+                  >
+                    <div className="flex items-center justify-between mb-1">
+                      <span className="font-display font-medium text-sm text-zinc-100 group-hover:text-emerald-300 transition-colors">
+                        MidSphere
+                      </span>
+                      <ArrowUpRight size={13} className="text-zinc-600 group-hover:text-emerald-300 transition-colors" />
+                    </div>
+                    <p className="text-xs text-zinc-500 font-light">
+                      Context circuit-breaker for DataHub
+                    </p>
+                  </Link>
+                </div>
+              </div>
+
+              {/* Layer 2: Deterministic Harness & Arbiters */}
+              <div className="rounded-xl border border-zinc-800/80 bg-zinc-950/60 p-5 hover:border-zinc-700 transition-colors">
+                <div className="flex items-center justify-between mb-3 flex-wrap gap-2">
+                  <div className="flex items-center gap-2">
+                    <span className="font-mono text-[10px] uppercase tracking-widest text-electric-lime font-semibold">
+                      Layer 2
+                    </span>
+                    <span className="text-zinc-700">•</span>
+                    <span className="font-mono text-xs uppercase tracking-wider text-zinc-300">
+                      Deterministic Harnesses & Arbiters
+                    </span>
+                  </div>
+                  <span className="font-mono text-[10px] text-zinc-500 uppercase tracking-widest">
+                    Verification · Sandbox Isolation
+                  </span>
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 font-mono text-xs">
+                  <Link
+                    to="/articles/the-verification-gap"
+                    className="p-3 rounded-lg border border-zinc-800/60 bg-zinc-900/30 hover:border-electric-lime/50 transition-all group"
+                  >
+                    <div className="flex items-center justify-between text-zinc-200 group-hover:text-electric-lime mb-1">
+                      <span>Deterministic Arbiters</span>
+                      <ArrowUpRight size={12} className="text-zinc-600 group-hover:text-electric-lime" />
+                    </div>
+                    <span className="text-[11px] text-zinc-500 block">Compilers · Linters · Pytest · AST</span>
+                  </Link>
+
+                  <Link
+                    to="/articles/context-circuit-breakers"
+                    className="p-3 rounded-lg border border-zinc-800/60 bg-zinc-900/30 hover:border-electric-lime/50 transition-all group"
+                  >
+                    <div className="flex items-center justify-between text-zinc-200 group-hover:text-electric-lime mb-1">
+                      <span>Circuit Breakers</span>
+                      <ArrowUpRight size={12} className="text-zinc-600 group-hover:text-electric-lime" />
+                    </div>
+                    <span className="text-[11px] text-zinc-500 block">Stagnation Gates · Output Quarantine</span>
+                  </Link>
+
+                  <Link
+                    to="/articles/sandboxing-architectures-for-agents"
+                    className="p-3 rounded-lg border border-zinc-800/60 bg-zinc-900/30 hover:border-electric-lime/50 transition-all group"
+                  >
+                    <div className="flex items-center justify-between text-zinc-200 group-hover:text-electric-lime mb-1">
+                      <span>Runtime Isolation</span>
+                      <ArrowUpRight size={12} className="text-zinc-600 group-hover:text-electric-lime" />
+                    </div>
+                    <span className="text-[11px] text-zinc-500 block">Firecracker MicroVMs · gVisor · Proxies</span>
+                  </Link>
+                </div>
+              </div>
+
+              {/* Layer 1: Protocol & Inference Foundation */}
+              <div className="rounded-xl border border-zinc-800/80 bg-zinc-950/60 p-5 hover:border-zinc-700 transition-colors">
+                <div className="flex items-center justify-between mb-3 flex-wrap gap-2">
+                  <div className="flex items-center gap-2">
+                    <span className="font-mono text-[10px] uppercase tracking-widest text-electric-lime font-semibold">
+                      Layer 1
+                    </span>
+                    <span className="text-zinc-700">•</span>
+                    <span className="font-mono text-xs uppercase tracking-wider text-zinc-300">
+                      Inference, State & Protocol Foundation
+                    </span>
+                  </div>
+                  <span className="font-mono text-[10px] text-zinc-500 uppercase tracking-widest">
+                    Economics · Memory · MCP
+                  </span>
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 font-mono text-xs">
+                  <Link
+                    to="/articles/the-chat-template-trap"
+                    className="p-3 rounded-lg border border-zinc-800/60 bg-zinc-900/30 hover:border-electric-lime/50 transition-all group"
+                  >
+                    <div className="flex items-center justify-between text-zinc-200 group-hover:text-electric-lime mb-1">
+                      <span>Provider Transforms</span>
+                      <ArrowUpRight size={12} className="text-zinc-600 group-hover:text-electric-lime" />
+                    </div>
+                    <span className="text-[11px] text-zinc-500 block">Chat Templates · Prompt Cache Partition</span>
+                  </Link>
+
+                  <Link
+                    to="/articles/memory-stacks-for-agents"
+                    className="p-3 rounded-lg border border-zinc-800/60 bg-zinc-900/30 hover:border-electric-lime/50 transition-all group"
+                  >
+                    <div className="flex items-center justify-between text-zinc-200 group-hover:text-electric-lime mb-1">
+                      <span>Memory Stacks</span>
+                      <ArrowUpRight size={12} className="text-zinc-600 group-hover:text-electric-lime" />
+                    </div>
+                    <span className="text-[11px] text-zinc-500 block">Episodic · Semantic · Procedural</span>
+                  </Link>
+
+                  <Link
+                    to="/articles/inference-economics-for-agents"
+                    className="p-3 rounded-lg border border-zinc-800/60 bg-zinc-900/30 hover:border-electric-lime/50 transition-all group"
+                  >
+                    <div className="flex items-center justify-between text-zinc-200 group-hover:text-electric-lime mb-1">
+                      <span>Inference Economics</span>
+                      <ArrowUpRight size={12} className="text-zinc-600 group-hover:text-electric-lime" />
+                    </div>
+                    <span className="text-[11px] text-zinc-500 block">Token Multipliers · Retry Budgets</span>
+                  </Link>
+                </div>
+              </div>
+
             </div>
           </m.div>
 
@@ -199,13 +363,13 @@ export default function Home() {
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="mt-6 text-center"
+            className="mt-8 text-center"
           >
             <Link
-              to="/projects/sentinel"
+              to="/articles"
               className="inline-flex items-center gap-2 text-zinc-500 hover:text-electric-lime transition-colors font-mono text-xs uppercase tracking-widest"
             >
-              Real code from Sentinel
+              Explore the architectural frameworks
               <ArrowUpRight size={14} />
             </Link>
           </m.div>
