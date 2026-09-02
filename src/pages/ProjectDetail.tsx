@@ -1,7 +1,7 @@
 import { useParams, Link } from 'react-router-dom';
 import { useMemo, useState, memo } from 'react';
 import { m } from 'motion/react';
-import { ArrowLeft, ArrowUpRight, ExternalLink, Github } from 'lucide-react';
+import { ArrowLeft, ArrowUpRight, ExternalLink, Github, Trophy } from 'lucide-react';
 import Markdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { getProjectBySlug, projects } from '../lib/projects';
@@ -124,6 +124,20 @@ export default function ProjectDetail() {
                 <span className="size-1.5 rounded-full bg-electric-lime shadow-[0_0_8px_rgba(204,255,0,0.8)]" />
                 {project.status}
               </span>
+              {project.award && (
+                <>
+                  <span className="text-zinc-700">•</span>
+                  <a
+                    href={project.award.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1.5 text-amber-300 hover:text-amber-200 transition-colors"
+                  >
+                    <Trophy size={13} className="shrink-0" />
+                    <span>{project.award.label}</span>
+                  </a>
+                </>
+              )}
             </div>
 
             <h1 className="font-display font-semibold text-[clamp(2.5rem,6vw,4.5rem)] leading-[1.05] tracking-[-0.02em] text-zinc-50 mb-6">
@@ -165,6 +179,19 @@ export default function ProjectDetail() {
                 Source
               </a>
             </Magnetic>
+            {project.award && (
+              <Magnetic>
+                <a
+                  href={project.award.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 border border-amber-500/40 bg-amber-500/10 text-amber-300 hover:border-amber-400 hover:text-amber-200 rounded-full px-5 py-2.5 text-xs uppercase tracking-widest font-mono transition-colors active:scale-[0.98]"
+                >
+                  <Trophy size={14} />
+                  Kaggle Writeup
+                </a>
+              </Magnetic>
+            )}
           </div>
 
           {/* Metrics */}

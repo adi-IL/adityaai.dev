@@ -1,7 +1,7 @@
 import { m } from 'motion/react';
 import SEO from '../components/SEO';
-import { SiUdemy, SiOpenai, SiGooglecloud } from 'react-icons/si';
-import { ArrowUpRight, Award } from 'lucide-react';
+import { SiUdemy, SiOpenai, SiGooglecloud, SiKaggle } from 'react-icons/si';
+import { ArrowUpRight, Trophy } from 'lucide-react';
 
 const OracleIcon = ({ size = 24, className = "" }: { size?: number, className?: string }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor" className={className} xmlns="http://www.w3.org/2000/svg">
@@ -108,11 +108,51 @@ export default function About() {
           transition={{ duration: 0.8, ease: [0.32, 0.72, 0, 1] }}
         >
           <div className="flex items-center gap-3 mb-12">
-            <Award className="text-electric-lime" size={28} />
+            <Trophy className="text-electric-lime" size={28} />
             <h2 className="font-display font-semibold text-[clamp(1.75rem,4vw,2.5rem)] text-zinc-50">
-              Certifications & Badges
+              Honors & Certifications
             </h2>
           </div>
+
+          {/* Featured Competition Award */}
+          <a
+            href="https://www.kaggle.com/competitions/gemini-3/writeups/new-writeup-1765520565551"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mb-8 block bg-zinc-900/30 border border-zinc-800/50 hover:border-amber-400/50 rounded-3xl p-8 md:p-10 relative overflow-hidden group transition-all"
+          >
+            <div className="absolute top-0 right-0 p-8 opacity-5 group-hover:opacity-10 transition-opacity">
+              <SiKaggle size={180} className="text-zinc-500" />
+            </div>
+
+            <div className="relative z-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+              <div className="flex items-start md:items-center gap-6">
+                <div className="size-14 rounded-2xl bg-amber-500/10 flex items-center justify-center border border-amber-500/20 text-amber-400 shrink-0">
+                  <Trophy size={28} />
+                </div>
+                <div>
+                  <div className="flex items-center gap-2 mb-2 flex-wrap">
+                    <span className="font-mono text-xs uppercase tracking-widest text-amber-300 font-semibold">
+                      Global Winner · Developer Tools
+                    </span>
+                    <span className="text-zinc-600">•</span>
+                    <span className="font-mono text-xs uppercase tracking-widest text-zinc-500">
+                      Top 50 Worldwide
+                    </span>
+                  </div>
+                  <h3 className="font-display text-2xl md:text-3xl text-zinc-100 group-hover:text-white transition-colors mb-2">
+                    Kaggle × Google DeepMind Gemini 3 Pro Hackathon
+                  </h3>
+                  <p className="text-zinc-400 text-base font-light max-w-2xl leading-relaxed">
+                    Awarded for F.R.I.D.A.Y — generative 3D visual intelligence engine built on Gemini 3 Pro, Three.js, and spatial assembly synthesis.
+                  </p>
+                </div>
+              </div>
+              <div className="size-11 rounded-full bg-zinc-950 flex items-center justify-center border border-zinc-800 group-hover:border-amber-400 group-hover:bg-amber-400/10 transition-all shrink-0 self-end md:self-auto">
+                <ArrowUpRight size={20} className="text-zinc-500 group-hover:text-amber-300 transition-colors" />
+              </div>
+            </div>
+          </a>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             

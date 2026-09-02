@@ -22,7 +22,7 @@ const PROJECTS = [
     slug: 'friday',
     tagline: 'Immersive Engineering Visual Intelligence',
     excerpt:
-      'Generative 3D engineering visualization engine - voice, sketches, or prompts into interactive mechanical assemblies.',
+      'Generative 3D engineering visualization engine - voice, sketches, or prompts into interactive mechanical assemblies. Official Winner in the Google DeepMind × Kaggle Gemini 3 Pro Hackathon (Developer Tools).',
     liveUrl: 'https://friday.adityaai.dev',
     codeUrl: 'https://github.com/adi-IL/friday-visual-engine',
   },

@@ -1,6 +1,6 @@
 import { m } from 'motion/react';
 import { Link } from 'react-router-dom';
-import { ArrowUpRight, ExternalLink, Github } from 'lucide-react';
+import { ArrowUpRight, ExternalLink, Github, Trophy } from 'lucide-react';
 import { projects, Project } from '../lib/projects';
 import SEO from '../components/SEO';
 import ProjectSignature from '../components/ProjectSignature';
@@ -62,7 +62,7 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
           {/* Text side */}
           <div className="p-8 md:p-12 flex flex-col justify-between min-h-[360px]">
             <div>
-              <div className="flex items-center gap-3 font-mono text-[10px] uppercase tracking-widest mb-6">
+              <div className="flex items-center gap-3 font-mono text-[10px] uppercase tracking-widest mb-6 flex-wrap">
                 <span className="text-electric-lime">{project.category}</span>
                 <span className="text-zinc-700">•</span>
                 <span className="text-zinc-500">{project.year}</span>
@@ -71,6 +71,15 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
                   <span className="size-1.5 rounded-full bg-electric-lime shadow-[0_0_8px_rgba(204,255,0,0.8)]" />
                   {project.status}
                 </span>
+                {project.award && (
+                  <>
+                    <span className="text-zinc-700">•</span>
+                    <span className="inline-flex items-center gap-1 text-amber-300">
+                      <Trophy size={11} className="shrink-0" />
+                      {project.award.label}
+                    </span>
+                  </>
+                )}
               </div>
 
               <h2 className="font-display font-semibold text-[clamp(2rem,4vw,3rem)] leading-[1.05] tracking-[-0.02em] text-zinc-50 group-hover:text-white transition-colors mb-3">

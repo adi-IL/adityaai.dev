@@ -6,22 +6,29 @@ export interface ProjectMetric {
   value: string;
 }
 
-export interface Project {
-  slug: string;
-  name: string;
-  tagline: string;
-  excerpt: string;
-  category: ProjectCategory;
-  status: ProjectStatus;
-  year: string;
-  stack: string[];
-  liveUrl: string;
-  codeUrl: string;
-  ogImage: string;
-  accent: string; // tailwind text color for the wordmark highlight
-  metrics: ProjectMetric[];
-  content: string; // markdown
-}
+export interface ProjectAward {
+  label: string;
+  sublabel?: string;
+  url: string;
+}
+
+export interface Project {
+  slug: string;
+  name: string;
+  tagline: string;
+  excerpt: string;
+  category: ProjectCategory;
+  status: ProjectStatus;
+  year: string;
+  stack: string[];
+  liveUrl: string;
+  codeUrl: string;
+  ogImage: string;
+  accent: string; // tailwind text color for the wordmark highlight
+  metrics: ProjectMetric[];
+  content: string; // markdown
+  award?: ProjectAward;
+}
 
 const friday: Project = {
   slug: 'friday',
@@ -36,12 +43,17 @@ const friday: Project = {
   liveUrl: 'https://friday.adityaai.dev',
   codeUrl: 'https://github.com/adi-IL/friday-visual-engine',
   ogImage: 'https://friday.adityaai.dev/og-image.png',
-  accent: 'text-cyan-300',
-  metrics: [
-    { label: 'Components per scene', value: '20-30' },
-    { label: 'Generation time', value: '45-60s' },
-    { label: 'Lines of code', value: '~5.8k' },
-  ],
+  accent: 'text-cyan-300',
+  award: {
+    label: 'Google DeepMind × Kaggle Winner',
+    sublabel: 'Gemini 3 Pro Hackathon · Developer Tools',
+    url: 'https://www.kaggle.com/competitions/gemini-3/writeups/new-writeup-1765520565551',
+  },
+  metrics: [
+    { label: 'DeepMind × Kaggle', value: 'Winner' },
+    { label: 'Components per scene', value: '20-30' },
+    { label: 'Generation time', value: '45-60s' },
+  ],
   content: `## Overview
 
 FRIDAY is a generative immersive visualization engine for engineering teams. Type a system name, upload a sketch, or speak a command, and a detailed 3D assembly compiles in front of you, ready to rotate, explode, scan, and interrogate.
@@ -81,14 +93,22 @@ Engineering teams lose days between "we need a visual of X" and actually having 
 - The Gemini Live WebSocket started dropping on frame 1 with close code 1007. Root cause: the \`realtime_input.media\` field was deprecated. Switched to \`audio\` and the session stayed alive.
 - Single-shot Pro for 30 component generations kept timing out. Split into a skeleton phase and parallel structure phase, both aware of the full skeleton context so primitives stay spatially coherent.
 
-## Why it matters
-
-Most AI tools for engineering stop at generating an image. FRIDAY generates an **assembly**, with component names, connections, and positions you can manipulate. It is the closest I have shipped to a browser-native spatial language model.
-
-## Links
-
-- Live demo: [friday.adityaai.dev](https://friday.adityaai.dev)
-- Source: [github.com/adi-IL/friday-visual-engine](https://github.com/adi-IL/friday-visual-engine)`,
+## Why it matters
+
+Most AI tools for engineering stop at generating an image. FRIDAY generates an **assembly**, with component names, connections, and positions you can manipulate. It is the closest I have shipped to a browser-native spatial language model.
+
+## Recognition & awards
+
+- **Winner — Google DeepMind × Kaggle: Vibe Code with Gemini 3 Pro Hackathon (Developer Tools Category)**  
+  Selected as one of the 50 winning projects globally out of thousands of submissions worldwide. Recognized for multimodal generative 3D visual intelligence, voice-native mechanical assembly manipulation, and two-phase geometric reasoning.
+  - [Official Winning Kaggle Writeup](https://www.kaggle.com/competitions/gemini-3/writeups/new-writeup-1765520565551)
+  - [Google DeepMind Hackathon Winners](https://www.kaggle.com/competitions/gemini-3/hackathon-winners)
+
+## Links
+
+- Live demo: [friday.adityaai.dev](https://friday.adityaai.dev)
+- Kaggle writeup: [kaggle.com/competitions/gemini-3/writeups/new-writeup-1765520565551](https://www.kaggle.com/competitions/gemini-3/writeups/new-writeup-1765520565551)
+- Source: [github.com/adi-IL/friday-visual-engine](https://github.com/adi-IL/friday-visual-engine)`,
 };
 
 const sentinel: Project = {

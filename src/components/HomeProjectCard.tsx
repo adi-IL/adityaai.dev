@@ -66,9 +66,16 @@ export default function HomeProjectCard({ project, index }: { project: Project; 
 
         <div className="p-6 bg-[#050505] relative">
           <div className="flex items-center justify-between mb-4">
-            <span className="font-mono text-[10px] uppercase tracking-widest text-electric-lime">
-              {project.category}
-            </span>
+            <div className="flex items-center gap-2 flex-wrap">
+              <span className="font-mono text-[10px] uppercase tracking-widest text-electric-lime">
+                {project.category}
+              </span>
+              {project.award && (
+                <span className="font-mono text-[10px] uppercase tracking-widest text-amber-300">
+                  • Winner
+                </span>
+              )}
+            </div>
             <ArrowUpRight
               size={16}
               className="text-zinc-700 group-hover:text-electric-lime transition-all duration-300 transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
