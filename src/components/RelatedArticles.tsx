@@ -7,7 +7,7 @@ import { articles, type ArticleMeta } from '../lib/articles';
  * Related essays for a small curated shelf:
  *   1. Same form (Framework / Architecture / Principle)
  *   2. Shared topics
- *   3. Fill with remaining shelf (never empty for 7 essays)
+ *   3. Fill with remaining shelf (never empty for 12 essays)
  */
 function pickRelated(currentSlug: string): ArticleMeta[] {
   const current = articles.find((a) => a.slug === currentSlug);
