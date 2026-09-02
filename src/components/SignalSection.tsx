@@ -25,6 +25,18 @@ const signalQuotes = [
     quote: 'MCP connects everything - and exposes everything.',
     slug: 'mcp-security-paradox',
   },
+  {
+    quote: 'The model proposes. Deterministic arbiters dispose.',
+    slug: 'the-verification-gap',
+  },
+  {
+    quote: 'Passing a unit test does not prove a patch is correct.',
+    slug: 'closed-loop-remediation-architecture',
+  },
+  {
+    quote: 'Multi-agent systems cannot run on static prompts.',
+    slug: 'the-chat-template-trap',
+  },
 ];
 
 export default function SignalSection() {

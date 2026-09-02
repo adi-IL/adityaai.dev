@@ -1,5 +1,22 @@
 [
   {
+    "slug": "the-chat-template-trap",
+    "title": "The Chat Template Trap: Why Dynamic Agent State Crashes Open-Weight Models",
+    "excerpt": "Multi-agent systems cannot run on static prompts. But the moment you inject volatile state into open-weight inference, Jinja templates throw fatal exceptions. Here is how we engineered asymmetric…",
+    "dateISO": "2026-09-02",
+    "date": "SEP 02, 2026",
+    "form": "Architecture",
+    "category": "Architecture",
+    "topics": [
+      "agents",
+      "architecture",
+      "security"
+    ],
+    "featured": true,
+    "readingTime": 5,
+    "wordCount": 1028
+  },
+  {
     "slug": "memory-stacks-for-agents",
     "title": "Memory Stacks for Agents: A Deep Dive into Episodic, Semantic, and Procedural Architecture",
     "excerpt": "Memory is the layer below reasoning, and most agent teams build it wrong. A systems architect's field guide to the three kinds of memory your agent actually needs, and how to make them work together.",
@@ -61,6 +78,70 @@
     "featured": true,
     "readingTime": 5,
     "wordCount": 1039
+  },
+  {
+    "slug": "the-verification-gap",
+    "title": "The Verification Gap: Why Reasoning Models Need Deterministic Arbiters",
+    "excerpt": "Test-time compute and extended chain-of-thought are not magic. Beyond a critical token budget, unconstrained reasoning leads to prior drift, verifier gaming, and overthinking. The governing…",
+    "dateISO": "2026-09-02",
+    "date": "SEP 02, 2026",
+    "form": "Principle",
+    "category": "Principle",
+    "topics": [
+      "models",
+      "architecture"
+    ],
+    "featured": false,
+    "readingTime": 5,
+    "wordCount": 1090
+  },
+  {
+    "slug": "closed-loop-remediation-architecture",
+    "title": "The Invariant Problem in Autonomous Remediation: Why Code Synthesis Fails Without Closed-Loop Verification",
+    "excerpt": "Generating a patch that silences a crash is easy. Guaranteeing that the patch does not break downstream invariants, truncate valid protocols, or leak resources is hard. Here is an architectural…",
+    "dateISO": "2026-08-28",
+    "date": "AUG 28, 2026",
+    "form": "Framework",
+    "category": "Framework",
+    "topics": [
+      "security",
+      "agents"
+    ],
+    "featured": false,
+    "readingTime": 6,
+    "wordCount": 1195
+  },
+  {
+    "slug": "sandboxing-architectures-for-agents",
+    "title": "Sandboxing Architectures for Autonomous Agents: MicroVMs, gVisor, and the Egress Dilemma",
+    "excerpt": "Running autonomous coding and offensive security agents inside standard Docker containers is an operational hazard. Here is a systems guide to isolation runtimes, cold boot mechanics, and the…",
+    "dateISO": "2026-08-14",
+    "date": "AUG 14, 2026",
+    "form": "Architecture",
+    "category": "Architecture",
+    "topics": [
+      "security",
+      "architecture"
+    ],
+    "featured": false,
+    "readingTime": 7,
+    "wordCount": 1370
+  },
+  {
+    "slug": "context-circuit-breakers",
+    "title": "Context Circuit Breakers: Preventing Reasoning Collapse in Long-Horizon Agent Loops",
+    "excerpt": "When autonomous agents run past 20 turns, standard context windows do not just fill up. They degrade. Here is an architectural framework for deterministic circuit breakers, tool output quarantine,…",
+    "dateISO": "2026-07-28",
+    "date": "JUL 28, 2026",
+    "form": "Framework",
+    "category": "Framework",
+    "topics": [
+      "agents",
+      "architecture"
+    ],
+    "featured": false,
+    "readingTime": 6,
+    "wordCount": 1111
   },
   {
     "slug": "mcp-security-paradox",

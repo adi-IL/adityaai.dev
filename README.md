@@ -32,20 +32,25 @@ surface for [FRIDAY](https://friday.adityaai.dev),
 
 ## Essay shelf (current)
 
-Seven essays after a 2026-08 reset. Forms:
+Twelve essays after a 2026-08/09 expansion. Forms:
 
 | Form | Meaning |
 | --- | --- |
-| **Framework** | Reusable decision model (memory stacks, inference economics, MCP security). |
-| **Architecture** | Maps of how systems are structured (Software 3.0, paradigm shifts, comparisons). |
-| **Principle** | Standing rules (product is the model). |
+| **Framework** | Reusable decision model (memory stacks, inference economics, MCP security, circuit breakers, remediation). |
+| **Architecture** | Maps of how systems are structured (Software 3.0, paradigm shifts, comparisons, sandboxing, chat templates). |
+| **Principle** | Standing rules (product is the model, verification gap). |
 
 | ★ Start here | Slug | Form |
 | --- | --- | --- |
+| ★ | [`the-chat-template-trap`](https://www.adityaai.dev/articles/the-chat-template-trap) | Architecture |
 | ★ | [`memory-stacks-for-agents`](https://www.adityaai.dev/articles/memory-stacks-for-agents) | Framework |
 | ★ | [`inference-economics-for-agents`](https://www.adityaai.dev/articles/inference-economics-for-agents) | Framework |
 | ★ | [`software-3-architecting-ai`](https://www.adityaai.dev/articles/software-3-architecting-ai) | Architecture |
 | ★ | [`product-is-the-model`](https://www.adityaai.dev/articles/product-is-the-model) | Principle |
+| | [`the-verification-gap`](https://www.adityaai.dev/articles/the-verification-gap) | Principle |
+| | [`closed-loop-remediation-architecture`](https://www.adityaai.dev/articles/closed-loop-remediation-architecture) | Framework |
+| | [`sandboxing-architectures-for-agents`](https://www.adityaai.dev/articles/sandboxing-architectures-for-agents) | Architecture |
+| | [`context-circuit-breakers`](https://www.adityaai.dev/articles/context-circuit-breakers) | Framework |
 | | [`mcp-security-paradox`](https://www.adityaai.dev/articles/mcp-security-paradox) | Framework |
 | | [`ai-systems-architecture-comparison`](https://www.adityaai.dev/articles/ai-systems-architecture-comparison) | Architecture |
 | | [`six-paradigm-shifts`](https://www.adityaai.dev/articles/six-paradigm-shifts) | Architecture |

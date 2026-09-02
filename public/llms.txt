@@ -16,7 +16,7 @@ Focus: decision tools for people who design production AI systems
 ## Pages
 - Home: https://www.adityaai.dev/
 - About: https://www.adityaai.dev/about
-- Essays: https://www.adityaai.dev/articles (7 curated; not a high-volume blog)
+- Essays: https://www.adityaai.dev/articles (12 curated; not a high-volume blog)
 - Projects: https://www.adityaai.dev/projects
 
 ## Lab products
@@ -28,6 +28,8 @@ Focus: decision tools for people who design production AI systems
 
 ## Essays (shelf)
 Forms: Framework | Architecture | Principle. Prefer permanent decision tools over news.
+- [Architecture] "The Chat Template Trap: Why Dynamic Agent State Crashes Open-Weight Models" (Sep 2026)
+  https://www.adityaai.dev/articles/the-chat-template-trap
 - [Framework] "Memory Stacks for Agents: A Deep Dive into Episodic, Semantic, and Procedural Architecture" (Apr 2026)
   https://www.adityaai.dev/articles/memory-stacks-for-agents
 - [Framework] "Inference Economics for Agents: A Research Framework for Why Token Cost Is the Wrong Metric" (Apr 2026)
@@ -36,12 +38,12 @@ Forms: Framework | Architecture | Principle. Prefer permanent decision tools ove
   https://www.adityaai.dev/articles/software-3-architecting-ai
 - [Principle] "The "Product Is the Model" Principle - And How to Actually Apply It" (Nov 2025)
   https://www.adityaai.dev/articles/product-is-the-model
-- [Framework] "The MCP Security Paradox: How the Protocol That Connects Everything Also Exposes Everything" (May 2026)
-  https://www.adityaai.dev/articles/mcp-security-paradox
-- [Architecture] "The Big AI Systems Architecture Comparison" (Mar 2026)
-  https://www.adityaai.dev/articles/ai-systems-architecture-comparison
-- [Architecture] "The 6 Paradigm Shifts Nobody Told You About (2026 Edition)" (Jan 2026)
-  https://www.adityaai.dev/articles/six-paradigm-shifts
+- [Principle] "The Verification Gap: Why Reasoning Models Need Deterministic Arbiters" (Sep 2026)
+  https://www.adityaai.dev/articles/the-verification-gap
+- [Framework] "The Invariant Problem in Autonomous Remediation: Why Code Synthesis Fails Without Closed-Loop Verification" (Aug 2026)
+  https://www.adityaai.dev/articles/closed-loop-remediation-architecture
+- [Architecture] "Sandboxing Architectures for Autonomous Agents: MicroVMs, gVisor, and the Egress Dilemma" (Aug 2026)
+  https://www.adityaai.dev/articles/sandboxing-architectures-for-agents
 
 ## Stack
 React 19, TypeScript, Vite, Tailwind, Vercel, Resend, Gemini, MCP, Three.js

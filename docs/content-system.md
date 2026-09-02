@@ -5,16 +5,21 @@
 - **Small shelf, high signal** - not a chronological blog dump.
 - Each piece should change how a systems designer decides something (memory, cost, MCP, product surface, architecture).
 - Taxonomy (UI filters): **Framework · Architecture · Principle**.
-- Restart snapshot: **7 essays** (see `src/content/articles/`).
+- Restart snapshot: **12 essays** (see `src/content/articles/`).
 
 ### Current shelf (slugs)
 
 | Slug | Form | Featured |
 | --- | --- | --- |
+| `the-chat-template-trap` | Architecture | ★ |
 | `memory-stacks-for-agents` | Framework | ★ |
 | `inference-economics-for-agents` | Framework | ★ |
 | `software-3-architecting-ai` | Architecture | ★ |
 | `product-is-the-model` | Principle | ★ |
+| `the-verification-gap` | Principle | |
+| `closed-loop-remediation-architecture` | Framework | |
+| `sandboxing-architectures-for-agents` | Architecture | |
+| `context-circuit-breakers` | Framework | |
 | `mcp-security-paradox` | Framework | |
 | `ai-systems-architecture-comparison` | Architecture | |
 | `six-paradigm-shifts` | Architecture | |
