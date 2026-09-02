@@ -22,7 +22,7 @@ Focus: decision tools for people who design production AI systems
 ## Lab products
 - FRIDAY - https://friday.adityaai.dev - generative 3D engineering visualization
 - Sentinel - https://sentinel.adityaai.dev - multi-agent competitive intelligence
-- OpalServe - https://opalserve.adityaai.dev - MCP registry & team gateway
+- MidSphere - https://midsphere.vercel.app - autonomous context circuit-breaker for data platforms
 - Ohh-my-excel - https://github.com/adi-IL/Ohh-my-excel
 - mt5-quant-windows - https://github.com/adi-IL/mt5-quant-windows
 

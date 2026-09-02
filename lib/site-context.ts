@@ -36,13 +36,13 @@ const PROJECTS = [
     codeUrl: 'https://github.com/adi-IL/sentinel',
   },
   {
-    name: 'OpalServe',
-    slug: 'opalserve',
-    tagline: 'MCP registry and team gateway',
+    name: 'MidSphere',
+    slug: 'midsphere',
+    tagline: 'Autonomous Context Circuit-Breaker for Data Platforms',
     excerpt:
-      'Open-source control plane for MCP servers - register, discover tools, observe usage.',
-    liveUrl: 'https://opalserve.adityaai.dev',
-    codeUrl: 'https://github.com/adi-IL/opalserve',
+      'Autonomous context circuit-breaker engine for DataHub and enterprise catalogs - audits schema drift and PII, scores selective blast radius, applies advisory quarantine.',
+    liveUrl: 'https://midsphere.vercel.app',
+    codeUrl: 'https://github.com/adi-IL/MidSphere',
   },
 ];
 
@@ -76,7 +76,7 @@ export function buildSiteContext(): string {
 
   return `SITE: adityaai.dev (canonical ${SITE})
 PERSON: Aditya Gaurav - AI Engineer & Systems Architect (Sonipat, Haryana, India).
-POSITIONING: Decision tools for people who design production AI systems. Curated essay shelf (not a content firehose). Lab products FRIDAY, Sentinel, OpalServe.
+POSITIONING: Decision tools for people who design production AI systems. Curated essay shelf (not a content firehose). Lab products FRIDAY, Sentinel, MidSphere.
 CONTACT: Virtual coffee form on the site; newsletter double opt-in; socials github.com/adi-IL, x.com/adityaaidev, linkedin.com/in/adityaai/
 
 ESSAYS (${essays.length}):

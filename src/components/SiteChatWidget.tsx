@@ -20,7 +20,7 @@ function getStartersForPath(pathname: string): string[] {
     return [
       'Tell me about FRIDAY',
       'What stack does Sentinel use?',
-      'How does OpalServe work?',
+      'How does MidSphere work?',
     ];
   }
   if (pathname.startsWith('/articles/')) {
@@ -228,7 +228,7 @@ export default function SiteChatWidget() {
             {messages.length === 0 && (
               <div className="space-y-3">
                 <p className="text-zinc-500 text-sm leading-relaxed">
-                  Ask about the essay shelf, FRIDAY / Sentinel / OpalServe, or how to get in touch.
+                  Ask about the essay shelf, FRIDAY / Sentinel / MidSphere, or how to get in touch.
                 </p>
                 <div className="flex flex-wrap gap-2">
                   {starters.map((s) => (

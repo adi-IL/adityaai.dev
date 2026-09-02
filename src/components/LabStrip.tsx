@@ -4,7 +4,7 @@ import { projects } from '../lib/projects';
 /**
  * "Part of the adityaai.dev lab" footer ribbon. Renders the three sibling
  * projects as compact cards. On adityaai.dev these link into the project
- * detail route; when ported to friday/sentinel/opalserve they should link
+ * detail route; when ported to friday/sentinel/midsphere they should link
  * to the external subdomain (pass `externalLinks` on those forks).
  */
 export default function LabStrip({

@@ -5,7 +5,7 @@
 **adityaai.dev** is the root site of the adityaai lab:
 
 - Curated **essay shelf** (12 decision-tool essays: Framework / Architecture / Principle)
-- **Projects** registry (FRIDAY, Sentinel, OpalServe) with awards and metrics
+- **Projects** registry (FRIDAY, Sentinel, MidSphere) with awards and metrics
 - **About** + newsletter + virtual coffee leads
 - **Lab guide chatbot** (Vertex AI / Gemini, site-first answers)
 

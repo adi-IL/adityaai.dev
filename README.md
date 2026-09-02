@@ -7,7 +7,7 @@
 Decision tools for people who design production AI systems - plus the control
 surface for [FRIDAY](https://friday.adityaai.dev),
 [Sentinel](https://sentinel.adityaai.dev), and
-[OpalServe](https://opalserve.adityaai.dev).
+[MidSphere](https://midsphere.vercel.app).
 
 </div>
 
@@ -96,7 +96,7 @@ Keep the shelf small. Prefer updating a thesis in place over publishing a near-d
 | --- | --- | --- | --- |
 | **FRIDAY** | [friday.adityaai.dev](https://friday.adityaai.dev) | [friday-visual-engine](https://github.com/adi-IL/friday-visual-engine) | Immersive Engineering Visual Intelligence |
 | **Sentinel** | [sentinel.adityaai.dev](https://sentinel.adityaai.dev) | [sentinel](https://github.com/adi-IL/sentinel) | Autonomous Competitive Intelligence |
-| **OpalServe** | [opalserve.adityaai.dev](https://opalserve.adityaai.dev) | [opalserve](https://github.com/adi-IL/opalserve) | The control plane for your team's AI tools |
+| **MidSphere** | [midsphere.vercel.app](https://midsphere.vercel.app) | [MidSphere](https://github.com/adi-IL/MidSphere) | Autonomous Context Circuit-Breaker for Data Platforms |
 
 ### Shared brand (do not fork)
 
@@ -107,7 +107,7 @@ Canonical files for sibling sites:
 3. `src/components/LabStrip.tsx` - footer ribbon
 4. `src/components/ProjectSignature.tsx` - per-project signatures
 
-Mirror these into friday / sentinel / opalserve when they change.
+Mirror these into friday / sentinel / midsphere when they change.
 
 ---
 

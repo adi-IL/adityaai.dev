@@ -10,7 +10,7 @@ export default function Projects() {
     <div className="min-h-screen pt-32 pb-16">
       <SEO
         title="Projects | Aditya Gaurav - AI Engineer & Systems Architect"
-        description="Shipping AI products: MCP registry (OpalServe), 3D engineering engine (FRIDAY), competitive intelligence (Sentinel), Excel graph (Ohh-my-excel), and more."
+        description="Shipping AI products: 3D engineering engine (FRIDAY), competitive intelligence (Sentinel), context circuit-breaker (MidSphere), and more."
         canonicalUrl="https://www.adityaai.dev/projects"
         breadcrumbs={[
           { name: 'Home', url: 'https://www.adityaai.dev/' },

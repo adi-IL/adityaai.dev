@@ -19,7 +19,7 @@ Related lab apps (separate deploys, not this repo):
 | --- | --- |
 | FRIDAY | https://friday.adityaai.dev |
 | Sentinel | https://sentinel.adityaai.dev · Vercel project `sentinel-main` |
-| OpalServe | https://opalserve.adityaai.dev |
+| MidSphere | https://midsphere.vercel.app |
 
 ---
 
@@ -165,5 +165,5 @@ vercel inspect <deployment-url>
 
 ## What is *not* deployed from this repo
 
-- FRIDAY / Sentinel / OpalServe app code (separate repos and Vercel projects).
+- FRIDAY / Sentinel / MidSphere app code (separate repos and Vercel projects).
 - Local-only files: `node_modules/`, `.env.local`, `.vercel/` (gitignored).

@@ -6,7 +6,7 @@ import { m } from 'motion/react';
  *
  * - FRIDAY  -> cyan isometric wireframe cube (3D product)
  * - Sentinel-> blue concentric radar + 5 dots (5-agent chain)
- * - OpalServe-> orange typed CLI line (CLI + control plane)
+ * - MidSphere-> emerald circuit breaker graph (context circuit breaker)
  */
 export default function ProjectSignature({ slug }: { slug: string }) {
   switch (slug) {
@@ -14,8 +14,8 @@ export default function ProjectSignature({ slug }: { slug: string }) {
       return <FridaySignature />;
     case 'sentinel':
       return <SentinelSignature />;
-    case 'opalserve':
-      return <OpalServeSignature />;
+    case 'midsphere':
+      return <MidSphereSignature />;
     default:
       return <DefaultSignature />;
   }
@@ -115,31 +115,52 @@ function SentinelSignature() {
   );
 }
 
-function OpalServeSignature() {
+function MidSphereSignature() {
   return (
-    <div className="absolute inset-0 flex items-center justify-center p-6 bg-[radial-gradient(ellipse_at_center,_rgba(251,146,60,0.12)_0%,_transparent_60%)]">
-      <div className="w-full max-w-[280px] rounded-lg border border-zinc-800/80 bg-zinc-950/80 shadow-2xl overflow-hidden">
-        <div className="flex items-center gap-1.5 px-3 py-2 border-b border-zinc-800/80 bg-zinc-900/60">
-          <span className="size-2 rounded-full bg-zinc-700" />
-          <span className="size-2 rounded-full bg-zinc-700" />
-          <span className="size-2 rounded-full bg-zinc-700" />
-          <span className="ml-auto font-mono text-[9px] text-zinc-500 uppercase tracking-widest">
-            opalserve · :3456
-          </span>
-        </div>
-        <div className="px-3 py-4 font-mono text-[11px] leading-relaxed">
-          <div className="text-zinc-500">$ opalserve server add \</div>
-          <div className="text-zinc-300 pl-3">--name files --stdio <span className="text-orange-400">"npx @mcp/fs"</span></div>
-          <m.div
-            className="mt-2 flex items-center gap-2 text-orange-400"
-            animate={{ opacity: [0.4, 1, 0.4] }}
-            transition={{ duration: 2, repeat: Infinity }}
-          >
-            <span>✓</span>
-            <span className="text-zinc-300">registered &middot; synced to 3 devs</span>
-          </m.div>
-        </div>
-      </div>
+    <div className="absolute inset-0 flex items-center justify-center p-6 bg-[radial-gradient(ellipse_at_center,_rgba(16,185,129,0.14)_0%,_transparent_60%)]">
+      <svg
+        viewBox="0 0 240 140"
+        className="w-full max-w-[280px] text-emerald-400 font-mono"
+        fill="none"
+        stroke="currentColor"
+        aria-hidden
+      >
+        {/* Connection lines */}
+        <path d="M 40 70 L 105 42" strokeWidth="1.25" strokeDasharray="3 3" opacity="0.5" />
+        <path d="M 40 70 L 105 98" strokeWidth="1.25" opacity="0.6" />
+        <path d="M 105 42 L 180 42" strokeWidth="1.25" stroke="#ef4444" opacity="0.8" />
+        <path d="M 105 98 L 180 98" strokeWidth="1.25" opacity="0.6" />
+
+        {/* Root Source Node */}
+        <circle cx="40" cy="70" r="16" fill="#0a0a0a" stroke="currentColor" strokeWidth="1.5" />
+        <text x="40" y="73" fontSize="8" fill="#CaFF4A" textAnchor="middle" stroke="none" fontWeight="600">RAW</text>
+
+        {/* Impacted Fork (Audit) */}
+        <circle cx="105" cy="42" r="13" fill="#0a0a0a" stroke="#ef4444" strokeWidth="1.5" />
+        <text x="105" y="45" fontSize="7" fill="#f87171" textAnchor="middle" stroke="none">AUDIT</text>
+
+        {/* Quarantined Mart Node */}
+        <rect x="180" y="29" width="52" height="26" rx="5" fill="#0a0a0a" stroke="#ef4444" strokeWidth="1.5" />
+        <text x="206" y="45" fontSize="7" fill="#f87171" textAnchor="middle" stroke="none" fontWeight="600">BLOCKED</text>
+
+        {/* Open Fork */}
+        <circle cx="105" cy="98" r="13" fill="#0a0a0a" stroke="currentColor" strokeWidth="1.5" />
+        <text x="105" y="101" fontSize="7" fill="#6ee7b7" textAnchor="middle" stroke="none">OPEN</text>
+
+        {/* Safe Mart Node */}
+        <rect x="180" y="85" width="52" height="26" rx="5" fill="#0a0a0a" stroke="currentColor" strokeWidth="1.5" />
+        <text x="206" y="101" fontSize="7" fill="#CaFF4A" textAnchor="middle" stroke="none" fontWeight="600">CLEAR</text>
+
+        {/* Pulsing indicator */}
+        <m.circle
+          cx="180"
+          cy="42"
+          r="4"
+          fill="#ef4444"
+          animate={{ scale: [1, 1.8, 1], opacity: [0.8, 0.2, 0.8] }}
+          transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
+        />
+      </svg>
     </div>
   );
 }

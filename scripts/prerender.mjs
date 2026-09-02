@@ -62,7 +62,7 @@ if (fs.existsSync(metaPath)) {
 const projects = [
   { slug: "friday", name: "FRIDAY", tagline: "Immersive Engineering Visual Intelligence" },
   { slug: "sentinel", name: "Sentinel", tagline: "Autonomous Competitive Intelligence" },
-  { slug: "opalserve", name: "OpalServe", tagline: "The control plane for your team's AI tools" },
+  { slug: "midsphere", name: "MidSphere", tagline: "Autonomous Context Circuit-Breaker for Data Platforms" },
 ];
 
 function headTags(title, description, canonical, ogType, jsonLd) {
@@ -159,7 +159,7 @@ writePage("articles", "Articles | Aditya Gaurav  -  Research on AI Architecture 
 count++;
 
 writePage("projects", "Projects | Aditya Gaurav  -  AI Systems & Open Source",
-  "Production AI systems and open-source projects by Aditya Gaurav  -  FRIDAY (3D engineering visual intelligence), Sentinel (competitive intelligence), OpalServe (MCP registry).",
+  "Production AI systems and open-source projects by Aditya Gaurav  -  FRIDAY (3D engineering visual intelligence), Sentinel (competitive intelligence), MidSphere (autonomous context circuit-breaker).",
   `${SITE_URL}/projects`, "website", {
     "@context": "https://schema.org", "@type": "BreadcrumbList",
     itemListElement: [
@@ -278,7 +278,7 @@ Focus: decision tools for people who design production AI systems
 ## Lab products
 - FRIDAY - https://friday.adityaai.dev - generative 3D engineering visualization
 - Sentinel - https://sentinel.adityaai.dev - multi-agent competitive intelligence
-- OpalServe - https://opalserve.adityaai.dev - MCP registry & team gateway
+- MidSphere - https://midsphere.vercel.app - autonomous context circuit-breaker for data platforms
 - Ohh-my-excel - https://github.com/adi-IL/Ohh-my-excel
 - mt5-quant-windows - https://github.com/adi-IL/mt5-quant-windows
 

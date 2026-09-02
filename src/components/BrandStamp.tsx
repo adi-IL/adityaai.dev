@@ -6,7 +6,7 @@ interface BrandStampProps {
   /**
    * 'root' renders an inert wordmark (for use inside adityaai.dev itself).
    * 'sibling' renders an anchor back to https://www.adityaai.dev, intended for
-   *   friday/sentinel/opalserve subdomains. This component is the single
+   *   friday/sentinel/midsphere subdomains. This component is the single
    *   source of truth for the cross-site lockup - mirror it into the three
    *   sibling repos byte-for-byte.
    */

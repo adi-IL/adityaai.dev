@@ -218,7 +218,7 @@ export async function handleChat(req: ApiRequest, res: ApiResponse): Promise<voi
 function shouldLikelyNeedSearch(messages: ChatMessage[]): boolean {
   const last = messages[messages.length - 1]?.content.toLowerCase() || '';
   if (
-    /(essay|article|shelf|aditya|friday|sentinel|opalserve|memory stack|inference economic|mcp security|software 3|virtual coffee|newsletter|project)/i.test(
+    /(essay|article|shelf|aditya|friday|sentinel|midsphere|memory stack|inference economic|mcp security|software 3|virtual coffee|newsletter|project)/i.test(
       last,
     )
   ) {
