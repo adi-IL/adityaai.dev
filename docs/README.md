@@ -1,18 +1,24 @@
-# adityaai.dev - documentation
+# Docs
 
-Internal architecture and operations docs for the lab root site.
+## Running the site
 
-| Doc | What it covers |
-| --- | --- |
-| [Architecture](./architecture.md) | System shape, folders, stack, request paths |
-| [How it works](./how-it-works.md) | Runtime flows: pages, essays, chat, email APIs |
-| [Deployment](./deployment.md) | GitHub, Vercel, CI, domains, env vars, local vs prod |
-| [Content system](./content-system.md) | Essay shelf, frontmatter, meta generation, prerender |
-| [API reference](./api-reference.md) | All HTTP endpoints |
+- [Local run](./user/local.md)
+- [Essay shelf](./user/essays.md)
 
-Root [README.md](../README.md) is the short contributor guide (setup, essays, scripts, CI).  
-These files under `docs/` are the deeper map of the system.
+---
 
-**CI/CD:** `.github/workflows/ci.yml` gates `main` and PRs (typecheck + tests + build on Node 20/22/24); deploys happen via the Vercel Git integration on push to `main`. See [deployment.md](./deployment.md#ci--cd).
+## Internals
 
-**Product north star:** decision tools for people who design production AI systems - not a high-volume blog.
+- [Architecture](./internals/overview.md)
+- [How it works](./internals/how-it-works.md)
+- [API](./internals/api.md)
+
+---
+
+## Operations
+
+- [Deploy](./operations/deployment.md)
+
+Root [README](../README.md) is the short entry. These files are the map of the system.
+
+CI is `.github/workflows/ci.yml` (typecheck, tests, build on Node 20 / 22 / 24). Deploys are the Vercel Git integration on push to `main`.
