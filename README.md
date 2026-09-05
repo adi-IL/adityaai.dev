@@ -3,7 +3,7 @@
 <img
   src="https://res.cloudinary.com/dpdttqyow/image/upload/f_auto,q_auto,w_280/v1768512786/Screenshot_2026-01-198_v3bwry.png"
   alt="adityaai"
-  width="280"
+  width="300"
   height="280"
 />
 
