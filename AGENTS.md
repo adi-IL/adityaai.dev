@@ -4,7 +4,7 @@ adityaai.dev is the root site for the adityaai lab. A Vite + React SPA on Vercel
 
 Live site: https://www.adityaai.dev
 
-This repository is private and proprietary. See `LICENSE`. Do not treat it as an open-source project.
+Source is public. `LICENSE` is all-rights-reserved, not MIT. Do not treat this as OSI open source.
 
 The rest of this file is for agents changing the code. Defaults, not hard law. The owner's instructions win.
 

@@ -17,7 +17,7 @@ The public site is a Vite + React SPA on Vercel, with serverless functions for n
 | Virtual coffee | `POST /api/virtual-coffee` | Lead form, two emails |
 | Lab guide | `POST /api/chat` | Gemini chat, site-first |
 
-This repository is private and proprietary. See [LICENSE](./LICENSE).
+Source is public. Copyright stays with Aditya Gaurav. See [LICENSE](./LICENSE). This is not MIT or Apache.
 
 ## Documentation
 

@@ -4,7 +4,7 @@
 
 | Layer | Location |
 | --- | --- |
-| Source | [github.com/adi-IL/adityaai.dev](https://github.com/adi-IL/adityaai.dev), private, branch `main` |
+| Source | [github.com/adi-IL/adityaai.dev](https://github.com/adi-IL/adityaai.dev), branch `main` |
 | CI | `.github/workflows/ci.yml` |
 | Hosting | Vercel project `adityaai.dev` |
 | Vercel alias | https://adityaaidev.vercel.app |

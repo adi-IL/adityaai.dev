@@ -102,7 +102,7 @@ Request → api/<name>.ts (or Express)
 | System | Used for |
 | --- | --- |
 | Vercel | Static hosting and serverless APIs |
-| GitHub `adi-IL/adityaai.dev` | Source (private) |
+| GitHub `adi-IL/adityaai.dev` | Source |
 | Google Cloud Vertex AI | Lab guide. Default model `gemini-3.7-flash` |
 | Resend | Transactional email |
 | Cloudinary | Brand and OG images (CDN URLs in HTML) |
