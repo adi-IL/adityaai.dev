@@ -1,8 +1,22 @@
+<div align="center">
+
 # adityaai.dev
+
+<a href="https://www.adityaai.dev">
+  <img
+    src="docs/assets/home.png"
+    alt="adityaai.dev homepage"
+    width="880"
+    height="550"
+  />
+</a>
 
 Root site for the adityaai lab. A small shelf of essays for people who design production AI systems, plus the control surface for [FRIDAY](https://friday.adityaai.dev), [Sentinel](https://sentinel.adityaai.dev), and [MidSphere](https://midsphere.vercel.app).
 
 Live site: [www.adityaai.dev](https://www.adityaai.dev)
+
+</div>
+
 
 ## What this repo is
 
