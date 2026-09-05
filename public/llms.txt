@@ -1,8 +1,7 @@
 # adityaai.dev
 
 Personal lab site for Aditya Gaurav - AI Engineer & Systems Architect.
-Focus: decision tools for people who design production AI systems
-(agents, memory, inference economics, MCP, architecture).
+Decision tools for people who design production AI systems.
 
 ## Person
 - Name: Aditya Gaurav
@@ -23,11 +22,9 @@ Focus: decision tools for people who design production AI systems
 - FRIDAY - https://friday.adityaai.dev - generative 3D engineering visualization
 - Sentinel - https://sentinel.adityaai.dev - multi-agent competitive intelligence
 - MidSphere - https://midsphere.vercel.app - autonomous context circuit-breaker for data platforms
-- Ohh-my-excel - https://github.com/adi-IL/Ohh-my-excel
-- mt5-quant-windows - https://github.com/adi-IL/mt5-quant-windows
 
 ## Essays (shelf)
-Forms: Framework | Architecture | Principle. Prefer permanent decision tools over news.
+Forms: Framework | Architecture | Principle.
 - [Architecture] "The Chat Template Trap: Why Dynamic Agent State Crashes Open-Weight Models" (Sep 2026)
   https://www.adityaai.dev/articles/the-chat-template-trap
 - [Framework] "Memory Stacks for Agents: A Deep Dive into Episodic, Semantic, and Procedural Architecture" (Apr 2026)
@@ -44,6 +41,14 @@ Forms: Framework | Architecture | Principle. Prefer permanent decision tools ove
   https://www.adityaai.dev/articles/closed-loop-remediation-architecture
 - [Architecture] "Sandboxing Architectures for Autonomous Agents: MicroVMs, gVisor, and the Egress Dilemma" (Aug 2026)
   https://www.adityaai.dev/articles/sandboxing-architectures-for-agents
+- [Framework] "Context Circuit Breakers: Preventing Reasoning Collapse in Long-Horizon Agent Loops" (Jul 2026)
+  https://www.adityaai.dev/articles/context-circuit-breakers
+- [Framework] "The MCP Security Paradox: How the Protocol That Connects Everything Also Exposes Everything" (May 2026)
+  https://www.adityaai.dev/articles/mcp-security-paradox
+- [Architecture] "The Big AI Systems Architecture Comparison" (Mar 2026)
+  https://www.adityaai.dev/articles/ai-systems-architecture-comparison
+- [Architecture] "The 6 Paradigm Shifts Nobody Told You About (2026 Edition)" (Jan 2026)
+  https://www.adityaai.dev/articles/six-paradigm-shifts
 
 ## Stack
-React 19, TypeScript, Vite, Tailwind, Vercel, Resend, Gemini, MCP, Three.js
+React 19, TypeScript, Vite, Tailwind, Motion, Vercel, Resend, Gemini, Three.js

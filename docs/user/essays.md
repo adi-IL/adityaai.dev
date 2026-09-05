@@ -78,7 +78,7 @@ Also runs on `npm run dev` and as `prebuild` before `npm run build`.
 4. Sorts featured first, then newest `dateISO`
 5. Writes `scripts/articles-meta.json`
 
-Do not hand-edit `articles-meta.json` for lasting changes. Edit the markdown and regenerate. CI fails if that JSON or `public/llms.txt` drifts from the committed files.
+Do not hand-edit `articles-meta.json` or `public/llms.txt` for lasting changes. Edit the markdown and regenerate. `scripts/prerender.mjs` writes `llms.txt` with the full shelf. CI fails if those files drift from the committed copies.
 
 ## How the client loads it
 

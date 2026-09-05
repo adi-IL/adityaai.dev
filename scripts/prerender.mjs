@@ -251,14 +251,24 @@ ${entries.map(urlEntry).join("\n")}
 fs.writeFileSync(path.join(DIST, "sitemap.xml"), sitemap, "utf-8");
 console.log(`✅ Generated sitemap.xml (${entries.length} URLs)`);
 
-// ── llms.txt (kept in sync with live article inventory) ─────────────────────
+// ── llms.txt (kept in sync with the live essay shelf) ───────────────────────
 
-const recentForLlms = articles.slice(0, Math.min(8, articles.length));
+const essayLinesForLlms = articles
+  .map((a) => {
+    const month = new Date(`${a.dateISO}T12:00:00Z`).toLocaleDateString("en-US", {
+      month: "short",
+      year: "numeric",
+      timeZone: "UTC",
+    });
+    const form = a.form || a.category || "Essay";
+    return `- [${form}] "${a.title}" (${month})\n  ${SITE_URL}/articles/${a.slug}`;
+  })
+  .join("\n");
+
 const llms = `# adityaai.dev
 
 Personal lab site for Aditya Gaurav - AI Engineer & Systems Architect.
-Focus: decision tools for people who design production AI systems
-(agents, memory, inference economics, MCP, architecture).
+Decision tools for people who design production AI systems.
 
 ## Person
 - Name: Aditya Gaurav
@@ -279,29 +289,16 @@ Focus: decision tools for people who design production AI systems
 - FRIDAY - https://friday.adityaai.dev - generative 3D engineering visualization
 - Sentinel - https://sentinel.adityaai.dev - multi-agent competitive intelligence
 - MidSphere - https://midsphere.vercel.app - autonomous context circuit-breaker for data platforms
-- Ohh-my-excel - https://github.com/adi-IL/Ohh-my-excel
-- mt5-quant-windows - https://github.com/adi-IL/mt5-quant-windows
 
 ## Essays (shelf)
-Forms: Framework | Architecture | Principle. Prefer permanent decision tools over news.
-${recentForLlms
-  .map((a) => {
-    const month = new Date(`${a.dateISO}T12:00:00Z`).toLocaleDateString("en-US", {
-      month: "short",
-      year: "numeric",
-      timeZone: "UTC",
-    });
-    const form = a.form || a.category || "Essay";
-    return `- [${form}] "${a.title}" (${month})\n  ${SITE_URL}/articles/${a.slug}`;
-  })
-  .join("\n")}
+Forms: Framework | Architecture | Principle.
+${essayLinesForLlms}
 
 ## Stack
-React 19, TypeScript, Vite, Tailwind, Vercel, Resend, Gemini, MCP, Three.js
+React 19, TypeScript, Vite, Tailwind, Motion, Vercel, Resend, Gemini, Three.js
 `;
 
 fs.writeFileSync(path.join(DIST, "llms.txt"), llms, "utf-8");
-// Keep public/ in sync so local preview and git stay honest.
 fs.writeFileSync(path.resolve(__dirname, "..", "public", "llms.txt"), llms, "utf-8");
-console.log(`✅ Generated llms.txt (${recentForLlms.length} recent + archive link)`);
+console.log(`Generated llms.txt (${articles.length} essays)`);
 console.log(`✨ Done! Total: ${count} pages, ${entries.length} sitemap URLs, ${articleCount} articles`);

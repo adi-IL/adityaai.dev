@@ -21,7 +21,7 @@ This repository is private and proprietary. See [LICENSE](./LICENSE).
 
 ## Documentation
 
-Full docs live in [docs/](./docs). There is no docs site.
+Full docs live in [docs/](./docs). There is no docs site. Agents: [AGENTS.md](./AGENTS.md) (`CLAUDE.md` points at it).
 
 - [Local run](./docs/user/local.md)
 - [Essay shelf](./docs/user/essays.md)
