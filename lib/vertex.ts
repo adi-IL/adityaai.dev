@@ -3,10 +3,11 @@ import fs from 'node:fs';
 import path from 'node:path';
 
 /**
- * Vertex / Gemini client - same auth pattern as sentinel-main:
+ * Vertex / Gemini client.
  *  1) GEMINI_API_KEY / GOOGLE_API_KEY (Google AI Studio)
  *  2) else Vertex ADC via GCP_CREDENTIALS_JSON (or aliases) written to /tmp
  *  3) project + location from GCP_PROJECT_ID / GCP_LOCATION (with GOOGLE_* aliases)
+ * No hardcoded project id. Vertex requires GCP_PROJECT_ID (or an alias) in env.
  */
 
 let client: GoogleGenAI | null = null;
@@ -21,7 +22,6 @@ function credentialsJsonFromEnv(): string | undefined {
 
 /**
  * Workaround for Vercel: write SA JSON from env to /tmp so ADC can load it.
- * Mirrors sentinel `api/_shared/gemini.ts`.
  */
 function ensureGcpCredentialsFromEnv(): void {
   if (process.env.GOOGLE_APPLICATION_CREDENTIALS) {
@@ -60,7 +60,7 @@ export function getVertexProject(): string {
     process.env.GCLOUD_PROJECT ||
     process.env.VITE_GCP_PROJECT_ID ||
     process.env.GCP_PROJECT ||
-    'project-dace7531-ac79-4f81-bd2'
+    ''
   );
 }
 
@@ -83,7 +83,7 @@ export function isSearchEnabled(): boolean {
 }
 
 /**
- * Same priority as Sentinel: API key first, then Vertex + env credentials.
+ * API key first, then Vertex + env credentials.
  */
 export function getGenAI(userKey?: string): GoogleGenAI {
   if (client && !userKey) return client;

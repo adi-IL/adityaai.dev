@@ -131,25 +131,25 @@ React 19 · React Router · TypeScript · Vite · Tailwind 4 · Motion · Vercel
 Floating widget (bottom-right) answers questions about the essay shelf and lab projects.
 
 - **API:** `POST /api/chat` with `{ messages: [{ role, content }] }`
-- **Model:** Gemini via `@google/genai` - **same auth pattern as `sentinel-main`**
+- **Model:** Gemini via `@google/genai`
 - **Context:** essay meta + project registry (site-first system prompt)
 - **Web research:** optional Google Search grounding when `CHAT_ENABLE_SEARCH=true`
 
-**Auth order (identical to Sentinel `api/_shared/gemini.ts`):**
+**Auth order:**
 
 1. `GEMINI_API_KEY` / `GOOGLE_API_KEY` -> Google AI Studio
 2. Else Vertex: write `GCP_CREDENTIALS_JSON` to `/tmp/gcp_adc.json`, set `GOOGLE_APPLICATION_CREDENTIALS`, then
    `new GoogleGenAI({ vertexai: true, project: GCP_PROJECT_ID, location: GCP_LOCATION })`
 
-**Vercel env (mirror `sentinel-main` Production):**
+**Vertex env (set in the host, never in git):**
 
 | Name | Notes |
 | --- | --- |
-| `GCP_PROJECT_ID` | Same project as Sentinel |
+| `GCP_PROJECT_ID` | GCP project for Vertex. Required when not using an API key. No default. |
 | `GCP_LOCATION` | e.g. `global` |
-| `GCP_CREDENTIALS_JSON` | Full service-account JSON (sensitive). Copy from Sentinel -> adityaai.dev in the Vercel dashboard (CLI cannot re-export encrypted secrets). |
+| `GCP_CREDENTIALS_JSON` | Full service-account JSON (sensitive). Local dev can use `gcloud` ADC instead. |
 
-Aliases `GOOGLE_CLOUD_*` / `GOOGLE_SERVICE_ACCOUNT_JSON` also work. Local dev can use ADC instead of the JSON.
+Aliases `GOOGLE_CLOUD_*` / `GOOGLE_SERVICE_ACCOUNT_JSON` also work.
 
 ---
 
@@ -185,9 +185,9 @@ Node.js 20+ (CI runs 20 / 22 / 24; Vercel production runs Node 24).
 | `SUBSCRIBE_SECRET` | No | HMAC for confirm links (defaults to `RESEND_API_KEY`) |
 | `APP_URL` | No | Origin in confirm emails (default `https://www.adityaai.dev`) |
 | `NOTIFY_EMAIL` | No | Your inbox for leads / feedback / confirmed subs (default `aiexpert@adityaai.dev`) |
-| `GCP_PROJECT_ID` | For Vertex chat | Same as Sentinel |
+| `GCP_PROJECT_ID` | For Vertex chat | GCP project id. Required when not using `GEMINI_API_KEY`. |
 | `GCP_LOCATION` | No | Default `global` |
-| `GCP_CREDENTIALS_JSON` | Prod Vertex | SA JSON string (copy from Sentinel dashboard) |
+| `GCP_CREDENTIALS_JSON` | Prod Vertex | Service-account JSON string. Do not commit. |
 | `GEMINI_API_KEY` | Optional | Skips Vertex if set (AI Studio) |
 | `GEMINI_MODEL` | No | Default `gemini-3.7-flash` |
 | `CHAT_ENABLE_SEARCH` | No | Default `true` |
@@ -209,6 +209,9 @@ See [docs/deployment.md](./docs/deployment.md) for the full operator guide.
 
 ---
 
-## License / ownership
+## License
 
-Private portfolio (`"private": true` in `package.json`). Content and brand are Aditya Gaurav / adityaai.dev lab.
+Copyright (c) 2026 Aditya Gaurav. All rights reserved.
+
+See [LICENSE](./LICENSE). Source, essays, and brand stay proprietary.
+Do not copy or redistribute without written permission.

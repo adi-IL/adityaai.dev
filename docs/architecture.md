@@ -68,7 +68,7 @@ adityaai.dev/
 │   └── virtual-coffee.ts
 ├── lib/                    # Shared server logic
 │   ├── handlers/           # chat, subscribe, feedback, virtual-coffee
-│   ├── vertex.ts           # Gemini / Vertex client (Sentinel auth pattern)
+│   ├── vertex.ts           # Gemini / Vertex client
 │   ├── site-context.ts     # Chat system prompt + essay/project context
 │   ├── email.ts, errors.ts, http.ts, rate-limit.ts
 │   └── subscribe-token.ts  # Double opt-in HMAC tokens

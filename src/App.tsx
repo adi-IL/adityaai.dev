@@ -1,8 +1,3 @@
-/**
- * @license
- * SPDX-License-Identifier: Apache-2.0
- */
-
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import { useEffect, useState, lazy, Suspense } from 'react';
 import { LazyMotion, domAnimation, m, AnimatePresence } from 'motion/react';

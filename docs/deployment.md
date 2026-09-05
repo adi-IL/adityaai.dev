@@ -6,11 +6,11 @@
 | --- | --- | --- |
 | **Source** | [github.com/adi-IL/adityaai.dev](https://github.com/adi-IL/adityaai.dev) | Private repo, branch `main` |
 | **CI** | `.github/workflows/ci.yml` | Typecheck + tests + build on Node 20/22/24 |
-| **Hosting** | Vercel team **aditya-ai-architects-projects** | Project name **`adityaai.dev`** |
+| **Hosting** | Vercel | Project name **`adityaai.dev`** |
 | **Production URL (Vercel)** | https://adityaaidev.vercel.app | Default project alias |
 | **Canonical brand domain** | https://www.adityaai.dev | Used in SEO, emails, site context |
 | **Local** | `http://localhost:3000` | `npm run dev` (Express + Vite) |
-| **GCP project (chat)** | Via env `GCP_PROJECT_ID` / `GOOGLE_CLOUD_PROJECT` | Same pattern as **sentinel-main** |
+| **GCP project (chat)** | Via env `GCP_PROJECT_ID` / `GOOGLE_CLOUD_PROJECT` | Required for Vertex. No hardcoded default. |
 | **Vertex region** | `global` (default via `GCP_LOCATION`) | |
 
 Related lab apps (separate deploys, not this repo):
@@ -18,7 +18,7 @@ Related lab apps (separate deploys, not this repo):
 | Product | Typical URL |
 | --- | --- |
 | FRIDAY | https://friday.adityaai.dev |
-| Sentinel | https://sentinel.adityaai.dev · Vercel project `sentinel-main` |
+| Sentinel | https://sentinel.adityaai.dev |
 | MidSphere | https://midsphere.vercel.app |
 
 ---
@@ -105,15 +105,15 @@ Node.js 20+ (`"engines"`). CI runs Node 20/22/24; Vercel production uses Node 24
 | `SUBSCRIBE_SECRET` | Optional HMAC for confirm tokens (falls back to Resend key) |
 | `APP_URL` | Origin for confirm links (default `https://www.adityaai.dev`) |
 
-### Required for lab guide chat (Vertex - Sentinel pattern)
+### Required for lab guide chat (Vertex)
 
 | Variable | Purpose |
 | --- | --- |
-| `GCP_PROJECT_ID` | GCP project for Vertex (or aliases: `GOOGLE_CLOUD_PROJECT`, `GCLOUD_PROJECT`, `VITE_GCP_PROJECT_ID`, `GCP_PROJECT`; falls back to default lab project if omitted) |
+| `GCP_PROJECT_ID` | GCP project for Vertex (or aliases: `GOOGLE_CLOUD_PROJECT`, `GCLOUD_PROJECT`, `VITE_GCP_PROJECT_ID`, `GCP_PROJECT`). Required when not using `GEMINI_API_KEY`. No default. |
 | `GCP_LOCATION` | e.g. `global` (or aliases: `GOOGLE_CLOUD_LOCATION`, `VERTEX_LOCATION`; defaults to `global`) |
 | `GCP_CREDENTIALS_JSON` | Full service-account JSON string or base64-encoded string (or aliases: `GOOGLE_SERVICE_ACCOUNT_JSON`, `GOOGLE_CREDENTIALS_JSON`) |
 
-**Auth order in `lib/vertex.ts` (same as Sentinel):**
+**Auth order in `lib/vertex.ts`:**
 
 1. `GEMINI_API_KEY` or `GOOGLE_API_KEY` → non-Vertex Google AI client  
 2. Else write `GCP_CREDENTIALS_JSON` to `/tmp/gcp_adc.json` and set `GOOGLE_APPLICATION_CREDENTIALS`  
