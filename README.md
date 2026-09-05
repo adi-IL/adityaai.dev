@@ -1,10 +1,10 @@
 <div align="center">
 
 <img
-  src="https://res.cloudinary.com/dpdttqyow/image/upload/f_auto,q_auto,w_280/v1768512786/Screenshot_2026-01-198_v3bwry.png"
+  src="https://res.cloudinary.com/dpdttqyow/image/upload/f_auto,q_auto,w_400/v1768512786/Screenshot_2026-01-198_v3bwry.png"
   alt="adityaai"
-  width="300"
-  height="280"
+  width="400"
+  height="296"
 />
 
 # adityaai.dev
