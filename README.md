@@ -3,8 +3,8 @@
 <img
   src="https://res.cloudinary.com/dpdttqyow/image/upload/f_auto,q_auto,w_400/v1768512786/Screenshot_2026-01-198_v3bwry.png"
   alt="adityaai"
-  width="400"
-  height="296"
+  width="300"
+  height="222"
 />
 
 # adityaai.dev
