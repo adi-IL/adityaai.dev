@@ -290,6 +290,13 @@ Decision tools for people who design production AI systems.
 - Sentinel - https://sentinel.adityaai.dev - multi-agent competitive intelligence
 - MidSphere - https://midsphere.vercel.app - autonomous context circuit-breaker for data platforms
 
+## Critical impacts in open source
+Static curated receipts on /projects (not a live GitHub feed):
+- tensorflow/tensorflow#125859 - invalid conv rank aborted the process; now raises ValueError
+- tensorflow/tensorflow#126449 - XLA Range missing half/bfloat16/integer paths under jit_compile
+- google/mug#130 - regex escape handling and Surefire suite naming
+- grafana/grafana#131335 - value-mapping range inputs rejected minus signs
+
 ## Essays (shelf)
 Forms: Framework | Architecture | Principle.
 ${essayLinesForLlms}
