@@ -41,7 +41,7 @@ Vercel
 CDN static (dist/**) + serverless /api/*
 ```
 
-`vercel.json`: Vite, `outputDirectory` `dist`. Rewrites send `/api/*` to functions, essay/project paths to prerendered `index.html`, everything else to SPA `index.html`. Headers: CSP, HSTS, `X-Frame-Options: DENY`, long cache for hashed assets.
+`vercel.json`: Vite, `outputDirectory` `dist`. Rewrites send `/api/*` to functions and essay/project/about paths to prerendered HTML. Missing essay or project slugs return HTTP 404 (no SPA catch-all soft-200). `/essays` permanently redirects to `/articles`. Headers: CSP, HSTS, `X-Frame-Options: DENY`, long cache for hashed assets.
 
 Pushes to `main` run CI, then Vercel Git integration deploys production. PRs get preview deploys. There is no `VERCEL_TOKEN` step in this repo.
 

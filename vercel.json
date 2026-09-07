@@ -3,6 +3,10 @@
   "buildCommand": "npm run build",
   "outputDirectory": "dist",
   "framework": "vite",
+  "redirects": [
+    { "source": "/essays", "destination": "/articles", "permanent": true },
+    { "source": "/essays/", "destination": "/articles", "permanent": true }
+  ],
   "rewrites": [
     { "source": "/api/:path*", "destination": "/api/:path*" },
     { "source": "/sitemap.xml", "destination": "/sitemap.xml" },
@@ -10,8 +14,7 @@
     { "source": "/llms.txt", "destination": "/llms.txt" },
     { "source": "/articles/:path*", "destination": "/articles/:path*/index.html" },
     { "source": "/projects/:path*", "destination": "/projects/:path*/index.html" },
-    { "source": "/about", "destination": "/about/index.html" },
-    { "source": "/(.*)", "destination": "/index.html" }
+    { "source": "/about", "destination": "/about/index.html" }
   ],
   "headers": [
     {

@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { useEffect, useState, lazy, Suspense } from 'react';
 import { LazyMotion, domAnimation, m, AnimatePresence } from 'motion/react';
 import Navbar from './components/Navbar';
@@ -100,6 +100,7 @@ function AnimatedRoutes() {
       >
         <Routes location={location} key={location.pathname}>
           <Route path="/" element={<Home />} />
+          <Route path="/essays" element={<Navigate to="/articles" replace />} />
           <Route path="/articles" element={<Articles />} />
           <Route path="/articles/:slug" element={<ArticleDetail />} />
           <Route path="/projects" element={<Projects />} />
