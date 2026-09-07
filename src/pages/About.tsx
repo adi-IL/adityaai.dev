@@ -1,7 +1,8 @@
 import { m } from 'motion/react';
 import SEO from '../components/SEO';
 import { SiUdemy, SiOpenai, SiGooglecloud, SiKaggle } from 'react-icons/si';
-import { ArrowUpRight, Trophy } from 'lucide-react';
+import { ArrowUpRight, GitPullRequest, Trophy } from 'lucide-react';
+import { upstreamReceipts } from '../lib/upstream';
 
 const OracleIcon = ({ size = 24, className = "" }: { size?: number, className?: string }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor" className={className} xmlns="http://www.w3.org/2000/svg">
@@ -96,6 +97,51 @@ export default function About() {
               />
             </div>
           </div>
+        </m.div>
+      </section>
+
+      {/* Upstream: curated merged PRs in other people's repos */}
+      <section className="max-w-6xl mx-auto px-6 md:px-8 lg:px-12 pb-24 cv-auto">
+        <m.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 0.8, ease: [0.32, 0.72, 0, 1] }}
+        >
+          <div className="flex items-center gap-3 mb-4">
+            <GitPullRequest className="text-electric-lime" size={28} />
+            <h2 className="font-display font-semibold text-[clamp(1.75rem,4vw,2.5rem)] text-zinc-50">
+              Upstream
+            </h2>
+          </div>
+          <p className="text-zinc-500 text-base mb-10 max-w-2xl leading-relaxed">
+            Merged fixes in other people's code. What broke, then what changed.
+          </p>
+
+          <ul className="flex flex-col gap-3">
+            {upstreamReceipts.map((receipt) => (
+              <li key={receipt.url}>
+                <a
+                  href={receipt.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-start md:items-center justify-between gap-4 p-5 md:p-6 rounded-2xl bg-zinc-900/30 border border-zinc-800/50 hover:border-electric-lime/40 hover:bg-zinc-900/50 transition-all group"
+                >
+                  <div className="min-w-0 flex-1">
+                    <p className="font-mono text-xs uppercase tracking-widest text-zinc-500 mb-2">
+                      {receipt.org}/{receipt.repo}
+                    </p>
+                    <p className="text-zinc-300 text-base leading-relaxed group-hover:text-zinc-100 transition-colors">
+                      {receipt.summary}
+                    </p>
+                  </div>
+                  <div className="size-10 rounded-full bg-zinc-950 flex items-center justify-center border border-zinc-800 group-hover:border-electric-lime group-hover:bg-electric-lime/10 transition-all shrink-0">
+                    <ArrowUpRight size={18} className="text-zinc-500 group-hover:text-electric-lime transition-colors" />
+                  </div>
+                </a>
+              </li>
+            ))}
+          </ul>
         </m.div>
       </section>
 
