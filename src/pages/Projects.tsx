@@ -65,14 +65,14 @@ export default function Projects() {
                     {receipt.org}/{receipt.repo}{' '}
                     <span className="text-electric-lime/80">#{receipt.pr}</span>
                   </p>
-                  <p className="text-zinc-300 text-sm md:text-base leading-relaxed">
-                    <span className="text-zinc-500">issue</span>{' '}
-                    {receipt.issue}
-                    <span className="text-zinc-600 mx-2" aria-hidden="true">
-                      |
-                    </span>
-                    <span className="text-zinc-500">fix</span> {receipt.fix}
-                  </p>
+                  <div className="space-y-2 text-sm md:text-base leading-relaxed">
+                    <p className="text-zinc-300">
+                      <span className="text-zinc-500">Issue</span> {receipt.issue}
+                    </p>
+                    <p className="text-zinc-300">
+                      <span className="text-zinc-500">Fix</span> {receipt.fix}
+                    </p>
+                  </div>
                 </div>
                 <a
                   href={receipt.url}
