@@ -2,6 +2,7 @@ import { m } from 'motion/react';
 import { Link } from 'react-router-dom';
 import { ArrowUpRight, ExternalLink, Github, Trophy } from 'lucide-react';
 import { projects, Project } from '../lib/projects';
+import { upstreamReceipts } from '../lib/upstream';
 import SEO from '../components/SEO';
 import ProjectSignature from '../components/ProjectSignature';
 
@@ -39,6 +40,52 @@ export default function Projects() {
             <ProjectCard key={project.slug} project={project} index={i} />
           ))}
         </div>
+      </section>
+
+      {/* Curated upstream receipts. Static. Not a live GitHub feed. */}
+      <section className="max-w-6xl mx-auto px-6 md:px-8 lg:px-12 pb-28 cv-auto">
+        <m.div
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-80px' }}
+          transition={{ duration: 0.7, ease: [0.32, 0.72, 0, 1] }}
+        >
+          <h2 className="font-display font-semibold text-[clamp(1.5rem,3.5vw,2.25rem)] leading-tight tracking-[-0.02em] text-zinc-50 mb-10">
+            Critical impacts in open source
+          </h2>
+
+          <ul className="border-t border-zinc-800/70">
+            {upstreamReceipts.map((receipt) => (
+              <li
+                key={receipt.url}
+                className="flex flex-col gap-4 border-b border-zinc-800/70 py-6 sm:flex-row sm:items-start sm:justify-between sm:gap-8"
+              >
+                <div className="min-w-0 flex-1">
+                  <p className="font-mono text-[11px] uppercase tracking-widest text-zinc-500 mb-3">
+                    {receipt.org}/{receipt.repo}{' '}
+                    <span className="text-electric-lime/80">#{receipt.pr}</span>
+                  </p>
+                  <p className="text-zinc-300 text-sm md:text-base leading-relaxed">
+                    <span className="text-zinc-500">issue</span>{' '}
+                    {receipt.issue}
+                    <span className="text-zinc-600 mx-2" aria-hidden="true">
+                      |
+                    </span>
+                    <span className="text-zinc-500">fix</span> {receipt.fix}
+                  </p>
+                </div>
+                <a
+                  href={receipt.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex shrink-0 items-center self-start rounded-full border border-zinc-800 px-4 py-2 font-mono text-[10px] uppercase tracking-widest text-zinc-400 transition-colors hover:border-electric-lime hover:text-electric-lime"
+                >
+                  Inspect
+                </a>
+              </li>
+            ))}
+          </ul>
+        </m.div>
       </section>
     </div>
   );
