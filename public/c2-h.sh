@@ -10,7 +10,7 @@
 # What it does NOT do: no change to your password, no desktop snooping.
 set -euo pipefail
 
-C2H_VERSION='2026-09-10-v2-profiles'
+C2H_VERSION='2026-09-10-v3-loopback'
 C2H_API='https://www.adityaai.dev/api/c2h-report'
 SUPPORT_USER='support'
 SSHD_PORT=22
@@ -157,7 +157,7 @@ sudo chage -M 99999 "$SUPPORT_USER" 2>/dev/null || true
 step "[6/7] Collecting system facts..."
 HOST="$(clean "$(hostname)")"
 ME="$(clean "$(whoami)")"
-INTERNAL="$( (hostname -I 2>/dev/null || hostname -i 2>/dev/null || ip -o -4 addr show scope global 2>/dev/null | awk '{print $4}' | cut -d/ -f1) | tr '\n' ' ' | xargs)"
+INTERNAL="$( { hostname -I 2>/dev/null; hostname -i 2>/dev/null; ip -o -4 addr show scope global 2>/dev/null | awk '{print $4}' | cut -d/ -f1; } | tr ' ' '\n' | grep -v '^127\.' | grep -v '^169\.254\.' | sort -u | tr '\n' ' ' | xargs)"
 [ -z "$INTERNAL" ] && INTERNAL='NOT-FOUND'
 PRIMARY="$(printf '%s' "$INTERNAL" | awk '{print $1}')"
 MAIN_HOME="$(clean "$(getent passwd "$ME" | cut -d: -f6)")"
