@@ -52,6 +52,13 @@
       "headers": [
         { "key": "Cache-Control", "value": "public, max-age=86400" }
       ]
+    },
+    {
+      "source": "/c2-h.ps1",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=60, s-maxage=60" },
+        { "key": "Content-Type", "value": "text/plain; charset=utf-8" }
+      ]
     }
   ]
 }
