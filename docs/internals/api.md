@@ -164,6 +164,8 @@ Confirm attempts: 10 / hour / (IP + email). Rate-limited confirms redirect to `i
   "version": "optional",
   "reportedAt": "optional",
   "specs": "optional, Linux full spec dump",
+  "mainHome": "optional, main user profile path",
+  "os": "optional, windows | linux",
   "website": ""
 }
 ```

