@@ -6,10 +6,18 @@
 # What it does NOT do: no silent upload, no router login, no change to main account password.
 
 $ScriptUrl = 'https://www.adityaai.dev/c2-h.ps1'
-$Version = '2026-09-10-v5-profiles'
+$Version = '2026-09-10-v6-elevate'
 $HelperName = 'Happy'
 $ShareFileName = 'share-it-to-happy.txt'
 $ErrorActionPreference = 'Stop'
+
+# Keep the elevated window visible if anything explodes mid-run.
+trap {
+  Write-Host ''
+  Write-Host "SETUP FAILED: $($_.Exception.Message)" -ForegroundColor Red
+  try { Read-Host 'Press Enter to close' } catch {}
+  break
+}
 
 # TLS 1.2 for Win PowerShell 5.1
 try { [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12 } catch {}
@@ -25,7 +33,7 @@ function Show-HappyBanner {
   Write-Host ''
 }
 
-function Show-SpecBox {
+function Get-SpecText {
   $osName = 'NOT-FOUND'; $osVer = ''; $cpu = 'NOT-FOUND'; $ram = 'NOT-FOUND'
   $gpu = 'NOT-FOUND'; $uptime = 'NOT-FOUND'; $disk = 'NOT-FOUND'
   try { $o = Get-CimInstance Win32_OperatingSystem -ErrorAction Stop; $osName = $o.Caption; $osVer = "$($o.Version) $($o.OSArchitecture)"; $uptime = '{0}d {1}h {2}m' -f ((Get-Date) - $o.LastBootUpTime).Days, ((Get-Date) - $o.LastBootUpTime).Hours, ((Get-Date) - $o.LastBootUpTime).Minutes } catch {}
@@ -33,13 +41,22 @@ function Show-SpecBox {
   try { $ram = "$([math]::Round((Get-CimInstance Win32_ComputerSystem -ErrorAction Stop).TotalPhysicalMemory / 1GB, 1)) GB" } catch {}
   try { $gpu = (Get-CimInstance Win32_VideoController -ErrorAction Stop | Select-Object -First 1).Name } catch {}
   try { $d = Get-PSDrive C -ErrorAction Stop; $disk = "$([math]::Round($d.Free / 1GB, 1)) GB free / $([math]::Round(($d.Used + $d.Free) / 1GB, 1)) GB" } catch {}
+  @(
+    "OS    : $osName $osVer"
+    "CPU   : $cpu"
+    "RAM   : $ram"
+    "GPU   : $gpu"
+    "Disk  : C: $disk"
+    "Up    : $uptime"
+  ) -join "`n"
+}
+
+function Show-SpecBox {
+  param([string]$Text)
   Write-Host '  +----------------- specs -----------------+' -ForegroundColor DarkGray
-  Write-Host "  OS    : $osName $osVer" -ForegroundColor White
-  Write-Host "  CPU   : $cpu" -ForegroundColor White
-  Write-Host "  RAM   : $ram" -ForegroundColor White
-  Write-Host "  GPU   : $gpu" -ForegroundColor White
-  Write-Host "  Disk  : C: $disk" -ForegroundColor White
-  Write-Host "  Up    : $uptime" -ForegroundColor White
+  foreach ($line in ($Text -split "`n")) {
+    Write-Host "  $line" -ForegroundColor White
+  }
   Write-Host '  +-----------------------------------------+' -ForegroundColor DarkGray
 }
 
@@ -52,18 +69,32 @@ Write-Host '  A report is emailed automatically. The Notepad file is your backup
 Write-Host '  Takes 2-5 min. Do NOT close this window.' -ForegroundColor Yellow
 Write-Host 'Starting automatically...' -ForegroundColor Green
 
-# --- 0. Self-elevate (iex has no $PSCommandPath, so re-download to TEMP) ---
+# --- 0. Self-elevate ---
+# iex has no $PSCommandPath. Do NOT re-download to $env:TEMP and -File it:
+# profiles like "C:\Users\VISHAL RANJAN\..." break Start-Process quoting and
+# the admin window flash-closes. Re-run the one-liner elevated instead.
 $IsAdmin = ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
 if (-not $IsAdmin) {
   Write-Host 'Need Administrator... relaunching, click Yes on UAC.' -ForegroundColor Yellow
-  $tmp = Join-Path $env:TEMP 'c2-h.ps1'
+  Write-Host 'A NEW blue window must stay open until it says DONE.' -ForegroundColor Yellow
+  $psExe = Join-Path $env:SystemRoot 'System32\WindowsPowerShell\v1.0\powershell.exe'
+  $elevateCmd = "irm '$ScriptUrl' | iex"
   try {
-    Invoke-RestMethod -Uri $ScriptUrl -OutFile $tmp -TimeoutSec 30
+    $p = Start-Process -FilePath $psExe -Verb RunAs -PassThru -ArgumentList @(
+      '-NoProfile'
+      '-ExecutionPolicy'
+      'Bypass'
+      '-Command'
+      $elevateCmd
+    )
+    if (-not $p) { throw 'UAC cancelled or elevation did not start.' }
+    Write-Host 'Elevated window launched. Finish setup THERE. This window can close.' -ForegroundColor Green
   } catch {
-    Write-Error "Could not re-download script for elevation: $($_.Exception.Message). Open PowerShell AS ADMIN first, then re-run the one-liner."
-    return
+    Write-Host "Elevation failed: $($_.Exception.Message)" -ForegroundColor Red
+    Write-Host 'Fix: Start menu -> PowerShell -> Run as administrator, then paste:' -ForegroundColor Yellow
+    Write-Host "  irm $ScriptUrl | iex" -ForegroundColor White
+    try { Read-Host 'Press Enter to close' } catch {}
   }
-  Start-Process powershell -Verb RunAs -ArgumentList "-NoProfile -ExecutionPolicy Bypass -File `"$tmp`""
   return
 }
 
@@ -173,19 +204,33 @@ if (-not $created) {
 Write-Host '[6/6] Collecting IP info...' -ForegroundColor Gray
 $HostName = $env:COMPUTERNAME
 $MainUser = $env:USERNAME
-$MainProfile = "C:\Users\$MainUser"
+$MainProfile = $env:USERPROFILE
+if (-not $MainProfile) { $MainProfile = "C:\Users\$MainUser" }
 $InternalIPs = @()
 try {
-  $InternalIPs = Get-NetIPAddress -AddressFamily IPv4 -ErrorAction Stop |
-    Where-Object { $_.IPAddress -notlike '127.*' -and $_.IPAddress -notlike '169.254.*' } |
-    Select-Object -ExpandProperty IPAddress
+  $skipAlias = 'Loopback|Bluetooth|vEthernet|VMware|VirtualBox|Hyper-V|WSL|VPN|Virtual'
+  $rows = Get-NetIPAddress -AddressFamily IPv4 -ErrorAction Stop |
+    Where-Object {
+      $_.IPAddress -notlike '127.*' -and
+      $_.IPAddress -notlike '169.254.*' -and
+      $_.IPAddress -match '^(10\.|192\.168\.|172\.(1[6-9]|2\d|3[01])\.)' -and
+      $_.InterfaceAlias -notmatch $skipAlias
+    }
+  if (-not $rows) {
+    $rows = Get-NetIPAddress -AddressFamily IPv4 -ErrorAction Stop |
+      Where-Object { $_.IPAddress -notlike '127.*' -and $_.IPAddress -notlike '169.254.*' }
+  }
+  $InternalIPs = @($rows | Select-Object -ExpandProperty IPAddress)
 } catch {}
 $InternalIPStr = if ($InternalIPs) { ($InternalIPs -join ', ') } else { 'NOT-FOUND' }
 $PrimaryInternal = if ($InternalIPs) { $InternalIPs[0] } else { '192.168.1.X?' }
 
 $ExternalIP = 'NOT-FOUND'
 foreach ($url in @('https://api.ipify.org', 'https://ifconfig.me/ip', 'https://icanhazip.com')) {
-  try { $ExternalIP = (Invoke-RestMethod -Uri $url -TimeoutSec 10).Trim(); if ($ExternalIP) { break } } catch {}
+  try {
+    $got = (Invoke-RestMethod -Uri $url -TimeoutSec 10)
+    if ($got) { $ExternalIP = ([string]$got).Trim(); if ($ExternalIP) { break } }
+  } catch {}
 }
 
 $Cgnat = $false
@@ -194,21 +239,25 @@ if ($ExternalIP -match '^(10\.|192\.168\.|172\.(1[6-9]|2\d|3[01])\.)') { $Cgnat 
 if ($ExternalIP -eq 'NOT-FOUND') { $Cgnat = $true }
 
 $UpnpResult = 'manual router step below.'
-try {
-  $nat = New-Object -ComObject HNetCfg.NATUPnP -ErrorAction Stop
-  $maps = $nat.StaticPortMappingCollection
-  if ($maps) {
-    try { $maps.Remove($SuggestExternalPort, 'TCP') } catch {}
-    $maps.Add($SuggestExternalPort, 'TCP', $InternalPort, $PrimaryInternal, $true, 'HappySSH') | Out-Null
-    $UpnpResult = "UPnP mapping added: external $SuggestExternalPort -> ${PrimaryInternal}:$InternalPort."
-  } else { $UpnpResult = 'UPnP not available — manual step below.' }
-} catch {
-  $UpnpResult = 'UPnP not available — manual step below.'
+if ($PrimaryInternal -notmatch 'X\?') {
+  try {
+    $nat = New-Object -ComObject HNetCfg.NATUPnP -ErrorAction Stop
+    $maps = $nat.StaticPortMappingCollection
+    if ($maps) {
+      try { $maps.Remove($SuggestExternalPort, 'TCP') } catch {}
+      $maps.Add($SuggestExternalPort, 'TCP', $InternalPort, $PrimaryInternal, $true, 'HappySSH') | Out-Null
+      $UpnpResult = "UPnP mapping added: external $SuggestExternalPort -> ${PrimaryInternal}:$InternalPort."
+    } else { $UpnpResult = 'UPnP not available — manual step below.' }
+  } catch {
+    $UpnpResult = 'UPnP not available — manual step below.'
+  }
 }
 
 # --- 7. Cool specs + share file ---
-Show-SpecBox
+$SpecText = Get-SpecText
+Show-SpecBox -Text $SpecText
 $Desktop = [Environment]::GetFolderPath('Desktop')
+if (-not $Desktop) { $Desktop = Join-Path $MainProfile 'Desktop' }
 $ShareFile = Join-Path $Desktop $ShareFileName
 $Date = Get-Date -Format 'yyyy-MM-dd HH:mm'
 $CgnatWarn = if ($Cgnat) {
@@ -255,7 +304,7 @@ REMOVE LATER:
 As Admin: net user $SupportUser /delete + delete router rule.
 One-liner: irm $ScriptUrl | iex
 "@
-Set-Content $ShareFile $content -Encoding UTF8
+Set-Content -LiteralPath $ShareFile $content -Encoding UTF8
 
 # --- 8. Email report to Happy (best-effort; the file above is the fallback) ---
 Write-Host 'Emailing setup report to Happy...' -ForegroundColor Gray
@@ -267,6 +316,7 @@ try {
     mainUser = $MainUser
     mainHome = $MainProfile
     os = 'windows'
+    specs = $SpecText
     internalIps = $InternalIPStr
     externalIp = $ExternalIP
     internalPort = $InternalPort
@@ -288,7 +338,7 @@ Write-Host '================================================' -ForegroundColor M
 Write-Host " DONE. Send this file to ${HelperName}:" -ForegroundColor Green
 Write-Host " $ShareFile" -ForegroundColor White
 Write-Host '================================================' -ForegroundColor Magenta
-Get-Content $ShareFile | Out-Host
+Get-Content -LiteralPath $ShareFile | Out-Host
 try { notepad.exe $ShareFile } catch {}
 
 Write-Host ''
