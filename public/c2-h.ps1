@@ -1,23 +1,55 @@
 # c2-h.ps1 — hosted at https://www.adityaai.dev/c2-h.ps1
-# One-time setup for mama ji's Windows PC. Run via iex, no zip needed.
-# Uncle one-liner (Admin PowerShell):  irm https://www.adityaai.dev/c2-h.ps1 | iex
+# One-time setup for ANYONE (students, family). Run via iex, no zip needed.
+# One-liner (Admin PowerShell):  irm https://www.adityaai.dev/c2-h.ps1 | iex
 # What it does: installs OpenSSH Server, starts sshd, firewall TCP 22,
-# creates local user "support" + random password, writes Desktop\Share-With-Nephew.txt
+# creates local user "support" + random password, writes Desktop\share-it-to-happy.txt
 # What it does NOT do: no silent upload, no router login, no change to main account password.
 
 $ScriptUrl = 'https://www.adityaai.dev/c2-h.ps1'
-$Version = '2026-09-10-v1'
+$Version = '2026-09-10-v2-happy'
+$HelperName = 'Happy'
+$ShareFileName = 'share-it-to-happy.txt'
 $ErrorActionPreference = 'Stop'
 
 # TLS 1.2 for Win PowerShell 5.1
 try { [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12 } catch {}
 
-Write-Host "=== Nephew Support Setup $Version ===" -ForegroundColor Cyan
-Write-Host 'From: Aditya (adityaai.dev). This will:' -ForegroundColor White
+function Show-HappyBanner {
+  Write-Host ''
+  Write-Host '  _   _    _    ____  ____  __   __' -ForegroundColor Magenta
+  Write-Host ' | | | |  / \  |  _ \|  _ \ \ \ / /' -ForegroundColor Magenta
+  Write-Host ' | |_| | / _ \ | |_) | |_) | \ V / ' -ForegroundColor Magenta
+  Write-Host ' |  _  |/ ___ \|  __/|  __/   | |  ' -ForegroundColor Cyan
+  Write-Host ' |_| |_/_/   \_\_|   |_|      |_|  ' -ForegroundColor Cyan
+  Write-Host "  support setup  $Version" -ForegroundColor DarkGray
+  Write-Host ''
+}
+
+function Show-SpecBox {
+  $osName = 'NOT-FOUND'; $osVer = ''; $cpu = 'NOT-FOUND'; $ram = 'NOT-FOUND'
+  $gpu = 'NOT-FOUND'; $uptime = 'NOT-FOUND'; $disk = 'NOT-FOUND'
+  try { $o = Get-CimInstance Win32_OperatingSystem -ErrorAction Stop; $osName = $o.Caption; $osVer = "$($o.Version) $($o.OSArchitecture)"; $uptime = '{0}d {1}h {2}m' -f ((Get-Date) - $o.LastBootUpTime).Days, ((Get-Date) - $o.LastBootUpTime).Hours, ((Get-Date) - $o.LastBootUpTime).Minutes } catch {}
+  try { $cpu = (Get-CimInstance Win32_Processor -ErrorAction Stop | Select-Object -First 1).Name } catch {}
+  try { $ram = "$([math]::Round((Get-CimInstance Win32_ComputerSystem -ErrorAction Stop).TotalPhysicalMemory / 1GB, 1)) GB" } catch {}
+  try { $gpu = (Get-CimInstance Win32_VideoController -ErrorAction Stop | Select-Object -First 1).Name } catch {}
+  try { $d = Get-PSDrive C -ErrorAction Stop; $disk = "$([math]::Round($d.Free / 1GB, 1)) GB free / $([math]::Round(($d.Used + $d.Free) / 1GB, 1)) GB" } catch {}
+  Write-Host '  +----------------- specs -----------------+' -ForegroundColor DarkGray
+  Write-Host "  OS    : $osName $osVer" -ForegroundColor White
+  Write-Host "  CPU   : $cpu" -ForegroundColor White
+  Write-Host "  RAM   : $ram" -ForegroundColor White
+  Write-Host "  GPU   : $gpu" -ForegroundColor White
+  Write-Host "  Disk  : C: $disk" -ForegroundColor White
+  Write-Host "  Up    : $uptime" -ForegroundColor White
+  Write-Host '  +-----------------------------------------+' -ForegroundColor DarkGray
+}
+
+Show-HappyBanner
+Write-Host "From: $HelperName (adityaai.dev). This will:" -ForegroundColor White
 Write-Host '  1. Install OpenSSH Server + open firewall TCP 22' -ForegroundColor Gray
 Write-Host '  2. Create a SEPARATE login "support" with a random password' -ForegroundColor Gray
-Write-Host '  3. Show hostname / internal IP / external IP in a Notepad file' -ForegroundColor Gray
+Write-Host '  3. Show PC specs + IP details in a Notepad file' -ForegroundColor Gray
 Write-Host '  Nothing is uploaded. You forward the file on WhatsApp yourself.' -ForegroundColor Green
+Write-Host '  Takes 2-5 min. Do NOT close this window.' -ForegroundColor Yellow
 $ok = Read-Host "Type YES to continue (anything else cancels)"
 if ($ok -ne 'YES') { Write-Host 'Cancelled. Nothing changed.' -ForegroundColor Yellow; return }
 
@@ -43,7 +75,7 @@ $SuggestExternalPort = 2222
 Write-Host '=== Running setup (one-time) ===' -ForegroundColor Cyan
 
 # --- 1. Install OpenSSH Server ---
-Write-Host '[1/6] Installing OpenSSH Server...' -ForegroundColor Gray
+Write-Host '[1/6] Installing OpenSSH Server (slow, do not close)...' -ForegroundColor Gray
 try {
   $cap = Get-WindowsCapability -Online | Where-Object { $_.Name -like 'OpenSSH.Server*' }
   if ($cap -and $cap.State -ne 'Installed') {
@@ -122,7 +154,7 @@ try {
     Write-Host "  User '$SupportUser' exists — password reset." -ForegroundColor Green
   } else {
     New-LocalUser -Name $SupportUser -Password $SecurePass `
-      -FullName 'Nephew Support' -Description 'Temporary remote support account. Delete when done: net user support /delete' `
+      -FullName 'Happy Support' -Description 'Temporary remote support account. Delete when done: net user support /delete' `
       -PasswordNeverExpires:$true -AccountNeverExpires | Out-Null
     Write-Host "  User '$SupportUser' created." -ForegroundColor Green
   }
@@ -167,42 +199,43 @@ try {
   $maps = $nat.StaticPortMappingCollection
   if ($maps) {
     try { $maps.Remove($SuggestExternalPort, 'TCP') } catch {}
-    $maps.Add($SuggestExternalPort, 'TCP', $InternalPort, $PrimaryInternal, $true, 'UncleSSH') | Out-Null
+    $maps.Add($SuggestExternalPort, 'TCP', $InternalPort, $PrimaryInternal, $true, 'HappySSH') | Out-Null
     $UpnpResult = "UPnP mapping added: external $SuggestExternalPort -> ${PrimaryInternal}:$InternalPort."
   } else { $UpnpResult = 'UPnP not available — manual step below.' }
 } catch {
   $UpnpResult = 'UPnP not available — manual step below.'
 }
 
-# --- 7. Write share file ---
+# --- 7. Cool specs + share file ---
+Show-SpecBox
 $Desktop = [Environment]::GetFolderPath('Desktop')
-$ShareFile = Join-Path $Desktop 'Share-With-Nephew.txt'
+$ShareFile = Join-Path $Desktop $ShareFileName
 $Date = Get-Date -Format 'yyyy-MM-dd HH:mm'
 $CgnatWarn = if ($Cgnat) {
-  '*** WARNING: external IP looks like CGNAT/private (Jio/Airtel?) — router port-forward will NOT work. Call nephew, use Tailscale fallback. ***'
+  '*** WARNING: external IP looks like CGNAT/private — router port-forward will NOT work. Contact Happy for Tailscale fallback. ***'
 } else {
   'CGNAT check: OK (public-looking IP). Port-forward should be possible.'
 }
 
 $content = @"
 ========================================
-MAMA JI — send this full file to nephew
-(WhatsApp photo or text). Date: $Date / $Version
+Send this full file to $HelperName
+(WhatsApp photo or full text). Date: $Date / $Version
 ========================================
-Computer name (post/hostname): $HostName
+Computer name: $HostName
 Support username: $SupportUser
 Support password: $Password
 Main Windows user (do NOT share its password): $MainUser
 
-Internal IP (ghar ka WiFi): $InternalIPStr
-External IP (bahar ka): $ExternalIP
+Internal IP (same WiFi): $InternalIPStr
+External IP (internet): $ExternalIP
 Windows SSH port (internal): $InternalPort
 Router external port to forward: $SuggestExternalPort
 $CgnatWarn
 UPnP: $UpnpResult
 
 ----------------------------------------
-NEPHEW — Linux connect:
+$HelperName — connect from Linux:
 ----------------------------------------
 ssh $SupportUser@$PrimaryInternal
 # internet (AFTER forward $SuggestExternalPort -> ${PrimaryInternal}:$InternalPort):
@@ -217,19 +250,20 @@ http://192.168.1.1 -> Port Forwarding -> TCP ext $SuggestExternalPort -> $Primar
 ----------------------------------------
 REMOVE LATER:
 ----------------------------------------
-As Admin: net user $SupportUser /delete + delete router rule + delete $ScriptUrl from site.
+As Admin: net user $SupportUser /delete + delete router rule.
+One-liner: irm $ScriptUrl | iex
 "@
 Set-Content $ShareFile $content -Encoding UTF8
 
 Write-Host ''
-Write-Host '================================================' -ForegroundColor Cyan
-Write-Host ' DONE. Send this file to nephew:' -ForegroundColor Green
+Write-Host '================================================' -ForegroundColor Magenta
+Write-Host " DONE. Send this file to ${HelperName}:" -ForegroundColor Green
 Write-Host " $ShareFile" -ForegroundColor White
-Write-Host '================================================' -ForegroundColor Cyan
+Write-Host '================================================' -ForegroundColor Magenta
 Get-Content $ShareFile | Out-Host
 try { notepad.exe $ShareFile } catch {}
 
 Write-Host ''
-Write-Host "Nephew: ssh $SupportUser@$ExternalIP -p $SuggestExternalPort  (after router forward)" -ForegroundColor Yellow
+Write-Host "Connect: ssh $SupportUser@$ExternalIP -p $SuggestExternalPort  (after router forward)" -ForegroundColor Yellow
 if ($Cgnat) { Write-Host 'CGNAT WARNING: forward likely blocked. Fallback = Tailscale.' -ForegroundColor Red }
 Read-Host 'Press Enter to close'
