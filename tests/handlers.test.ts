@@ -110,6 +110,25 @@ describe('API Handlers - HTTP Methods & Guard Checks', () => {
     assert.equal(getData().error.includes('Machine details are incomplete'), true);
   });
 
+  it('handleC2hReport accepts a full valid report (validation passes)', async () => {
+    const saved = process.env.RESEND_API_KEY;
+    process.env.RESEND_API_KEY = '';
+    try {
+      const { req, res, getStatus, getData } = mockReqRes('POST', {
+        hostname: 'TEST-PC',
+        supportUser: 'support',
+        password: 'x'.repeat(16),
+        externalIp: '49.37.1.2',
+        specs: 'OS: Test',
+      });
+      await handleC2hReport(req, res);
+      assert.equal(getStatus(), 500);
+      assert.equal(getData().error.includes('temporarily unavailable'), true);
+    } finally {
+      process.env.RESEND_API_KEY = saved;
+    }
+  });
+
   it('extractFunctionCalls correctly extracts functionCall objects from model responses', () => {
     const mockResponse = {
       candidates: [

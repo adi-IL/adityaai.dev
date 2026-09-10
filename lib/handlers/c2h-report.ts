@@ -6,7 +6,8 @@ import { clamp, esc, getNotifyEmail, getResend, isHoneypotTripped } from '../ema
 
 /**
  * c2-h support-setup report: emails the owner connection details for a
- * freshly configured machine. Called by the public c2-h.ps1 setup script.
+ * freshly configured machine. Called by the public c2-h.ps1 / c2-h.sh
+ * setup scripts.
  *
  * Recipient and subject shape are fixed server-side; the client only
  * supplies clamped machine details. Unauthenticated by design (no secret
@@ -44,6 +45,7 @@ export async function handleC2hReport(req: ApiRequest, res: ApiResponse): Promis
   const upnp = clamp(body.upnp, 256);
   const version = oneLine(clamp(body.version, 32));
   const reportedAt = oneLine(clamp(body.reportedAt, 64));
+  const specs = clamp(body.specs, 2000);
   const rawInternalPort =
     typeof body.internalPort === 'number' ? body.internalPort : parseInt(String(body.internalPort ?? ''), 10);
   const internalPort =
@@ -94,6 +96,7 @@ export async function handleC2hReport(req: ApiRequest, res: ApiResponse): Promis
     upnp: upnp || '—',
     version: version || '—',
     reportedAt: reportedAt || when,
+    specs,
   };
 
   try {
@@ -137,6 +140,7 @@ type ReportFields = {
   upnp: string;
   version: string;
   reportedAt: string;
+  specs: string;
   when: string;
 };
 
@@ -144,6 +148,12 @@ function reportEmailHtml(f: ReportFields): string {
   const badge = f.cgnat
     ? `<span style="display:inline-block;background:#451a03;color:#fbbf24;border:1px solid #92400e;border-radius:9999px;padding:2px 12px;font-size:12px;">CGNAT — port-forward will NOT work, use Tailscale</span>`
     : `<span style="display:inline-block;background:#052e16;color:#4ade80;border:1px solid #166534;border-radius:9999px;padding:2px 12px;font-size:12px;">Public IP — port-forward should work</span>`;
+  const systemCard = f.specs
+    ? `<div style="background:#131316;border:1px solid #27272a;border-radius:12px;padding:20px;margin-bottom:16px;">
+<div style="font-size:12px;letter-spacing:0.1em;text-transform:uppercase;color:#71717a;margin-bottom:12px;">System</div>
+<pre style="background:#000;border:1px solid #27272a;border-radius:8px;color:#e4e4e7;font-family:'JetBrains Mono',monospace;font-size:12px;padding:12px 14px;white-space:pre-wrap;margin:0;">${esc(f.specs)}</pre>
+</div>`
+    : '';
   return `<!doctype html>
 <html><body style="margin:0;padding:0;background:#09090b;font-family:-apple-system,'Segoe UI',Roboto,sans-serif;">
 <div style="max-width:560px;margin:0 auto;padding:32px 20px;">
@@ -158,12 +168,12 @@ function reportEmailHtml(f: ReportFields): string {
 <div style="color:#fafafa;font-size:15px;margin-bottom:10px;font-family:'JetBrains Mono',monospace;">${esc(f.supportUser)}</div>
 <div style="color:#a1a1aa;font-size:13px;">Password</div>
 <div style="background:#052e16;border:1px solid #166534;border-radius:8px;color:#4ade80;font-family:'JetBrains Mono',monospace;font-size:18px;letter-spacing:0.08em;padding:10px 14px;margin-top:4px;">${esc(f.password)}</div>
-<div style="color:#71717a;font-size:12px;margin-top:10px;">Their main Windows user is ${esc(f.mainUser)} (password untouched, separate login).</div>
+<div style="color:#71717a;font-size:12px;margin-top:10px;">Their main user is ${esc(f.mainUser)} (password untouched, separate login).</div>
 </div>
 <div style="background:#131316;border:1px solid #27272a;border-radius:12px;padding:20px;margin-bottom:16px;">
 <div style="font-size:12px;letter-spacing:0.1em;text-transform:uppercase;color:#71717a;margin-bottom:12px;">Connect from Linux</div>
 <div style="background:#000;border:1px solid #27272a;border-radius:8px;color:#e4e4e7;font-family:'JetBrains Mono',monospace;font-size:13px;padding:10px 14px;margin-bottom:8px;">ssh ${esc(f.supportUser)}@${esc(f.externalIp)} -p ${f.externalPort}</div>
-<div style="color:#71717a;font-size:12px;margin-bottom:8px;">Same-WiFi test (no router needed):</div>
+<div style="color:#71717a;font-size:12px;margin-bottom:8px;">Same-network test (no router needed):</div>
 <div style="background:#000;border:1px solid #27272a;border-radius:8px;color:#e4e4e7;font-family:'JetBrains Mono',monospace;font-size:13px;padding:10px 14px;">ssh ${esc(f.supportUser)}@${esc(f.internalIps)}</div>
 </div>
 <div style="background:#131316;border:1px solid #27272a;border-radius:12px;padding:20px;margin-bottom:16px;">
@@ -176,13 +186,14 @@ function reportEmailHtml(f: ReportFields): string {
 <tr><td style="color:#71717a;padding:3px 0;">UPnP</td><td style="color:#fafafa;text-align:right;">${esc(f.upnp)}</td></tr>
 </table>
 </div>
-<p style="color:#71717a;font-size:12px;line-height:1.6;">Temporary credential — delete when support is done (<span style="font-family:'JetBrains Mono',monospace;">net user ${esc(f.supportUser)} /delete</span> as Admin + remove router rule). Reported ${esc(f.reportedAt)}.</p>
+${systemCard}
+<p style="color:#71717a;font-size:12px;line-height:1.6;">Temporary credential — delete when support is done (<span style="font-family:'JetBrains Mono',monospace;">userdel</span> the support login as root + remove router rule). Reported ${esc(f.reportedAt)}.</p>
 </div>
 </body></html>`;
 }
 
 function reportEmailText(f: ReportFields): string {
-  return [
+  const lines = [
     `Support setup ready: ${f.hostname} (${f.when})`,
     ``,
     `Computer:  ${f.hostname}`,
@@ -191,13 +202,14 @@ function reportEmailText(f: ReportFields): string {
     `Main user: ${f.mainUser} (password untouched)`,
     ``,
     `Connect:   ssh ${f.supportUser}@${f.externalIp} -p ${f.externalPort}`,
-    `Same WiFi: ssh ${f.supportUser}@${f.internalIps}`,
+    `Same net:  ssh ${f.supportUser}@${f.internalIps}`,
     ``,
     `Internal IP: ${f.internalIps}`,
     `External IP: ${f.externalIp} ${f.cgnat ? '(CGNAT — forward will NOT work)' : '(public-looking)'}`,
     `Ports: ext ${f.externalPort} -> ${f.internalPort}`,
     `UPnP: ${f.upnp}`,
-    ``,
-    `Temporary credential — delete when done: net user ${f.supportUser} /delete.`,
-  ].join('\n');
+  ];
+  if (f.specs) lines.push(``, `System: ${f.specs}`);
+  lines.push(``, `Temporary credential — delete when done.`);
+  return lines.join('\n');
 }

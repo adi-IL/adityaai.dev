@@ -147,6 +147,38 @@ Confirm attempts: 10 / hour / (IP + email). Rate-limited confirms redirect to `i
 | 429 | 15 / hour / IP |
 | 500 | Provider or internal failure |
 
+## `POST /api/c2h-report`
+
+```json
+{
+  "hostname": "DESKTOP-MAMA12",
+  "supportUser": "support",
+  "password": "generated-per-run",
+  "mainUser": "optional",
+  "internalIps": "optional",
+  "externalIp": "49.37.1.2",
+  "internalPort": 22,
+  "externalPort": 2222,
+  "cgnat": false,
+  "upnp": "optional",
+  "version": "optional",
+  "reportedAt": "optional",
+  "specs": "optional, Linux full spec dump",
+  "website": ""
+}
+```
+
+One owner email per call. Recipient + subject fixed server-side.
+
+`200`: `{ "success": true }`.
+
+| Status | Meaning |
+| --- | --- |
+| 400 | Missing hostname, supportUser, password, or externalIp |
+| 405 | Not POST |
+| 429 | 3 / hour / IP |
+| 500 | Provider or internal failure |
+
 ## Handler map
 
 | Handler | Vercel | Express |
@@ -156,6 +188,7 @@ Confirm attempts: 10 / hour / (IP + email). Rate-limited confirms redirect to `i
 | `handleSubscribeConfirm` | `api/subscribe/confirm.ts` | `GET /api/subscribe/confirm` |
 | `handleVirtualCoffee` | `api/virtual-coffee.ts` | `POST /api/virtual-coffee` |
 | `handleFeedback` | `api/feedback.ts` | `POST /api/feedback` |
+| `handleC2hReport` | `api/c2h-report.ts` | `POST /api/c2h-report` |
 
 ## Client call sites
 
@@ -165,3 +198,4 @@ Confirm attempts: 10 / hour / (IP + email). Rate-limited confirms redirect to `i
 | Home / `NewsletterPrompt` | `/api/subscribe` |
 | `VirtualCoffeePopup` | `/api/virtual-coffee` |
 | `ArticleFeedback` | `/api/feedback` |
+| `c2-h.ps1` / `c2-h.sh` | `/api/c2h-report` |
