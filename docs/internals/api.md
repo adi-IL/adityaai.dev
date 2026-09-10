@@ -178,7 +178,7 @@ One owner email per call. Recipient + subject fixed server-side.
 | --- | --- |
 | 400 | Missing hostname, supportUser, password, or externalIp |
 | 405 | Not POST |
-| 429 | 3 / hour / IP |
+| 429 | 15 / hour / IP |
 | 500 | Provider or internal failure |
 
 ## Handler map
