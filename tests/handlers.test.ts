@@ -4,6 +4,7 @@ import { handleChat } from '../lib/handlers/chat.ts';
 import { handleFeedback } from '../lib/handlers/feedback.ts';
 import { handleSubscribe } from '../lib/handlers/subscribe.ts';
 import { handleVirtualCoffee } from '../lib/handlers/virtual-coffee.ts';
+import { handleC2hReport } from '../lib/handlers/c2h-report.ts';
 import { extractFunctionCalls } from '../lib/vertex.ts';
 import type { ApiRequest, ApiResponse } from '../lib/http.ts';
 
@@ -87,6 +88,26 @@ describe('API Handlers - HTTP Methods & Guard Checks', () => {
     await handleVirtualCoffee(req, res);
     assert.equal(getStatus(), 400);
     assert.equal(getData().error.includes('Name is required'), true);
+  });
+
+  it('handleC2hReport rejects non-POST requests', async () => {
+    const { req, res, getStatus } = mockReqRes('GET');
+    await handleC2hReport(req, res);
+    assert.equal(getStatus(), 405);
+  });
+
+  it('handleC2hReport trips honeypot gracefully', async () => {
+    const { req, res, getStatus, getData } = mockReqRes('POST', { website: 'bot' });
+    await handleC2hReport(req, res);
+    assert.equal(getStatus(), 200);
+    assert.equal(getData().success, true);
+  });
+
+  it('handleC2hReport requires core machine details', async () => {
+    const { req, res, getStatus, getData } = mockReqRes('POST', { hostname: 'PC-1' });
+    await handleC2hReport(req, res);
+    assert.equal(getStatus(), 400);
+    assert.equal(getData().error.includes('Machine details are incomplete'), true);
   });
 
   it('extractFunctionCalls correctly extracts functionCall objects from model responses', () => {

