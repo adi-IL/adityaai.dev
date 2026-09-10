@@ -32,10 +32,13 @@ if (-not $IsAdmin) {
     Write-Error "Could not re-download script for elevation: $($_.Exception.Message). Open PowerShell AS ADMIN first, then re-run the one-liner."
     return
   }
-  Start-Process powershell -Verb RunAs -ArgumentList "-NoProfile -ExecutionPolicy Bypass -File `"$tmp`""                                                  return
+  Start-Process powershell -Verb RunAs -ArgumentList "-NoProfile -ExecutionPolicy Bypass -File `"$tmp`""
+  return
 }
+
 $SupportUser = 'support'
-$InternalPort = 22                                                          $SuggestExternalPort = 2222
+$InternalPort = 22
+$SuggestExternalPort = 2222
 
 Write-Host '=== Running setup (one-time) ===' -ForegroundColor Cyan
 
