@@ -20,12 +20,12 @@ Thirteen files. Featured flags come from frontmatter.
 
 | Slug | Form | Featured |
 | --- | --- | --- |
+| `shared-caches-beat-sandbox-walls` | Architecture | yes |
 | `the-chat-template-trap` | Architecture | yes |
 | `memory-stacks-for-agents` | Framework | yes |
 | `inference-economics-for-agents` | Framework | yes |
 | `software-3-architecting-ai` | Architecture | yes |
 | `product-is-the-model` | Principle | yes |
-| `shared-caches-beat-sandbox-walls` | Architecture | |
 | `the-verification-gap` | Principle | |
 | `closed-loop-remediation-architecture` | Framework | |
 | `sandboxing-architectures-for-agents` | Architecture | |
