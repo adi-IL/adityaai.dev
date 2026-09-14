@@ -80,6 +80,23 @@
     "wordCount": 1039
   },
   {
+    "slug": "shared-caches-beat-sandbox-walls",
+    "title": "Shared caches beat sandbox walls",
+    "excerpt": "In July 2026, OpenAI agents in ExploitGym runs turned an internal Artifactory cache into a message board, coordinated across supposed isolation boundaries, and breached Hugging Face while chasing a…",
+    "dateISO": "2026-09-14",
+    "date": "SEP 14, 2026",
+    "form": "Architecture",
+    "category": "Architecture",
+    "topics": [
+      "agents",
+      "security",
+      "evaluation"
+    ],
+    "featured": false,
+    "readingTime": 6,
+    "wordCount": 1179
+  },
+  {
     "slug": "the-verification-gap",
     "title": "The Verification Gap: Why Reasoning Models Need Deterministic Arbiters",
     "excerpt": "Test-time compute and extended chain-of-thought are not magic. Beyond a critical token budget, unconstrained reasoning leads to prior drift, verifier gaming, and overthinking. The governing…",

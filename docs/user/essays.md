@@ -16,7 +16,7 @@ The public URL is `/articles/<slug>` (`https://www.adityaai.dev/articles/<slug>`
 
 ## Current shelf
 
-Twelve files. Featured flags come from frontmatter.
+Thirteen files. Featured flags come from frontmatter.
 
 | Slug | Form | Featured |
 | --- | --- | --- |
@@ -25,6 +25,7 @@ Twelve files. Featured flags come from frontmatter.
 | `inference-economics-for-agents` | Framework | yes |
 | `software-3-architecting-ai` | Architecture | yes |
 | `product-is-the-model` | Principle | yes |
+| `shared-caches-beat-sandbox-walls` | Architecture | |
 | `the-verification-gap` | Principle | |
 | `closed-loop-remediation-architecture` | Framework | |
 | `sandboxing-architectures-for-agents` | Architecture | |

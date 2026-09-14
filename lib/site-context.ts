@@ -14,6 +14,8 @@ type EssayMeta = {
 };
 
 const require = createRequire(import.meta.url);
+// Chat inventory is derived from scripts/articles-meta.json (all shelf slugs,
+// including shared-caches-beat-sandbox-walls after meta regen) — do not hardcode.
 const articlesMeta = require('../scripts/articles-meta.json') as EssayMeta[];
 
 const PROJECTS = [

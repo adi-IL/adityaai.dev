@@ -20,7 +20,7 @@ Do not invent essays, GitHub repos, env defaults, or product claims. If a source
 
 ### 3. Small shelf
 
-Twelve essays is the current shelf. Prefer updating a thesis in place over adding a near-duplicate. `featured: true` is the Home "Start here" set. Keep that list short.
+Thirteen essays is the current shelf. Prefer updating a thesis in place over adding a near-duplicate. `featured: true` is the Home "Start here" set. Keep that list short.
 
 ### 4. Site-first lab guide
 
