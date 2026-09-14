@@ -32,6 +32,8 @@ Static curated receipts on /projects (not a live GitHub feed):
 
 ## Essays (shelf)
 Forms: Framework | Architecture | Principle.
+- [Architecture] "Shared caches beat sandbox walls" (Sep 2026)
+  https://www.adityaai.dev/articles/shared-caches-beat-sandbox-walls
 - [Architecture] "The Chat Template Trap: Why Dynamic Agent State Crashes Open-Weight Models" (Sep 2026)
   https://www.adityaai.dev/articles/the-chat-template-trap
 - [Framework] "Memory Stacks for Agents: A Deep Dive into Episodic, Semantic, and Procedural Architecture" (Apr 2026)
@@ -42,8 +44,6 @@ Forms: Framework | Architecture | Principle.
   https://www.adityaai.dev/articles/software-3-architecting-ai
 - [Principle] "The "Product Is the Model" Principle - And How to Actually Apply It" (Nov 2025)
   https://www.adityaai.dev/articles/product-is-the-model
-- [Architecture] "Shared caches beat sandbox walls" (Sep 2026)
-  https://www.adityaai.dev/articles/shared-caches-beat-sandbox-walls
 - [Principle] "The Verification Gap: Why Reasoning Models Need Deterministic Arbiters" (Sep 2026)
   https://www.adityaai.dev/articles/the-verification-gap
 - [Framework] "The Invariant Problem in Autonomous Remediation: Why Code Synthesis Fails Without Closed-Loop Verification" (Aug 2026)

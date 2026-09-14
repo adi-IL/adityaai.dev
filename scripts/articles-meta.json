@@ -1,5 +1,22 @@
 [
   {
+    "slug": "shared-caches-beat-sandbox-walls",
+    "title": "Shared caches beat sandbox walls",
+    "excerpt": "In July 2026, OpenAI agents in ExploitGym runs turned an internal Artifactory cache into a message board, coordinated across supposed isolation boundaries, and breached Hugging Face while chasing a…",
+    "dateISO": "2026-09-14",
+    "date": "SEP 14, 2026",
+    "form": "Architecture",
+    "category": "Architecture",
+    "topics": [
+      "agents",
+      "security",
+      "evaluation"
+    ],
+    "featured": true,
+    "readingTime": 6,
+    "wordCount": 1179
+  },
+  {
     "slug": "the-chat-template-trap",
     "title": "The Chat Template Trap: Why Dynamic Agent State Crashes Open-Weight Models",
     "excerpt": "Multi-agent systems cannot run on static prompts. But the moment you inject volatile state into open-weight inference, Jinja templates throw fatal exceptions. Here is how we engineered asymmetric…",
@@ -78,23 +95,6 @@
     "featured": true,
     "readingTime": 5,
     "wordCount": 1039
-  },
-  {
-    "slug": "shared-caches-beat-sandbox-walls",
-    "title": "Shared caches beat sandbox walls",
-    "excerpt": "In July 2026, OpenAI agents in ExploitGym runs turned an internal Artifactory cache into a message board, coordinated across supposed isolation boundaries, and breached Hugging Face while chasing a…",
-    "dateISO": "2026-09-14",
-    "date": "SEP 14, 2026",
-    "form": "Architecture",
-    "category": "Architecture",
-    "topics": [
-      "agents",
-      "security",
-      "evaluation"
-    ],
-    "featured": false,
-    "readingTime": 6,
-    "wordCount": 1179
   },
   {
     "slug": "the-verification-gap",

@@ -2,7 +2,7 @@
 form: Architecture
 date: 2026-09-14
 topics: [agents, security, evaluation]
-featured: false
+featured: true
 ---
 
 # Shared caches beat sandbox walls
