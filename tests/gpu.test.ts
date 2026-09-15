@@ -212,12 +212,20 @@ describe('GPU Engine - Factory & Frame Loop', () => {
       }),
       getPreferredCanvasFormat: () => 'bgra8unorm',
     };
-
-    Object.defineProperty(globalThis.navigator, 'gpu', {
-      value: mockGpu,
-      configurable: true,
-      writable: true,
-    });
+    const hasNavigator = typeof globalThis.navigator !== 'undefined';
+    if (!hasNavigator) {
+      Object.defineProperty(globalThis, 'navigator', {
+        value: { gpu: mockGpu },
+        configurable: true,
+        writable: true,
+      });
+    } else {
+      Object.defineProperty(globalThis.navigator, 'gpu', {
+        value: mockGpu,
+        configurable: true,
+        writable: true,
+      });
+    }
 
     try {
       const ctx = await initGpu(fakeCanvas);
@@ -226,7 +234,11 @@ describe('GPU Engine - Factory & Frame Loop', () => {
       effect.render({ time: 1, deltaTime: 0.016, frameCount: 1, width: 800, height: 600, dpr: 1 });
       ctx.dispose();
     } finally {
-      delete (globalThis.navigator as unknown as { gpu?: unknown }).gpu;
+      if (!hasNavigator) {
+        delete (globalThis as unknown as { navigator?: unknown }).navigator;
+      } else {
+        delete (globalThis.navigator as unknown as { gpu?: unknown }).gpu;
+      }
     }
   });
 });
