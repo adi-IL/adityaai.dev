@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 
 /** Lab instrument: Canvas2D GPU-evoking field. No vgpu npm dep. Vercel Labs attribution. */
 export default function VgpuInstrument() {
+  const rootRef = useRef<HTMLElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [reducedMotion, setReducedMotion] = useState(false);
 
@@ -15,13 +16,16 @@ export default function VgpuInstrument() {
 
   useEffect(() => {
     const canvas = canvasRef.current;
-    if (!canvas) return;
+    const root = rootRef.current;
+    if (!canvas || !root) return;
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
     let raf = 0;
     let cssW = 0;
     let cssH = 0;
+    let visible = document.visibilityState === 'visible';
+    let onscreen = true;
     const t0 = performance.now();
 
     const resize = () => {
@@ -31,6 +35,13 @@ export default function VgpuInstrument() {
       canvas.width = Math.floor(cssW * dpr);
       canvas.height = Math.floor(cssH * dpr);
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    };
+
+    const stopLoop = () => {
+      if (raf) {
+        cancelAnimationFrame(raf);
+        raf = 0;
+      }
     };
 
     const draw = (now: number) => {
@@ -83,31 +94,66 @@ export default function VgpuInstrument() {
         }
       }
 
-      if (!reducedMotion) {
+      if (!reducedMotion && visible && onscreen) {
         const scanY = ((t * 28) % (h + 20)) - 10;
         ctx.fillStyle = 'rgba(204, 255, 0, 0.08)';
         ctx.fillRect(0, scanY, w, 2);
         raf = requestAnimationFrame(draw);
+      } else {
+        raf = 0;
       }
     };
 
+    const startLoop = () => {
+      if (reducedMotion) {
+        stopLoop();
+        draw(performance.now());
+        return;
+      }
+      if (!visible || !onscreen) {
+        stopLoop();
+        draw(performance.now());
+        return;
+      }
+      if (!raf) raf = requestAnimationFrame(draw);
+    };
+
+    const onVisibility = () => {
+      visible = document.visibilityState === 'visible';
+      startLoop();
+    };
+
     resize();
-    if (reducedMotion) draw(performance.now());
-    else raf = requestAnimationFrame(draw);
+    startLoop();
+
+    document.addEventListener('visibilitychange', onVisibility);
+
+    const io = new IntersectionObserver(
+      (entries) => {
+        onscreen = entries.some((e) => e.isIntersecting);
+        startLoop();
+      },
+      { threshold: 0.01 },
+    );
+    io.observe(root);
 
     const ro = new ResizeObserver(() => {
       resize();
-      if (reducedMotion) draw(performance.now());
+      if (reducedMotion || !visible || !onscreen) draw(performance.now());
     });
     ro.observe(canvas);
+
     return () => {
-      if (raf) cancelAnimationFrame(raf);
+      stopLoop();
+      document.removeEventListener('visibilitychange', onVisibility);
+      io.disconnect();
       ro.disconnect();
     };
   }, [reducedMotion]);
 
   return (
     <aside
+      ref={rootRef}
       className="w-48 md:w-52 shrink-0 rounded-xl border border-zinc-800 bg-[#0a0a0a] overflow-hidden shadow-lg"
       aria-label="vgpu lab instrument"
     >
@@ -127,15 +173,36 @@ export default function VgpuInstrument() {
         </p>
         <div className="flex flex-wrap gap-1.5" aria-label="Runtime targets">
           {(['browser', 'node', 'mock'] as const).map((chip) => (
-            <span key={chip} className="font-mono text-[9px] uppercase tracking-widest text-zinc-500 border border-zinc-800 rounded-full px-2 py-0.5">
+            <span
+              key={chip}
+              className="font-mono text-[9px] uppercase tracking-widest text-zinc-500 border border-zinc-800 rounded-full px-2 py-0.5"
+            >
               {chip}
             </span>
           ))}
         </div>
         <div className="flex items-center gap-3 font-mono text-[10px] uppercase tracking-widest">
-          <a href="https://github.com/vercel-labs/vgpu" target="_blank" rel="noopener noreferrer" className="text-zinc-500 hover:text-electric-lime focus-visible:outline focus-visible:outline-1 focus-visible:outline-electric-lime focus-visible:outline-offset-2 rounded-sm transition-colors">GitHub</a>
-          <span className="text-zinc-700" aria-hidden>·</span>
-          <a href="https://vgpu.sh" target="_blank" rel="noopener noreferrer" className="text-zinc-500 hover:text-electric-lime focus-visible:outline focus-visible:outline-1 focus-visible:outline-electric-lime focus-visible:outline-offset-2 rounded-sm transition-colors">vgpu.sh</a>
+          <a
+            href="https://github.com/vercel-labs/vgpu"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="vgpu on GitHub (opens in a new tab)"
+            className="text-zinc-500 hover:text-electric-lime focus-visible:outline focus-visible:outline-1 focus-visible:outline-electric-lime focus-visible:outline-offset-2 rounded-sm transition-colors"
+          >
+            GitHub
+          </a>
+          <span className="text-zinc-700" aria-hidden>
+            ·
+          </span>
+          <a
+            href="https://vgpu.sh"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="vgpu documentation on vgpu.sh (opens in a new tab)"
+            className="text-zinc-500 hover:text-electric-lime focus-visible:outline focus-visible:outline-1 focus-visible:outline-electric-lime focus-visible:outline-offset-2 rounded-sm transition-colors"
+          >
+            vgpu.sh
+          </a>
         </div>
       </div>
     </aside>

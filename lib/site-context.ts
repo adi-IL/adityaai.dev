@@ -87,6 +87,8 @@ ${essayLines}
 PROJECTS:
 ${projectLines}
 
+HOME NOTE: Home hero includes a lab instrument linking to Vercel Labs vgpu (https://github.com/vercel-labs/vgpu, https://vgpu.sh), a tiny TypeScript WebGPU API (browser, node, mock). Not an Aditya project.
+
 OTHER PAGES: ${SITE}/ about · ${SITE}/articles · ${SITE}/projects
 `;
 }
