@@ -23,9 +23,6 @@ export default defineConfig(({ mode }) => {
         output: {
           manualChunks(id) {
             if (id.includes('node_modules')) {
-              if (id.includes('three') || id.includes('vanta')) {
-                return 'vendor-three';
-              }
               if (id.includes('motion')) {
                 return 'vendor-motion';
               }

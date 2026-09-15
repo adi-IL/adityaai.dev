@@ -32,9 +32,7 @@
     "react-markdown": "^10.1.0",
     "react-router-dom": "^7.18.2",
     "remark-gfm": "^4.0.1",
-    "resend": "^6.10.0",
-    "three": "^0.183.2",
-    "vanta": "^0.5.24"
+    "resend": "^6.10.0"
   },
   "devDependencies": {
     "@tailwindcss/typography": "^0.5.19",
@@ -43,7 +41,6 @@
     "@types/node": "^22.14.0",
     "@types/react": "^19.2.18",
     "@types/react-dom": "^19.2.4",
-    "@types/three": "^0.185.3",
     "@vitejs/plugin-react": "^5.0.4",
     "autoprefixer": "^10.4.21",
     "esbuild": "^0.28.1",
