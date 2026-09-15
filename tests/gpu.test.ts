@@ -1,0 +1,132 @@
+import { describe, it } from 'node:test';
+import assert from 'node:assert/strict';
+import { createClock } from '../src/lib/gpu/clock.ts';
+import { createMockContext } from '../src/lib/gpu/mock.ts';
+import { initGpu } from '../src/lib/gpu/context.ts';
+import { createFrameLoop } from '../src/lib/gpu/loop.ts';
+
+describe('GPU Engine - Clock', () => {
+  it('initializes with zeroed elapsed and delta', () => {
+    const clock = createClock();
+    assert.equal(clock.time, 0);
+    assert.equal(clock.deltaTime, 0);
+    assert.equal(clock.frameCount, 0);
+  });
+
+  it('calculates elapsed time and delta on successive ticks', () => {
+    const clock = createClock();
+    const t0 = clock.tick(1000);
+    assert.equal(t0.time, 0);
+    assert.equal(t0.deltaTime, 0);
+    assert.equal(t0.frameCount, 1);
+
+    const t1 = clock.tick(1050);
+    assert.equal(Math.round(t1.time * 1000), 50);
+    assert.equal(Math.round(t1.deltaTime * 1000), 50);
+    assert.equal(t1.frameCount, 2);
+
+    const t2 = clock.tick(1100);
+    assert.equal(Math.round(t2.time * 1000), 100);
+    assert.equal(Math.round(t2.deltaTime * 1000), 50);
+    assert.equal(t2.frameCount, 3);
+  });
+
+  it('clamps delta time to 0.1s ceiling on tab suspension', () => {
+    const clock = createClock();
+    clock.tick(1000);
+    const jump = clock.tick(5000);
+    assert.equal(jump.deltaTime, 0.1);
+  });
+
+  it('resets time and frames on reset', () => {
+    const clock = createClock();
+    clock.tick(1000);
+    clock.tick(1050);
+    clock.reset();
+    assert.equal(clock.time, 0);
+    assert.equal(clock.frameCount, 0);
+  });
+});
+
+describe('GPU Engine - Mock Context & Uniform Reflection', () => {
+  it('records effect uniform mutations and renders', () => {
+    const ctx = createMockContext();
+    const effect = ctx.createEffect({
+      name: 'test-shader',
+      fragment: '#version 300 es\nvoid main(){}',
+      uniforms: {
+        u_speed: 1.5,
+        u_color: [0.8, 1.0, 0.0],
+      },
+    });
+
+    assert.equal(effect.name, 'test-shader');
+    assert.equal(effect.lastUniforms.u_speed, 1.5);
+    assert.deepEqual(effect.lastUniforms.u_color, [0.8, 1.0, 0.0]);
+
+    effect.set({ u_speed: 2.0 });
+    assert.equal(effect.lastUniforms.u_speed, 2.0);
+
+    effect.render({
+      time: 1.2,
+      deltaTime: 0.016,
+      frameCount: 60,
+      width: 1920,
+      height: 1080,
+      dpr: 2,
+    });
+
+    assert.equal(effect.renderHistory.length, 1);
+    assert.equal(effect.renderHistory[0].frame.time, 1.2);
+    assert.equal(effect.renderHistory[0].uniforms.u_speed, 2.0);
+  });
+
+  it('updates canvas dimensions on resize with dpr', () => {
+    const ctx = createMockContext();
+    ctx.resize(500, 300, 2);
+    assert.equal(ctx.canvas.width, 1000);
+    assert.equal(ctx.canvas.height, 600);
+    assert.deepEqual(ctx.lastResize, { width: 500, height: 300, dpr: 2 });
+  });
+
+  it('disposes all child effects on context disposal', () => {
+    const ctx = createMockContext();
+    const effect1 = ctx.createEffect({ name: 'e1', fragment: '' });
+    const effect2 = ctx.createEffect({ name: 'e2', fragment: '' });
+
+    assert.equal(ctx.isDisposed, false);
+    assert.equal(effect1.isDisposed, false);
+    assert.equal(effect2.isDisposed, false);
+
+    ctx.dispose();
+    assert.equal(ctx.isDisposed, true);
+    assert.equal(effect1.isDisposed, true);
+    assert.equal(effect2.isDisposed, true);
+  });
+});
+
+describe('GPU Engine - Factory & Frame Loop', () => {
+  it('falls back to mock context gracefully in headless Node', async () => {
+    const fakeCanvas = {} as HTMLCanvasElement;
+    const ctx = await initGpu(fakeCanvas);
+    assert.equal(ctx.backend, 'mock');
+  });
+
+  it('starts, renders one step in mock environment, and stops', async () => {
+    const ctx = createMockContext();
+    let renderedFrames = 0;
+
+    const loop = createFrameLoop(ctx, (frame) => {
+      renderedFrames += 1;
+      assert.equal(frame.frameCount, 1);
+    });
+
+    assert.equal(loop.isRunning, false);
+    loop.start();
+    assert.equal(loop.isRunning, true);
+    assert.equal(renderedFrames, 1);
+
+    loop.stop();
+    assert.equal(loop.isRunning, false);
+  });
+});
