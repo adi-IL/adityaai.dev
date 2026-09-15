@@ -49,7 +49,7 @@ src/                      React SPA
   pages/
   components/
   content/articles/       Essay markdown
-  lib/                    articles.ts, projects.ts
+  lib/                    articles.ts, projects.ts, gpu/
 scripts/
   generate-articles-meta.mjs
   articles-meta.json
@@ -77,7 +77,7 @@ docs/
 | `/about` | Bio / certs | Static plus external cert links |
 | `*` | NotFound | `noIndex` SEO |
 
-SEO is `react-helmet-async` plus prerendered HTML (title, OG, JSON-LD). Vanta/Three backgrounds load on Home only, after idle.
+SEO is `react-helmet-async` plus prerendered HTML (title, OG, JSON-LD). Lightweight GPU shader backgrounds (`src/lib/gpu`) load on Home only, with WebGPU negotiation, WebGL2 fallback, and visibility/reduced-motion pausing.
 
 ## Backend
 
