@@ -1,5 +1,6 @@
 import { createWebGL2Effect } from './effect';
 import { createMockContext } from './mock';
+import { createWebGpuContext, type GPUCanvasContextInterface, type GPUInterface } from './webgpu';
 import type { GpuContext, GpuEffect, GpuOptions, ShaderSpec } from './types';
 
 export async function initGpu(
@@ -12,8 +13,46 @@ export async function initGpu(
     return createMockContext(canvas);
   }
 
+  if (typeof canvas?.getContext !== 'function') {
+    if (preferredBackend === 'webgpu') {
+      throw new Error('WebGPU is not supported in this environment');
+    }
+    return createMockContext(canvas);
+  }
+  if (preferredBackend !== 'webgl2') {
+    const nav = typeof navigator !== 'undefined'
+      ? (navigator as unknown as { gpu?: GPUInterface })
+      : undefined;
+
+    if (nav?.gpu && typeof nav.gpu.requestAdapter === 'function') {
+      try {
+        const adapter = await nav.gpu.requestAdapter({
+          powerPreference: options?.powerPreference === 'low-power' ? 'low-power' : 'high-performance',
+        });
+        if (adapter) {
+          const device = await adapter.requestDevice();
+          const webgpuContext = canvas.getContext('webgpu') as GPUCanvasContextInterface | null;
+          if (webgpuContext && device) {
+            const format = nav.gpu.getPreferredCanvasFormat();
+            webgpuContext.configure({
+              device,
+              format,
+              alphaMode: options?.alpha === false ? 'opaque' : 'premultiplied',
+            });
+            return createWebGpuContext(canvas, device, webgpuContext, format);
+          }
+        }
+      } catch (err) {
+        if (preferredBackend === 'webgpu') {
+          throw err;
+        }
+      }
+    } else if (preferredBackend === 'webgpu') {
+      throw new Error('WebGPU is not supported in this environment');
+    }
+  }
   const isBrowser = typeof window !== 'undefined' && typeof document !== 'undefined';
-  if (!isBrowser || typeof canvas.getContext !== 'function') {
+  if (!isBrowser) {
     return createMockContext(canvas);
   }
 

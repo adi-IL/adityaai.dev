@@ -6,7 +6,7 @@
 2. Vercel rewrite serves prerendered `dist/articles/<slug>/index.html` when that file exists.
 3. Hashed JS/CSS load. React hydrates the SPA.
 4. Client router handles further navigation.
-5. On Home only, after idle, Vanta/Three backgrounds lazy-load.
+5. On Home only, lightweight procedural GPU shader backgrounds lazy-load via `src/lib/gpu`.
 
 Unknown paths fall through SPA `index.html` to React `NotFound` with `noindex`.
 

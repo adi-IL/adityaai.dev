@@ -1,4 +1,4 @@
-export type BackendKind = 'webgl2' | 'mock';
+export type BackendKind = 'webgpu' | 'webgl2' | 'mock';
 
 export type UniformType = 'float' | 'vec2' | 'vec3' | 'vec4' | 'int';
 
@@ -12,7 +12,8 @@ export type UniformValue =
 export interface ShaderSpec {
   name: string;
   vertex?: string;
-  fragment: string;
+  fragment?: string;
+  wgsl?: string;
   uniforms?: Record<string, UniformValue>;
 }
 

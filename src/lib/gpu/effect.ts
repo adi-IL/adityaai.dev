@@ -36,6 +36,9 @@ export function createWebGL2Effect(
   gl: WebGL2RenderingContext,
   spec: ShaderSpec,
 ): GpuEffect {
+  if (!spec.fragment) {
+    throw new Error('spec.fragment is required for WebGL2 shader effects');
+  }
   const vertexShader = compileShader(
     gl,
     spec.vertex ?? DEFAULT_VERTEX_SHADER,

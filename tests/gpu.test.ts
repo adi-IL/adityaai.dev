@@ -158,4 +158,75 @@ describe('GPU Engine - Factory & Frame Loop', () => {
     assert.equal(fakeCanvas.width, 600);
     loop.stop();
   });
+
+  it('throws when webgpu is explicitly requested without environment support', async () => {
+    const fakeCanvas = {} as HTMLCanvasElement;
+    await assert.rejects(
+      async () => initGpu(fakeCanvas, { backend: 'webgpu' }),
+      /WebGPU is not supported/,
+    );
+  });
+
+  it('initializes webgpu backend when navigator.gpu adapter and device succeed', async () => {
+    const fakeCanvas = {
+      getContext(type: string) {
+        if (type === 'webgpu') {
+          return {
+            configure() {},
+            getCurrentTexture() {
+              return { createView: () => ({}) };
+            },
+          };
+        }
+        return null;
+      },
+      width: 800,
+      height: 600,
+    } as unknown as HTMLCanvasElement;
+
+    const mockDevice = {
+      createShaderModule: () => ({}),
+      createBuffer: () => ({ destroy: () => {} }),
+      createBindGroupLayout: () => ({}),
+      createBindGroup: () => ({}),
+      createPipelineLayout: () => ({}),
+      createRenderPipeline: () => ({}),
+      createCommandEncoder: () => ({
+        beginRenderPass: () => ({
+          setPipeline: () => {},
+          setBindGroup: () => {},
+          draw: () => {},
+          end: () => {},
+        }),
+        finish: () => ({}),
+      }),
+      queue: {
+        writeBuffer: () => {},
+        submit: () => {},
+      },
+      destroy: () => {},
+    };
+    const mockGpu = {
+      requestAdapter: async () => ({
+        requestDevice: async () => mockDevice,
+      }),
+      getPreferredCanvasFormat: () => 'bgra8unorm',
+    };
+
+    Object.defineProperty(globalThis.navigator, 'gpu', {
+      value: mockGpu,
+      configurable: true,
+      writable: true,
+    });
+
+    try {
+      const ctx = await initGpu(fakeCanvas);
+      assert.equal(ctx.backend, 'webgpu');
+      const effect = ctx.createEffect({ name: 'wgsl-test' });
+      effect.render({ time: 1, deltaTime: 0.016, frameCount: 1, width: 800, height: 600, dpr: 1 });
+      ctx.dispose();
+    } finally {
+      delete (globalThis.navigator as unknown as { gpu?: unknown }).gpu;
+    }
+  });
 });
