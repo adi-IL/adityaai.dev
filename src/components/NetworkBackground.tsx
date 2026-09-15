@@ -8,6 +8,7 @@ out vec4 fragColor;
 
 uniform float u_time;
 uniform vec2 u_resolution;
+uniform vec2 u_mouse;
 
 vec2 hash2(vec2 p) {
   p = vec2(dot(p, vec2(127.1, 311.7)), dot(p, vec2(269.5, 183.3)));
@@ -39,10 +40,12 @@ void main() {
       vec2 neighbor = vec2(float(x), float(y));
       vec2 cellId = i_st + neighbor;
       vec2 h = hash2(cellId);
-      vec2 pos = neighbor + 0.5 + 0.32 * sin(t + 6.2831 * h);
+      vec2 mousePos = vec2(u_mouse.x * aspect, 1.0 - u_mouse.y) * 12.0;
+      float mDist = length((cellId + 0.5) - mousePos);
+      float mFactor = (1.0 - smoothstep(0.0, 3.0, mDist)) * 0.35;
+      vec2 pos = neighbor + 0.5 + (0.32 + mFactor) * sin(t + 6.2831 * h);
       points[idx] = pos;
       idx += 1;
-    }
   }
 
   float nodeGlow = 0.0;
@@ -50,15 +53,15 @@ void main() {
 
   for (int i = 0; i < 9; i++) {
     float d = length(f_st - points[i]);
-    nodeGlow += smoothstep(0.12, 0.02, d) * 1.4;
-    nodeGlow += smoothstep(0.35, 0.0, d) * 0.25;
+    nodeGlow += (1.0 - smoothstep(0.02, 0.12, d)) * 1.4;
+    nodeGlow += (1.0 - smoothstep(0.0, 0.35, d)) * 0.25;
 
     for (int j = i + 1; j < 9; j++) {
       float distNodes = length(points[i] - points[j]);
       if (distNodes < 1.35) {
         float lineDist = dfLine(f_st, points[i], points[j]);
         float lineFade = 1.0 - (distNodes / 1.35);
-        lineGlow += smoothstep(0.035, 0.005, lineDist) * lineFade * 0.65;
+        lineGlow += (1.0 - smoothstep(0.005, 0.035, lineDist)) * lineFade * 0.65;
       }
     }
   }
@@ -83,7 +86,7 @@ export default function NetworkBackground() {
     let cancelled = false;
 
     initGpu(canvas, { alpha: true, antialias: false, powerPreference: 'low-power' }).then((gpu) => {
-      if (cancelled) {
+      if (cancelled || gpu.backend === 'mock') {
         gpu.dispose();
         return;
       }
@@ -91,7 +94,21 @@ export default function NetworkBackground() {
       const effect = gpu.createEffect({
         name: 'network-lattice',
         fragment: NETWORK_FRAGMENT_SHADER,
+        uniforms: { u_mouse: [-10.0, -10.0] },
       });
+
+      const handlePointer = (e: PointerEvent) => {
+        const rect = canvas.getBoundingClientRect();
+        if (rect.width > 0 && rect.height > 0) {
+          const mx = (e.clientX - rect.left) / rect.width;
+          const my = (e.clientY - rect.top) / rect.height;
+          effect.set({ u_mouse: [mx, my] });
+        }
+      };
+      window.addEventListener('pointermove', handlePointer, { passive: true });
+      cleanupPointer = () => {
+        window.removeEventListener('pointermove', handlePointer);
+      };
 
       loopController = createFrameLoop(
         gpu,
@@ -106,8 +123,11 @@ export default function NetworkBackground() {
       // Graceful silence on unsupported contexts
     });
 
+    let cleanupPointer: (() => void) | null = null;
+
     return () => {
       cancelled = true;
+      cleanupPointer?.();
       loopController?.stop();
       gpuContext?.dispose();
     };

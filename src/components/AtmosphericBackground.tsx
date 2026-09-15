@@ -71,7 +71,7 @@ export default function AtmosphericBackground() {
     let cancelled = false;
 
     initGpu(canvas, { alpha: true, antialias: false, powerPreference: 'low-power' }).then((gpu) => {
-      if (cancelled) {
+      if (cancelled || gpu.backend === 'mock') {
         gpu.dispose();
         return;
       }
