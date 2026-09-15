@@ -39,7 +39,7 @@ export function createClock(): GpuClock {
 
       const diffSec = (now - lastTime) / 1000;
       delta = Math.min(Math.max(diffSec, 0), 0.1);
-      elapsed = (now - startTime) / 1000;
+      elapsed += delta;
       lastTime = now;
       frames += 1;
 

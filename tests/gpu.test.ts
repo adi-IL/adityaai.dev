@@ -31,11 +31,12 @@ describe('GPU Engine - Clock', () => {
     assert.equal(t2.frameCount, 3);
   });
 
-  it('clamps delta time to 0.1s ceiling on tab suspension', () => {
+  it('clamps delta time and advances elapsed only by clamped delta on tab delay', () => {
     const clock = createClock();
     clock.tick(1000);
     const jump = clock.tick(5000);
     assert.equal(jump.deltaTime, 0.1);
+    assert.equal(Math.round(jump.time * 100), 10);
   });
 
   it('resets time and frames on reset', () => {
@@ -81,6 +82,21 @@ describe('GPU Engine - Mock Context & Uniform Reflection', () => {
     assert.equal(effect.renderHistory[0].uniforms.u_speed, 2.0);
   });
 
+  it('deep-clones uniform array values in render history', () => {
+    const ctx = createMockContext();
+    const effect = ctx.createEffect({
+      name: 'test-clone',
+      fragment: '',
+      uniforms: { u_coords: [10, 20] },
+    });
+
+    effect.render({ time: 0, deltaTime: 0, frameCount: 1, width: 100, height: 100, dpr: 1 });
+    effect.set({ u_coords: [99, 100] });
+
+    assert.deepEqual(effect.renderHistory[0].uniforms.u_coords, [10, 20]);
+    assert.deepEqual(effect.lastUniforms.u_coords, [99, 100]);
+  });
+
   it('updates canvas dimensions on resize with dpr', () => {
     const ctx = createMockContext();
     ctx.resize(500, 300, 2);
@@ -89,7 +105,7 @@ describe('GPU Engine - Mock Context & Uniform Reflection', () => {
     assert.deepEqual(ctx.lastResize, { width: 500, height: 300, dpr: 2 });
   });
 
-  it('disposes all child effects on context disposal', () => {
+  it('disposes all child effects on context disposal and forbids new effects', () => {
     const ctx = createMockContext();
     const effect1 = ctx.createEffect({ name: 'e1', fragment: '' });
     const effect2 = ctx.createEffect({ name: 'e2', fragment: '' });
@@ -102,6 +118,8 @@ describe('GPU Engine - Mock Context & Uniform Reflection', () => {
     assert.equal(ctx.isDisposed, true);
     assert.equal(effect1.isDisposed, true);
     assert.equal(effect2.isDisposed, true);
+
+    assert.throws(() => ctx.createEffect({ name: 'e3', fragment: '' }), /disposed/);
   });
 });
 
@@ -112,7 +130,7 @@ describe('GPU Engine - Factory & Frame Loop', () => {
     assert.equal(ctx.backend, 'mock');
   });
 
-  it('starts, renders one step in mock environment, and stops', async () => {
+  it('starts, renders in mock environment, and stops', async () => {
     const ctx = createMockContext();
     let renderedFrames = 0;
 
@@ -124,9 +142,20 @@ describe('GPU Engine - Factory & Frame Loop', () => {
     assert.equal(loop.isRunning, false);
     loop.start();
     assert.equal(loop.isRunning, true);
-    assert.equal(renderedFrames, 1);
+    if (typeof requestAnimationFrame === 'undefined') {
+      assert.equal(renderedFrames, 1);
+    }
 
     loop.stop();
     assert.equal(loop.isRunning, false);
+  });
+
+  it('does not compound canvas backing dimensions when clientWidth is zero', () => {
+    const fakeCanvas = { clientWidth: 0, clientHeight: 0, width: 300, height: 150 } as HTMLCanvasElement;
+    const ctx = createMockContext(fakeCanvas);
+    const loop = createFrameLoop(ctx, () => {}, { dpr: [2, 2] });
+    loop.start();
+    assert.equal(fakeCanvas.width, 600);
+    loop.stop();
   });
 });

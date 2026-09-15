@@ -40,10 +40,12 @@ export function createMockContext(canvas?: HTMLCanvasElement): MockGpuContext {
       return disposed;
     },
     createEffect(spec: ShaderSpec): MockEffect {
+      if (disposed) {
+        throw new Error('Cannot create effect on disposed GpuContext');
+      }
       const uniforms: Record<string, UniformValue> = { ...(spec.uniforms ?? {}) };
       const history: MockEffectCall[] = [];
       let effectDisposed = false;
-
       const effect: MockEffect = {
         name: spec.name,
         renderHistory: history,
@@ -58,9 +60,15 @@ export function createMockContext(canvas?: HTMLCanvasElement): MockGpuContext {
         },
         render(frame: GpuFrame) {
           if (effectDisposed) return;
+          const clonedUniforms: Record<string, UniformValue> = {};
+          for (const [k, v] of Object.entries(uniforms)) {
+            if (v instanceof Float32Array) clonedUniforms[k] = new Float32Array(v);
+            else if (Array.isArray(v)) clonedUniforms[k] = [...v] as [number, number];
+            else clonedUniforms[k] = v;
+          }
           history.push({
             frame: { ...frame },
-            uniforms: { ...uniforms },
+            uniforms: clonedUniforms,
           });
         },
         dispose() {

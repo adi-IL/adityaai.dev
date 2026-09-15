@@ -41,11 +41,17 @@ export function createWebGL2Effect(
     spec.vertex ?? DEFAULT_VERTEX_SHADER,
     gl.VERTEX_SHADER,
   );
-  const fragmentShader = compileShader(
-    gl,
-    spec.fragment,
-    gl.FRAGMENT_SHADER,
-  );
+  let fragmentShader: WebGLShader;
+  try {
+    fragmentShader = compileShader(
+      gl,
+      spec.fragment,
+      gl.FRAGMENT_SHADER,
+    );
+  } catch (err) {
+    gl.deleteShader(vertexShader);
+    throw err;
+  }
 
   const program = gl.createProgram();
   if (!program) {
@@ -71,9 +77,14 @@ export function createWebGL2Effect(
 
   const quadVao = gl.createVertexArray();
   const quadVbo = gl.createBuffer();
+  if (!quadVao || !quadVbo) {
+    if (quadVao) gl.deleteVertexArray(quadVao);
+    if (quadVbo) gl.deleteBuffer(quadVbo);
+    gl.deleteProgram(program);
+    throw new Error('Failed to allocate WebGL vertex array or buffer');
+  }
   gl.bindVertexArray(quadVao);
   gl.bindBuffer(gl.ARRAY_BUFFER, quadVbo);
-
   const quadVertices = new Float32Array([
     -1, -1,
      1, -1,
@@ -91,7 +102,18 @@ export function createWebGL2Effect(
   }
   gl.bindVertexArray(null);
 
+  const uniformTypes = new Map<string, number>();
   const uniformLocations = new Map<string, WebGLUniformLocation | null>();
+
+  const activeUniformCount = gl.getProgramParameter(program, gl.ACTIVE_UNIFORMS) as number;
+  for (let i = 0; i < activeUniformCount; i++) {
+    const info = gl.getActiveUniform(program, i);
+    if (info) {
+      const cleanName = info.name.replace(/\[0\]$/, '');
+      uniformTypes.set(cleanName, info.type);
+    }
+  }
+
   const resolveLocation = (name: string): WebGLUniformLocation | null => {
     if (uniformLocations.has(name)) {
       return uniformLocations.get(name) ?? null;
@@ -108,12 +130,24 @@ export function createWebGL2Effect(
     const loc = resolveLocation(name);
     if (!loc) return;
 
+    const uType = uniformTypes.get(name);
+    const isInt = uType === gl.INT || uType === gl.BOOL || uType === gl.SAMPLER_2D;
+
     if (typeof value === 'number') {
-      gl.uniform1f(loc, value);
+      if (isInt) gl.uniform1i(loc, Math.round(value));
+      else gl.uniform1f(loc, value);
     } else if (Array.isArray(value)) {
-      if (value.length === 2) gl.uniform2f(loc, value[0], value[1]);
-      else if (value.length === 3) gl.uniform3f(loc, value[0], value[1], value[2]);
-      else if (value.length === 4) gl.uniform4f(loc, value[0], value[1], value[2], value[3]);
+      if (isInt) {
+        const rounded = value.map((v) => Math.round(v));
+        if (rounded.length === 2) gl.uniform2i(loc, rounded[0], rounded[1]);
+        else if (rounded.length === 3) gl.uniform3i(loc, rounded[0], rounded[1], rounded[2]);
+        else if (rounded.length === 4) gl.uniform4i(loc, rounded[0], rounded[1], rounded[2], rounded[3]);
+        else gl.uniform1i(loc, rounded[0]);
+      } else {
+        if (value.length === 2) gl.uniform2f(loc, value[0], value[1]);
+        else if (value.length === 3) gl.uniform3f(loc, value[0], value[1], value[2]);
+        else if (value.length === 4) gl.uniform4f(loc, value[0], value[1], value[2], value[3]);
+      }
     } else if (value instanceof Float32Array) {
       if (value.length === 2) gl.uniform2fv(loc, value);
       else if (value.length === 3) gl.uniform3fv(loc, value);
