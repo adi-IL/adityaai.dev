@@ -6,6 +6,10 @@
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
+import React from "react";
+import { renderToStaticMarkup } from "react-dom/server";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const DIST = path.resolve(__dirname, "..", "dist");
@@ -60,10 +64,266 @@ if (fs.existsSync(metaPath)) {
 }
 
 const projects = [
-  { slug: "friday", name: "FRIDAY", tagline: "Immersive Engineering Visual Intelligence" },
-  { slug: "sentinel", name: "Sentinel", tagline: "Autonomous Competitive Intelligence" },
-  { slug: "midsphere", name: "MidSphere", tagline: "Autonomous Context Circuit-Breaker for Data Platforms" },
+  {
+    slug: "friday",
+    name: "FRIDAY",
+    tagline: "Immersive Engineering Visual Intelligence",
+    description:
+      "Generative 3D engineering visualization engine. Turn voice commands, sketches, or prompts into interactive mechanical assemblies in real time. Winner: Google DeepMind × Kaggle Vibe Code with Gemini 3 Pro Hackathon (Developer Tools).",
+    content: `FRIDAY is a generative immersive visualization engine for engineering teams. Type a system name, upload a sketch, or speak a command, and a detailed 3D assembly compiles in front of you, ready to rotate, explode, scan, and interrogate.
+
+It is a neural spatial architect that writes geometry the way language models write prose. Built with React 19, Three.js, Gemini 3.1 Pro, and Gemini Live native audio.
+
+Key capabilities include generative system building with schema-validated outputs, holographic CAD rendering with see-through cabinet walls, and ephemeral token voice interaction.`,
+  },
+  {
+    slug: "sentinel",
+    name: "Sentinel",
+    tagline: "Autonomous Competitive Intelligence",
+    description:
+      "Autonomous competitive intelligence platform. Five Gemini agents chained in a state machine hunt the web, perform scored SWOT analysis across 5 dimensions, and compile executive strategic briefs in under a minute.",
+    content: `Sentinel is an autonomous competitive intelligence platform that transforms raw web research into structured executive briefs in under 60 seconds.
+
+Five specialized Gemini agents operate in a state machine pipeline: Discovery, Feature Extraction, Pricing Analysis, Threat Scoring, and Executive Synthesis.
+
+Key capabilities include 5-dimensional SWOT scoring, automated citation tracking with screenshot evidence, and differential drift monitoring across market competitors.`,
+  },
+  {
+    slug: "midsphere",
+    name: "MidSphere",
+    tagline: "Autonomous Context Circuit-Breaker for Data Platforms",
+    description:
+      "Closed-loop autonomous context circuit-breaker engine for enterprise data platforms. Audits schema drift and PII leaks, scores selective blast radius, and applies advisory quarantine to protect downstream AI agents.",
+    content: `MidSphere is an autonomous context circuit-breaker for enterprise data platforms and agentic pipelines.
+
+It monitors data platform inputs, audits schema drift, detects PII leaks, and isolates poisoned context before it reaches downstream reasoning agents.
+
+Key capabilities include automated quarantine policies, selective blast radius scoring, and deterministic invariant arbitration.`,
+  },
 ];
+
+function renderNav() {
+  return `<nav aria-label="Main Navigation">
+  <a href="/">Home</a> | <a href="/about">About</a> | <a href="/articles">Articles</a> | <a href="/projects">Projects</a>
+</nav>`;
+}
+
+function renderHomeBody(articlesList, projectsList) {
+  const featured = articlesList.filter((a) => a.featured);
+  const featuredList = featured.length > 0 ? featured : articlesList.slice(0, 5);
+
+  const featuredItems = featuredList
+    .map(
+      (a) => `      <li>
+        <article>
+          <h3><a href="/articles/${escapeHtml(a.slug)}">${escapeHtml(a.title)}</a></h3>
+          <p><time datetime="${escapeHtml(a.dateISO || a.date)}">${escapeHtml(a.date || a.dateISO)}</time> · <span>${escapeHtml(a.form || "Article")}</span></p>
+          <p>${escapeHtml(a.excerpt || "")}</p>
+        </article>
+      </li>`
+    )
+    .join("\n");
+
+  const projectItems = projectsList
+    .map(
+      (p) => `      <li>
+        <article>
+          <h3><a href="/projects/${escapeHtml(p.slug)}">${escapeHtml(p.name)}</a></h3>
+          <p><strong>${escapeHtml(p.tagline)}</strong></p>
+          <p>${escapeHtml(p.description)}</p>
+        </article>
+      </li>`
+    )
+    .join("\n");
+
+  return `<header>
+  ${renderNav()}
+  <h1>Aditya Gaurav</h1>
+  <p>AI Engineer &amp; Systems Architect</p>
+</header>
+<main>
+  <section aria-labelledby="bio-heading">
+    <h2 id="bio-heading">About Aditya Gaurav</h2>
+    <p>AI Engineer &amp; Systems Architect specializing in agentic systems, cognitive architectures, and MCP. Focused on building production-ready AI systems that reason, plan, and execute reliably.</p>
+  </section>
+  <section aria-labelledby="hero-heading">
+    <h2 id="hero-heading">Systems &amp; Cognitive Architecture</h2>
+    <p>Researching the layer between foundational models and enterprise infrastructure. Exploring dynamic agent state, context quarantine, multi-agent evaluation, and inference economics.</p>
+  </section>
+  <section aria-labelledby="featured-articles-heading">
+    <h2 id="featured-articles-heading">Featured Research &amp; Articles</h2>
+    <ul>
+${featuredItems}
+    </ul>
+    <p><a href="/articles">View all research articles &rarr;</a></p>
+  </section>
+  <section aria-labelledby="featured-projects-heading">
+    <h2 id="featured-projects-heading">Selected Projects</h2>
+    <ul>
+${projectItems}
+    </ul>
+    <p><a href="/projects">View all projects &rarr;</a></p>
+  </section>
+</main>
+<footer>
+  <p>&copy; ${new Date().getFullYear()} Aditya Gaurav. <a href="/">Home</a> · <a href="/about">About</a> · <a href="/articles">Articles</a> · <a href="/projects">Projects</a></p>
+</footer>`;
+}
+
+function renderAboutBody() {
+  return `<header>
+  ${renderNav()}
+  <h1>About Aditya Gaurav</h1>
+  <p>AI Researcher &amp; Systems Architect</p>
+</header>
+<main>
+  <section aria-labelledby="bio-heading">
+    <h2 id="bio-heading">Bio &amp; Focus</h2>
+    <p>I am an AI Researcher &amp; Systems Architect focused on cognitive architectures and scalable intelligence. My work bridges the gap between theoretical AI models and production-ready systems.</p>
+    <p>With a deep focus on agentic workflows, large language models, and scalable inference, I build systems that don't just predict the next token, but actively plan, reason, and execute complex tasks.</p>
+  </section>
+  <section aria-labelledby="credentials-heading">
+    <h2 id="credentials-heading">Credentials &amp; Recognition</h2>
+    <ul>
+      <li><strong>Google DeepMind &times; Kaggle Winner:</strong> Vibe Code with Gemini 3 Pro Hackathon (Developer Tools track).</li>
+      <li><strong>Oracle Certified:</strong> Generative AI Professional, Data Platform Associate, and Data Science Professional.</li>
+      <li><strong>Cloud &amp; GenAI Certifications:</strong> Google Cloud Certified and OpenAI GenAI Certified.</li>
+    </ul>
+  </section>
+  <section aria-labelledby="explore-heading">
+    <h2 id="explore-heading">Explore My Work</h2>
+    <p>Read my deep dives on AI systems architecture, agentic evaluation, and inference economics in <a href="/articles">Articles</a>, or explore production AI engines in <a href="/projects">Projects</a>.</p>
+  </section>
+</main>
+<footer>
+  <p><a href="/">Back to Home</a> · <a href="/articles">Articles</a> · <a href="/projects">Projects</a></p>
+</footer>`;
+}
+
+function renderArticlesListBody(articlesList) {
+  const items = articlesList
+    .map(
+      (a) => `    <li>
+      <article>
+        <h2><a href="/articles/${escapeHtml(a.slug)}">${escapeHtml(a.title)}</a></h2>
+        <p><time datetime="${escapeHtml(a.dateISO || a.date)}">${escapeHtml(a.date || a.dateISO)}</time> · <span>${escapeHtml(a.form || "Article")}</span></p>
+        <p>${escapeHtml(a.excerpt || "")}</p>
+        <p><a href="/articles/${escapeHtml(a.slug)}">Read full article &rarr;</a></p>
+      </article>
+    </li>`
+    )
+    .join("\n");
+
+  return `<header>
+  ${renderNav()}
+  <h1>Research Articles &amp; Technical Deep Dives</h1>
+  <p>Infrequent, high-signal research on AI architecture, agentic systems, cognitive architectures, and systems design by Aditya Gaurav.</p>
+</header>
+<main>
+  <ul>
+${items}
+  </ul>
+</main>
+<footer>
+  <p><a href="/">Back to Home</a> · <a href="/projects">Projects</a> · <a href="/about">About</a></p>
+</footer>`;
+}
+
+function renderProjectsListBody(projectsList) {
+  const items = projectsList
+    .map(
+      (p) => `    <li>
+      <article>
+        <h2><a href="/projects/${escapeHtml(p.slug)}">${escapeHtml(p.name)}</a></h2>
+        <p><strong>${escapeHtml(p.tagline)}</strong></p>
+        <p>${escapeHtml(p.description)}</p>
+        <p><a href="/projects/${escapeHtml(p.slug)}">View ${escapeHtml(p.name)} details &rarr;</a></p>
+      </article>
+    </li>`
+    )
+    .join("\n");
+
+  return `<header>
+  ${renderNav()}
+  <h1>AI Systems &amp; Open Source Projects</h1>
+  <p>Production AI systems and open-source architectures engineered by Aditya Gaurav.</p>
+</header>
+<main>
+  <ul>
+${items}
+  </ul>
+</main>
+<footer>
+  <p><a href="/">Back to Home</a> · <a href="/articles">Articles</a> · <a href="/about">About</a></p>
+</footer>`;
+}
+
+function renderProjectDetailBody(project) {
+  const renderedContent = project.content
+    ? renderToStaticMarkup(
+        React.createElement(ReactMarkdown, { remarkPlugins: [remarkGfm] }, project.content)
+      )
+    : `<p>${escapeHtml(project.description)}</p>`;
+
+  return `<header>
+  ${renderNav()}
+  <p><a href="/projects">&larr; Back to Projects</a> | <a href="/">Home</a></p>
+  <h1>${escapeHtml(project.name)}</h1>
+  <p><strong>${escapeHtml(project.tagline)}</strong></p>
+</header>
+<main>
+  <article>
+    <section>
+      <h2>Overview</h2>
+      <p>${escapeHtml(project.description)}</p>
+    </section>
+    <section>
+      <h2>Technical Architecture</h2>
+${renderedContent}
+    </section>
+  </article>
+</main>
+<footer>
+  <p><a href="/projects">&larr; Return to Projects</a> | <a href="/articles">Browse Articles</a> | <a href="/about">About Aditya Gaurav</a></p>
+</footer>`;
+}
+
+function renderArticleDetailBody(article) {
+  const mdPath = path.resolve(__dirname, "..", "src", "content", "articles", `${article.slug}.md`);
+  let renderedMarkdown = "";
+  if (fs.existsSync(mdPath)) {
+    const rawMarkdown = fs.readFileSync(mdPath, "utf-8");
+    const cleanMarkdown = rawMarkdown
+      .replace(/^---\r?\n[\s\S]*?\r?\n---\r?\n?/, "")
+      .replace(/^#\s+[^\r\n]+\r?\n?/, "");
+    renderedMarkdown = renderToStaticMarkup(
+      React.createElement(ReactMarkdown, { remarkPlugins: [remarkGfm] }, cleanMarkdown)
+    );
+  } else {
+    renderedMarkdown = `<p>${escapeHtml(article.excerpt || "")}</p>`;
+  }
+
+  const title = escapeHtml(article.title);
+  const dateStr = escapeHtml(article.date || article.dateISO || "");
+  const dateISO = escapeHtml(article.dateISO || article.date || "");
+  const form = escapeHtml(article.form || "Article");
+
+  return `<header>
+  ${renderNav()}
+  <p><a href="/articles">&larr; Back to Articles</a> | <a href="/">Home</a></p>
+  <h1>${title}</h1>
+  <p>By <strong>Aditya Gaurav</strong> · <time datetime="${dateISO}">${dateStr}</time> · <span>${form}</span></p>
+</header>
+<main>
+  <article>
+${renderedMarkdown}
+  </article>
+</main>
+<footer>
+  <p><a href="/articles">&larr; Back to Articles</a> | <a href="/">Return to Home</a> | <a href="/projects">Projects</a></p>
+</footer>`;
+}
+
 
 function headTags(title, description, canonical, ogType, jsonLd) {
   const safeTitle = escapeHtml(title);
@@ -103,20 +363,24 @@ ${jsonLd ? `    <script type="application/ld+json">${JSON.stringify(jsonLd).repl
 ${viteAssetsHead}`;
 }
 
-function writePage(routeDir, title, description, canonical, ogType, jsonLd) {
+function writePage(routeDir, title, description, canonical, ogType, jsonLd, pageBody = "") {
   const dir = path.join(DIST, routeDir);
   fs.mkdirSync(dir, { recursive: true });
+  const finalBodyContent = pageBody
+    ? bodyContent.replace('<div id="root"></div>', '<div id="root">' + pageBody + '</div>')
+    : bodyContent;
   const html = `<!doctype html>
 <html lang="en">
   <head>
 ${headTags(title, description, canonical, ogType || "website", jsonLd)}
   </head>
   <body>
-${bodyContent}
+${finalBodyContent}
   </body>
 </html>`;
   fs.writeFileSync(path.join(dir, "index.html"), html, "utf-8");
 }
+
 
 console.log("🚀 Prerendering static pages for adityaai.dev...");
 let count = 0;
@@ -135,7 +399,7 @@ writePage(".", "Aditya Gaurav  -  AI Engineer · Systems Architect",
     url: `${SITE_URL}/`, inLanguage: "en",
     author: { "@type": "Person", name: "Aditya Gaurav", url: `${SITE_URL}/`, jobTitle: "AI Researcher & Systems Architect",
       sameAs: ["https://x.com/adityaaidev", "https://www.linkedin.com/in/adityaai/", "https://github.com/adi-IL"] },
-  });
+  }, renderHomeBody(articles, projects));
 count++;
 
 writePage("about", "About | Aditya Gaurav  -  AI Engineer & Systems Architect",
@@ -145,7 +409,7 @@ writePage("about", "About | Aditya Gaurav  -  AI Engineer & Systems Architect",
     itemListElement: [
       { "@type": "ListItem", position: 1, name: "Home", item: `${SITE_URL}/` },
       { "@type": "ListItem", position: 2, name: "About", item: `${SITE_URL}/about` }],
-  });
+  }, renderAboutBody());
 count++;
 
 writePage("articles", "Articles | Aditya Gaurav  -  Research on AI Architecture & Systems Design",
@@ -155,7 +419,7 @@ writePage("articles", "Articles | Aditya Gaurav  -  Research on AI Architecture 
     itemListElement: [
       { "@type": "ListItem", position: 1, name: "Home", item: `${SITE_URL}/` },
       { "@type": "ListItem", position: 2, name: "Articles", item: `${SITE_URL}/articles` }],
-  });
+  }, renderArticlesListBody(articles));
 count++;
 
 writePage("projects", "Projects | Aditya Gaurav  -  AI Systems & Open Source",
@@ -165,7 +429,7 @@ writePage("projects", "Projects | Aditya Gaurav  -  AI Systems & Open Source",
     itemListElement: [
       { "@type": "ListItem", position: 1, name: "Home", item: `${SITE_URL}/` },
       { "@type": "ListItem", position: 2, name: "Projects", item: `${SITE_URL}/projects` }],
-  });
+  }, renderProjectsListBody(projects));
 count++;
 
 for (const a of articles) {
@@ -186,7 +450,7 @@ for (const a of articles) {
     ...(typeof a.wordCount === "number" ? { wordCount: a.wordCount } : {}),
     ...(typeof a.readingTime === "number" ? { timeRequired: `PT${a.readingTime}M` } : {}),
     mainEntityOfPage: { "@type": "WebPage", "@id": canonical },
-  });
+  }, renderArticleDetailBody(a));
   count++;
 }
 
@@ -198,7 +462,7 @@ for (const p of projects) {
       { "@type": "ListItem", position: 1, name: "Home", item: `${SITE_URL}/` },
       { "@type": "ListItem", position: 2, name: "Projects", item: `${SITE_URL}/projects` },
       { "@type": "ListItem", position: 3, name: p.name, item: canonical }],
-  });
+  }, renderProjectDetailBody(p));
   count++;
 }
 
