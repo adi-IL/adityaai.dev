@@ -65,10 +65,11 @@ function normalizeMessages(raw: unknown): ChatMessage[] | null {
     out.push({ role, content: trimmed });
   }
   if (out.length === 0) return null;
-  // First message must be from user to prevent history poisoning
-  if (out[0]?.role !== 'user') return null;
-  // Last message must be from the user
-  if (out[out.length - 1]?.role !== 'user') return null;
+  // Enforce strict alternating turns: user -> assistant -> user -> ...
+  for (let i = 0; i < out.length; i++) {
+    const expectedRole: ChatRole = i % 2 === 0 ? 'user' : 'assistant';
+    if (out[i].role !== expectedRole) return null;
+  }
   return out;
 }
 
@@ -144,10 +145,8 @@ export async function handleChat(req: ApiRequest, res: ApiResponse): Promise<voi
     return;
   }
 
-  // 3. Pre-flight prompt injection / jailbreak guardrail
-  const hasInjection = messages.some(
-    (m) => m.role === 'user' && isPromptInjectionAttempt(m.content),
-  );
+  // 3. Pre-flight prompt injection / jailbreak guardrail across all message turns
+  const hasInjection = messages.some((m) => isPromptInjectionAttempt(m.content));
   if (hasInjection) {
     res.status(200).json({
       reply:

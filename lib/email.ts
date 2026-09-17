@@ -36,7 +36,13 @@ export function isValidEmail(email: string): boolean {
 }
 
 export function stripHtml(s: string): string {
-  return s.replace(/<[^>]*>/g, '').trim();
+  let cleaned = s;
+  let prev = '';
+  while (cleaned !== prev) {
+    prev = cleaned;
+    cleaned = cleaned.replace(/<[^>]*>/g, '');
+  }
+  return cleaned.replace(/[<>]/g, '').trim();
 }
 
 /**

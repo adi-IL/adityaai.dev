@@ -1,5 +1,6 @@
 import { describe, it, before } from 'node:test';
 import assert from 'node:assert/strict';
+import { stripHtml } from '../lib/email.ts';
 import { handleChat, isAllowedNavigationPath, isPromptInjectionAttempt } from '../lib/handlers/chat.ts';
 import { handleFeedback } from '../lib/handlers/feedback.ts';
 import { handleSubscribe } from '../lib/handlers/subscribe.ts';
@@ -100,6 +101,23 @@ describe('API Handlers - HTTP Methods & Guard Checks', () => {
       headers: { 'x-real-ip': ['203.0.113.195', '198.51.100.1'], 'x-forwarded-for': 'attacker-ip' },
     };
     assert.equal(getClientIp(req), '203.0.113.195');
+  });
+
+  it('getClientIp prefers x-vercel-forwarded-for over other headers', () => {
+    const req: any = {
+      headers: {
+        'x-vercel-forwarded-for': '198.51.100.42',
+        'x-real-ip': '203.0.113.195',
+        'x-forwarded-for': 'attacker-ip',
+      },
+    };
+    assert.equal(getClientIp(req), '198.51.100.42');
+  });
+
+  it('stripHtml strips nested and malformed tags recursively', () => {
+    assert.equal(stripHtml('<<script>alert(1)>hello'), 'alert(1)hello');
+    assert.equal(stripHtml('<p>Clean text</p>'), 'Clean text');
+    assert.equal(stripHtml('<img src=x onerror=alert(2)>'), '');
   });
 
   it('handleFeedback rejects non-POST requests', async () => {

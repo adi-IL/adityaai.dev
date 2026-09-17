@@ -2,27 +2,23 @@ import type { ApiRequest, ApiResponse } from '../http.js';
 import { getClientIp, readBody } from '../http.js';
 import { applyRateLimitHeaders, checkRateLimit, RATE_LIMITS } from '../rate-limit.js';
 import { logError, publicErrorMessage } from '../errors.js';
+import { createRequire } from 'node:module';
 import { clamp, esc, getNotifyEmail, getResend, isHoneypotTripped, isValidEmail, stripHtml } from '../email.js';
 
-const ALLOWED_SLUGS: Record<string, true> = {
-  'shared-caches-beat-sandbox-walls': true,
-  'the-chat-template-trap': true,
-  'memory-stacks-for-agents': true,
-  'inference-economics-for-agents': true,
-  'software-3-architecting-ai': true,
-  'product-is-the-model': true,
-  'the-verification-gap': true,
-  'closed-loop-remediation-architecture': true,
-  'sandboxing-architectures-for-agents': true,
-  'context-circuit-breakers': true,
-  'mcp-security-paradox': true,
-  'ai-systems-architecture-comparison': true,
-  'six-paradigm-shifts': true,
+const require = createRequire(import.meta.url);
+const articlesMeta = require('../../scripts/articles-meta.json') as Array<{ slug: string }>;
+
+const ALLOWED_PROJECT_SLUGS: Record<string, true> = {
   friday: true,
   sentinel: true,
   midsphere: true,
   general: true,
 };
+
+function isAllowedFeedbackSlug(slug: string): boolean {
+  if (ALLOWED_PROJECT_SLUGS[slug]) return true;
+  return articlesMeta.some((a) => a.slug === slug);
+}
 
 const ALLOWED_REACTIONS = ['insightful', 'useful', 'needs-depth'] as const;
 
@@ -54,7 +50,7 @@ export async function handleFeedback(req: ApiRequest, res: ApiResponse): Promise
     res.status(400).json({ error: 'Article slug and reaction are required' });
     return;
   }
-  if (!ALLOWED_SLUGS[slug]) {
+  if (!isAllowedFeedbackSlug(slug)) {
     res.status(400).json({ error: 'Invalid article slug' });
     return;
   }

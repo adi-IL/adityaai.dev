@@ -80,9 +80,10 @@ export async function handleSubscribe(req: ApiRequest, res: ApiResponse): Promis
   }
 
   // Per-address cap: stops using many IPs to spam one inbox with confirm mails.
+  // Return generic 200 success to prevent using this endpoint as an email enumeration oracle.
   const emailRl = checkRateLimit('subscribe:email', email, RATE_LIMITS['subscribe-email']);
   if (!emailRl.ok) {
-    res.status(429).json({ error: 'Too many requests for this email address. Please try again later.' });
+    res.status(200).json(GENERIC_SUCCESS);
     return;
   }
 

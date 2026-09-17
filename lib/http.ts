@@ -23,6 +23,10 @@ export type ApiResponse = {
 };
 
 export function getClientIp(req: ApiRequest): string {
+  const vff = req.headers['x-vercel-forwarded-for'];
+  const vercelIp = Array.isArray(vff) ? vff[0] : vff;
+  if (typeof vercelIp === 'string' && vercelIp.trim()) return vercelIp.trim();
+
   const rawRealIp = req.headers['x-real-ip'];
   const realIp = Array.isArray(rawRealIp) ? rawRealIp[0] : rawRealIp;
   if (typeof realIp === 'string' && realIp.trim()) return realIp.trim();
