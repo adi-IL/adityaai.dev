@@ -135,7 +135,7 @@ export async function handleChat(req: ApiRequest, res: ApiResponse): Promise<voi
   const body = readBody<Record<string, unknown>>(req);
   // Honeypot check
   if (isHoneypotTripped(body)) {
-    res.status(400).json({ error: 'Invalid submission' });
+    res.status(200).json({ reply: 'Thanks for visiting the lab.' });
     return;
   }
   const messages = normalizeMessages(body.messages);
@@ -145,8 +145,10 @@ export async function handleChat(req: ApiRequest, res: ApiResponse): Promise<voi
   }
 
   // 3. Pre-flight prompt injection / jailbreak guardrail
-  const lastUserMessage = messages[messages.length - 1]?.content || '';
-  if (isPromptInjectionAttempt(lastUserMessage)) {
+  const hasInjection = messages.some(
+    (m) => m.role === 'user' && isPromptInjectionAttempt(m.content),
+  );
+  if (hasInjection) {
     res.status(200).json({
       reply:
         "I am the lab guide for adityaai.dev and only answer questions about Aditya Gaurav's research essays, system architecture projects, and collaborations. I cannot assist with off-topic requests or roleplay.",

@@ -44,7 +44,7 @@ export async function handleFeedback(req: ApiRequest, res: ApiResponse): Promise
   const body = readBody<Record<string, unknown>>(req);
 
   if (isHoneypotTripped(body)) {
-    res.status(400).json({ error: 'Invalid submission' });
+    res.status(200).json({ success: true });
     return;
   }
 

@@ -98,7 +98,7 @@ function renderHomeBody(articlesList, projectsList) {
         <article>
           <h3><a href="/projects/${escapeHtml(p.slug)}">${escapeHtml(p.name)}</a></h3>
           <p><strong>${escapeHtml(p.tagline)}</strong></p>
-          <p>${escapeHtml(p.description)}</p>
+          <p>${escapeHtml(p.description || p.excerpt || "")}</p>
         </article>
       </li>`
     )
@@ -361,7 +361,10 @@ function writePage(routeDir, title, description, canonical, ogType, jsonLd, page
   const dir = path.join(DIST, routeDir);
   fs.mkdirSync(dir, { recursive: true });
   const finalBodyContent = pageBody
-    ? bodyContent.replace('<div id="root"></div>', '<div id="root"></div>\n    <div id="prerendered-content">\n' + pageBody + '\n    </div>')
+    ? bodyContent.replace(
+        '<div id="root"></div>',
+        () => '<div id="root"></div>\n    <div id="prerendered-content">\n' + pageBody + '\n    </div>'
+      )
     : bodyContent;
   const html = `<!doctype html>
 <html lang="en">

@@ -69,7 +69,7 @@ export async function handleSubscribe(req: ApiRequest, res: ApiResponse): Promis
   const body = readBody<Record<string, unknown>>(req);
 
   if (isHoneypotTripped(body)) {
-    res.status(400).json({ error: 'Invalid submission' });
+    res.status(200).json(GENERIC_SUCCESS);
     return;
   }
 

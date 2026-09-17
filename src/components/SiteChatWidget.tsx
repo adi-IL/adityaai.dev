@@ -297,7 +297,7 @@ export default function SiteChatWidget() {
                           if (
                             url.startsWith('http://') ||
                             url.startsWith('https://') ||
-                            url.startsWith('/') ||
+                            (url.startsWith('/') && !url.startsWith('//') && !url.startsWith('/\\')) ||
                             url.startsWith('mailto:')
                           ) {
                             return url;
