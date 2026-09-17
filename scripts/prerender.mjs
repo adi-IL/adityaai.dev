@@ -10,10 +10,15 @@ import React from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-import { projects } from "../src/lib/projects.ts";
+import esbuild from "esbuild";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const DIST = path.resolve(__dirname, "..", "dist");
+const tsProjectsPath = path.resolve(__dirname, "..", "src", "lib", "projects.ts");
+const tsProjectsSource = fs.readFileSync(tsProjectsPath, "utf-8");
+const transformedProjects = esbuild.transformSync(tsProjectsSource, { loader: "ts", format: "esm" });
+const projectsDataUrl = "data:text/javascript;base64," + Buffer.from(transformedProjects.code).toString("base64");
+const { projects } = await import(projectsDataUrl);
 
 // ── Read Vite build output ─────────────────────────────────────────────────
 
