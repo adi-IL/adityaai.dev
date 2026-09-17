@@ -25,11 +25,11 @@ export type ApiResponse = {
 export function getClientIp(req: ApiRequest): string {
   const vff = req.headers['x-vercel-forwarded-for'];
   const vercelIp = Array.isArray(vff) ? vff[0] : vff;
-  if (typeof vercelIp === 'string' && vercelIp.trim()) return vercelIp.trim();
+  if (typeof vercelIp === 'string' && vercelIp.trim()) return vercelIp.split(',')[0].trim();
 
   const rawRealIp = req.headers['x-real-ip'];
   const realIp = Array.isArray(rawRealIp) ? rawRealIp[0] : rawRealIp;
-  if (typeof realIp === 'string' && realIp.trim()) return realIp.trim();
+  if (typeof realIp === 'string' && realIp.trim()) return realIp.split(',')[0].trim();
   const xf = req.headers['x-forwarded-for'];
   if (typeof xf === 'string' && xf.length > 0) {
     const parts = xf.split(',').map((p) => p.trim()).filter(Boolean);
