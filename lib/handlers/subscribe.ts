@@ -62,19 +62,18 @@ export async function handleSubscribe(req: ApiRequest, res: ApiResponse): Promis
   const ipRl = checkRateLimit('subscribe:ip', ip, ipLimit);
   applyRateLimitHeaders(res, ipRl, ipLimit.max);
   if (!ipRl.ok) {
-    // Still generic - don't teach attackers the limit shape via wording differences.
-    res.status(200).json(GENERIC_SUCCESS);
+    res.status(429).json({ error: 'Too many requests. Please try again later.' });
     return;
   }
 
   const body = readBody<Record<string, unknown>>(req);
 
   if (isHoneypotTripped(body)) {
-    res.status(200).json(GENERIC_SUCCESS);
+    res.status(400).json({ error: 'Invalid submission' });
     return;
   }
 
-  const email = normalizeEmail(clamp(body.email, 200));
+  const email = normalizeEmail(clamp(body.email, 254));
   if (!email || !isValidEmail(email)) {
     res.status(400).json({ error: 'Valid email is required' });
     return;
@@ -83,7 +82,7 @@ export async function handleSubscribe(req: ApiRequest, res: ApiResponse): Promis
   // Per-address cap: stops using many IPs to spam one inbox with confirm mails.
   const emailRl = checkRateLimit('subscribe:email', email, RATE_LIMITS['subscribe-email']);
   if (!emailRl.ok) {
-    res.status(200).json(GENERIC_SUCCESS);
+    res.status(429).json({ error: 'Too many requests for this email address. Please try again later.' });
     return;
   }
 

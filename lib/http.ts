@@ -37,5 +37,18 @@ export function getClientIp(req: ApiRequest): string {
 }
 
 export function readBody<T extends Record<string, unknown>>(req: ApiRequest): T {
-  return (req.body && typeof req.body === 'object' ? req.body : {}) as T;
+  if (req.body && typeof req.body === 'object') {
+    return req.body as T;
+  }
+  if (typeof req.body === 'string' && req.body.trim().length > 0) {
+    try {
+      const parsed = JSON.parse(req.body);
+      if (parsed && typeof parsed === 'object') {
+        return parsed as T;
+      }
+    } catch {
+      return {} as T;
+    }
+  }
+  return {} as T;
 }

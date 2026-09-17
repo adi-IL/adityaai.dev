@@ -20,6 +20,24 @@ const MAX_CONTENT_CHARS = 2000;
 type ChatRole = 'user' | 'assistant';
 type ChatMessage = { role: ChatRole; content: string };
 
+export function isAllowedNavigationPath(path: unknown): boolean {
+  if (typeof path !== 'string') return false;
+  const trimmed = path.trim();
+  if (!trimmed.startsWith('/') || trimmed.startsWith('//') || trimmed.startsWith('/\\')) {
+    return false;
+  }
+  const ALLOWED_EXACT: Record<string, true> = {
+    '/': true,
+    '/about': true,
+    '/articles': true,
+    '/projects': true,
+    '/projects/friday': true,
+    '/projects/sentinel': true,
+    '/projects/midsphere': true,
+  };
+  if (ALLOWED_EXACT[trimmed]) return true;
+  return /^\/articles\/[a-z0-9_-]+$/.test(trimmed);
+}
 function normalizeMessages(raw: unknown): ChatMessage[] | null {
   if (!Array.isArray(raw) || raw.length === 0) return null;
   const out: ChatMessage[] = [];
@@ -181,8 +199,14 @@ export async function handleChat(req: ApiRequest, res: ApiResponse): Promise<voi
     }
 
     let reply = extractText(result as any);
-    const functionCalls = extractFunctionCalls(result as any);
-    
+    const rawFunctionCalls = extractFunctionCalls(result as any);
+    const functionCalls = rawFunctionCalls.filter((call) => {
+      if (call.name === 'navigateTo') {
+        return isAllowedNavigationPath(call.args?.path);
+      }
+      return false;
+    });
+
     // Auto-generate a reply if the model only returned a function call without text
     if (!reply && functionCalls.length > 0) {
       const call = functionCalls[0];

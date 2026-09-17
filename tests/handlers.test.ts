@@ -1,6 +1,6 @@
 import { describe, it, before } from 'node:test';
 import assert from 'node:assert/strict';
-import { handleChat } from '../lib/handlers/chat.ts';
+import { handleChat, isAllowedNavigationPath } from '../lib/handlers/chat.ts';
 import { handleFeedback } from '../lib/handlers/feedback.ts';
 import { handleSubscribe } from '../lib/handlers/subscribe.ts';
 import { handleVirtualCoffee } from '../lib/handlers/virtual-coffee.ts';
@@ -69,18 +69,60 @@ describe('API Handlers - HTTP Methods & Guard Checks', () => {
   });
 
   it('handleFeedback requires valid article slug and allowed reaction', async () => {
-    const { req, res, getStatus, getData } = mockReqRes('POST', { slug: 'test', reaction: 'invalid-reaction' });
+    const { req, res, getStatus, getData } = mockReqRes('POST', {
+      slug: 'memory-stacks-for-agents',
+      reaction: 'invalid-reaction',
+    });
     await handleFeedback(req, res);
     assert.equal(getStatus(), 400);
     assert.equal(getData().error.includes('Invalid reaction'), true);
   });
 
-  it('handleSubscribe returns generic success on invalid email to prevent enumeration', async () => {
+  it('handleFeedback rejects path traversal and unknown slugs', async () => {
+    const { req, res, getStatus, getData } = mockReqRes('POST', {
+      slug: '../../../../etc/passwd',
+      reaction: 'useful',
+    });
+    await handleFeedback(req, res);
+    assert.equal(getStatus(), 400);
+    assert.equal(getData().error, 'Invalid article slug');
+  });
+
+  it('handleFeedback rejects honeypot submissions', async () => {
+    const { req, res, getStatus, getData } = mockReqRes('POST', {
+      slug: 'memory-stacks-for-agents',
+      reaction: 'useful',
+      website: 'http://spam.com',
+    });
+    await handleFeedback(req, res);
+    assert.equal(getStatus(), 400);
+    assert.equal(getData().error, 'Invalid submission');
+  });
+
+  it('handleSubscribe returns 400 on invalid email', async () => {
     const { req, res, getStatus, getData } = mockReqRes('POST', { email: 'invalid-email-shape' });
     await handleSubscribe(req, res);
-    // Anti-enumeration defense: handleSubscribe returns 400 for bad email, or 200 generic message.
     assert.equal(getStatus(), 400);
-    assert.equal(getData().error.includes('Valid email is required'), true);
+    assert.equal(getData().error, 'Valid email is required');
+  });
+
+  it('handleSubscribe rejects honeypot submissions with 400', async () => {
+    const { req, res, getStatus, getData } = mockReqRes('POST', {
+      email: 'user@example.com',
+      website: 'http://spam.com',
+    });
+    await handleSubscribe(req, res);
+    assert.equal(getStatus(), 400);
+    assert.equal(getData().error, 'Invalid submission');
+  });
+
+  it('isAllowedNavigationPath blocks external URLs and allows valid internal routes', () => {
+    assert.equal(isAllowedNavigationPath('/projects'), true);
+    assert.equal(isAllowedNavigationPath('/articles/memory-stacks-for-agents'), true);
+    assert.equal(isAllowedNavigationPath('//evil.com'), false);
+    assert.equal(isAllowedNavigationPath('/\\evil.com'), false);
+    assert.equal(isAllowedNavigationPath('https://attacker.com'), false);
+    assert.equal(isAllowedNavigationPath('javascript:alert(1)'), false);
   });
 
   it('handleVirtualCoffee requires valid name and email', async () => {
