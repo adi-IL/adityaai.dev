@@ -10,6 +10,7 @@ import React from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+import { projects } from "../src/lib/projects.ts";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const DIST = path.resolve(__dirname, "..", "dist");
@@ -63,44 +64,6 @@ if (fs.existsSync(metaPath)) {
   articles = [];
 }
 
-const projects = [
-  {
-    slug: "friday",
-    name: "FRIDAY",
-    tagline: "Immersive Engineering Visual Intelligence",
-    description:
-      "Generative 3D engineering visualization engine. Turn voice commands, sketches, or prompts into interactive mechanical assemblies in real time. Winner: Google DeepMind × Kaggle Vibe Code with Gemini 3 Pro Hackathon (Developer Tools).",
-    content: `FRIDAY is a generative immersive visualization engine for engineering teams. Type a system name, upload a sketch, or speak a command, and a detailed 3D assembly compiles in front of you, ready to rotate, explode, scan, and interrogate.
-
-It is a neural spatial architect that writes geometry the way language models write prose. Built with React 19, Three.js, Gemini 3.1 Pro, and Gemini Live native audio.
-
-Key capabilities include generative system building with schema-validated outputs, holographic CAD rendering with see-through cabinet walls, and ephemeral token voice interaction.`,
-  },
-  {
-    slug: "sentinel",
-    name: "Sentinel",
-    tagline: "Autonomous Competitive Intelligence",
-    description:
-      "Autonomous competitive intelligence platform. Five Gemini agents chained in a state machine hunt the web, perform scored SWOT analysis across 5 dimensions, and compile executive strategic briefs in under a minute.",
-    content: `Sentinel is an autonomous competitive intelligence platform that transforms raw web research into structured executive briefs in under 60 seconds.
-
-Five specialized Gemini agents operate in a state machine pipeline: Discovery, Feature Extraction, Pricing Analysis, Threat Scoring, and Executive Synthesis.
-
-Key capabilities include 5-dimensional SWOT scoring, automated citation tracking with screenshot evidence, and differential drift monitoring across market competitors.`,
-  },
-  {
-    slug: "midsphere",
-    name: "MidSphere",
-    tagline: "Autonomous Context Circuit-Breaker for Data Platforms",
-    description:
-      "Closed-loop autonomous context circuit-breaker engine for enterprise data platforms. Audits schema drift and PII leaks, scores selective blast radius, and applies advisory quarantine to protect downstream AI agents.",
-    content: `MidSphere is an autonomous context circuit-breaker for enterprise data platforms and agentic pipelines.
-
-It monitors data platform inputs, audits schema drift, detects PII leaks, and isolates poisoned context before it reaches downstream reasoning agents.
-
-Key capabilities include automated quarantine policies, selective blast radius scoring, and deterministic invariant arbitration.`,
-  },
-];
 
 function renderNav() {
   return `<nav aria-label="Main Navigation">
@@ -183,11 +146,12 @@ function renderAboutBody() {
     <p>With a deep focus on agentic workflows, large language models, and scalable inference, I build systems that don't just predict the next token, but actively plan, reason, and execute complex tasks.</p>
   </section>
   <section aria-labelledby="credentials-heading">
-    <h2 id="credentials-heading">Credentials &amp; Recognition</h2>
+    <h2 id="credentials-heading">Honors &amp; Certifications</h2>
     <ul>
       <li><strong>Google DeepMind &times; Kaggle Winner:</strong> Vibe Code with Gemini 3 Pro Hackathon (Developer Tools track).</li>
-      <li><strong>Oracle Certified:</strong> Generative AI Professional, Data Platform Associate, and Data Science Professional.</li>
+      <li><strong>Oracle Certified:</strong> AI Vector Search Professional, Cloud Infrastructure Associate, Data Platform Associate, and Data Science Professional.</li>
       <li><strong>Cloud &amp; GenAI Certifications:</strong> Google Cloud Certified and OpenAI GenAI Certified.</li>
+      <li><strong>Design &amp; UI/UX:</strong> Udemy UI UX Mastery Certified.</li>
     </ul>
   </section>
   <section aria-labelledby="explore-heading">
@@ -236,13 +200,12 @@ function renderProjectsListBody(projectsList) {
       <article>
         <h2><a href="/projects/${escapeHtml(p.slug)}">${escapeHtml(p.name)}</a></h2>
         <p><strong>${escapeHtml(p.tagline)}</strong></p>
-        <p>${escapeHtml(p.description)}</p>
-        <p><a href="/projects/${escapeHtml(p.slug)}">View ${escapeHtml(p.name)} details &rarr;</a></p>
+        <p>${escapeHtml(p.excerpt || "")}</p>
+        <p><a href="/projects/${escapeHtml(p.slug)}">View ${escapeHtml(p.name)} project brief &rarr;</a></p>
       </article>
     </li>`
     )
     .join("\n");
-
   return `<header>
   ${renderNav()}
   <h1>AI Systems &amp; Open Source Projects</h1>
@@ -263,22 +226,48 @@ function renderProjectDetailBody(project) {
     ? renderToStaticMarkup(
         React.createElement(ReactMarkdown, { remarkPlugins: [remarkGfm] }, project.content)
       )
-    : `<p>${escapeHtml(project.description)}</p>`;
+    : `<p>${escapeHtml(project.excerpt || "")}</p>`;
+
+  const metricsList = Array.isArray(project.metrics) && project.metrics.length > 0
+    ? `    <section aria-labelledby="project-metrics">
+      <h2 id="project-metrics">Project Metrics</h2>
+      <ul>
+${project.metrics.map((m) => `        <li><strong>${escapeHtml(m.label)}:</strong> ${escapeHtml(m.value)}</li>`).join("\n")}
+      </ul>
+    </section>`
+    : "";
+
+  const stackLine = Array.isArray(project.stack) && project.stack.length > 0
+    ? `<p><strong>Stack:</strong> ${escapeHtml(project.stack.join(" · "))}</p>`
+    : "";
+
+  const awardLine = project.award
+    ? `<p><strong>Award:</strong> <a href="${escapeHtml(project.award.url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(project.award.label)}${project.award.sublabel ? ` (${escapeHtml(project.award.sublabel)})` : ""}</a></p>`
+    : "";
+
+  const linksLine = `    <p>
+      ${project.liveUrl ? `<a href="${escapeHtml(project.liveUrl)}" target="_blank" rel="noopener noreferrer">Live Site &rarr;</a>` : ""}
+      ${project.codeUrl ? ` | <a href="${escapeHtml(project.codeUrl)}" target="_blank" rel="noopener noreferrer">Source Code &rarr;</a>` : ""}
+    </p>`;
 
   return `<header>
   ${renderNav()}
   <p><a href="/projects">&larr; Back to Projects</a> | <a href="/">Home</a></p>
   <h1>${escapeHtml(project.name)}</h1>
   <p><strong>${escapeHtml(project.tagline)}</strong></p>
+  ${stackLine}
+  ${awardLine}
+  ${linksLine}
 </header>
 <main>
   <article>
-    <section>
-      <h2>Overview</h2>
-      <p>${escapeHtml(project.description)}</p>
+    <section aria-labelledby="overview-heading">
+      <h2 id="overview-heading">Overview</h2>
+      <p>${escapeHtml(project.excerpt || "")}</p>
     </section>
-    <section>
-      <h2>Technical Architecture</h2>
+${metricsList}
+    <section aria-labelledby="architecture-heading">
+      <h2 id="architecture-heading">System Architecture &amp; Implementation</h2>
 ${renderedContent}
     </section>
   </article>
@@ -367,7 +356,7 @@ function writePage(routeDir, title, description, canonical, ogType, jsonLd, page
   const dir = path.join(DIST, routeDir);
   fs.mkdirSync(dir, { recursive: true });
   const finalBodyContent = pageBody
-    ? bodyContent.replace('<div id="root"></div>', '<div id="root">' + pageBody + '</div>')
+    ? bodyContent.replace('<div id="root"></div>', '<div id="root"></div>\n    <div id="prerendered-content">\n' + pageBody + '\n    </div>')
     : bodyContent;
   const html = `<!doctype html>
 <html lang="en">
