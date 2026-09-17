@@ -70,8 +70,8 @@ export const RATE_LIMITS = {
   'virtual-coffee': { windowMs: 60 * 60 * 1000, max: 5 },
   feedback: { windowMs: 60 * 60 * 1000, max: 15 },
   'c2h-report': { windowMs: 60 * 60 * 1000, max: 15 }, // setup-report emails / hour / IP
-  chat: { windowMs: 60 * 60 * 1000, max: 20 }, // lab guide chatbot
-  api: { windowMs: 60 * 1000, max: 30 }, // global API burst
+  chat: { windowMs: 60 * 60 * 1000, max: 20 }, // lab guide chatbot (hourly)
+  'chat-burst': { windowMs: 10 * 1000, max: 3 }, // burst protection against spammers (3 / 10s)
 } as const;
 
 export function applyRateLimitHeaders(

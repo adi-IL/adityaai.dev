@@ -27,11 +27,24 @@ export function esc(s: string): string {
     .replace(/'/g, '&#39;');
 }
 
-const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const EMAIL_RE =
+  /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+$/;
 
 export function isValidEmail(email: string): boolean {
-  if (!email || email.length > 200) return false;
+  if (!email || typeof email !== 'string' || email.length > 254) return false;
   return EMAIL_RE.test(email);
+}
+
+export function stripHtml(s: string): string {
+  let cleaned = s;
+  let prev = '';
+  // Match actual HTML tags: starts with < followed by an optional / and an ASCII tag name or comment/doctype
+  const tagRegex = /<(?:\/?[a-zA-Z][a-zA-Z0-9:-]*(?:\s+[^>]*?)?\/?>|!--[\s\S]*?-->|![^>]*>)/g;
+  while (cleaned !== prev) {
+    prev = cleaned;
+    cleaned = cleaned.replace(tagRegex, '');
+  }
+  return cleaned.trim();
 }
 
 /**

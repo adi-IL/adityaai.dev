@@ -2,7 +2,20 @@ import type { ApiRequest, ApiResponse } from '../http.js';
 import { getClientIp, readBody } from '../http.js';
 import { applyRateLimitHeaders, checkRateLimit, RATE_LIMITS } from '../rate-limit.js';
 import { logError, publicErrorMessage } from '../errors.js';
-import { clamp, esc, getNotifyEmail, getResend, isHoneypotTripped, isValidEmail } from '../email.js';
+import { clamp, esc, getNotifyEmail, getResend, isHoneypotTripped, isValidEmail, stripHtml } from '../email.js';
+import articlesMeta from '../../scripts/articles-meta.json' with { type: 'json' };
+
+const ALLOWED_PROJECT_SLUGS: Record<string, true> = {
+  friday: true,
+  sentinel: true,
+  midsphere: true,
+  general: true,
+};
+
+function isAllowedFeedbackSlug(slug: string): boolean {
+  if (ALLOWED_PROJECT_SLUGS[slug]) return true;
+  return articlesMeta.some((a) => a.slug === slug);
+}
 
 const ALLOWED_REACTIONS = ['insightful', 'useful', 'needs-depth'] as const;
 
@@ -28,10 +41,14 @@ export async function handleFeedback(req: ApiRequest, res: ApiResponse): Promise
     return;
   }
 
-  const slug = clamp(body.slug, 200);
+  const slug = clamp(body.slug, 100);
   const reaction = clamp(body.reaction, 50);
   if (!slug || !reaction) {
     res.status(400).json({ error: 'Article slug and reaction are required' });
+    return;
+  }
+  if (!isAllowedFeedbackSlug(slug)) {
+    res.status(400).json({ error: 'Invalid article slug' });
     return;
   }
   if (!(ALLOWED_REACTIONS as readonly string[]).includes(reaction)) {
@@ -45,8 +62,8 @@ export async function handleFeedback(req: ApiRequest, res: ApiResponse): Promise
     return;
   }
 
-  const safeTitle = clamp(body.title, 200) || slug;
-  const safeComment = clamp(body.comment, 2000);
+  const safeTitle = clamp(stripHtml(String(body.title || '')), 200) || slug;
+  const safeComment = stripHtml(clamp(body.comment, 2000));
   const safeEmail = clamp(body.email, 200);
   if (safeEmail && !isValidEmail(safeEmail)) {
     res.status(400).json({ error: 'Valid email is required' });

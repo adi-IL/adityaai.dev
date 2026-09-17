@@ -1,0 +1,5 @@
+Contact: mailto:aiexpert@adityaai.dev
+Expires: 2027-09-17T00:00:00.000Z
+Preferred-Languages: en
+Canonical: https://www.adityaai.dev/.well-known/security.txt
+Policy: https://www.adityaai.dev/about

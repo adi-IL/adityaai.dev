@@ -9,3 +9,4 @@ coverage/
 doctor.json
 
 .vercel
+.omp/

@@ -23,19 +23,38 @@ export type ApiResponse = {
 };
 
 export function getClientIp(req: ApiRequest): string {
+  const vff = req.headers['x-vercel-forwarded-for'];
+  const vercelIp = Array.isArray(vff) ? vff[0] : vff;
+  if (typeof vercelIp === 'string' && vercelIp.trim()) return vercelIp.split(',')[0].trim();
+
+  const rawRealIp = req.headers['x-real-ip'];
+  const realIp = Array.isArray(rawRealIp) ? rawRealIp[0] : rawRealIp;
+  if (typeof realIp === 'string' && realIp.trim()) return realIp.split(',')[0].trim();
   const xf = req.headers['x-forwarded-for'];
   if (typeof xf === 'string' && xf.length > 0) {
-    return xf.split(',')[0]?.trim() || 'unknown';
+    const parts = xf.split(',').map((p) => p.trim()).filter(Boolean);
+    if (parts.length > 0) return parts[0];
   }
   if (Array.isArray(xf) && xf[0]) {
     return xf[0].split(',')[0]?.trim() || 'unknown';
   }
-  const realIp = req.headers['x-real-ip'];
-  if (typeof realIp === 'string' && realIp) return realIp.trim();
   if (typeof req.ip === 'string' && req.ip) return req.ip;
   return req.socket?.remoteAddress || 'unknown';
 }
 
 export function readBody<T extends Record<string, unknown>>(req: ApiRequest): T {
-  return (req.body && typeof req.body === 'object' ? req.body : {}) as T;
+  if (req.body && typeof req.body === 'object') {
+    return req.body as T;
+  }
+  if (typeof req.body === 'string' && req.body.trim().length > 0) {
+    try {
+      const parsed = JSON.parse(req.body);
+      if (parsed && typeof parsed === 'object') {
+        return parsed as T;
+      }
+    } catch {
+      return {} as T;
+    }
+  }
+  return {} as T;
 }

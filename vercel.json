@@ -5,7 +5,9 @@
   "framework": "vite",
   "redirects": [
     { "source": "/essays", "destination": "/articles", "permanent": true },
-    { "source": "/essays/", "destination": "/articles", "permanent": true }
+    { "source": "/essays/", "destination": "/articles", "permanent": true },
+    { "source": "/articles/44_arc_agi_3_failure_architecture", "destination": "/articles/the-verification-gap", "permanent": true },
+    { "source": "/articles/44_arc_agi_3_failure_architecture/", "destination": "/articles/the-verification-gap", "permanent": true }
   ],
   "rewrites": [
     { "source": "/api/:path*", "destination": "/api/:path*" },
@@ -51,6 +53,13 @@
       "source": "/robots.txt",
       "headers": [
         { "key": "Cache-Control", "value": "public, max-age=86400" }
+      ]
+    },
+    {
+      "source": "/.well-known/security.txt",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=86400" },
+        { "key": "Content-Type", "value": "text/plain; charset=utf-8" }
       ]
     },
     {

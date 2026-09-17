@@ -6,9 +6,19 @@
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
+import React from "react";
+import { renderToStaticMarkup } from "react-dom/server";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
+import esbuild from "esbuild";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const DIST = path.resolve(__dirname, "..", "dist");
+const tsProjectsPath = path.resolve(__dirname, "..", "src", "lib", "projects.ts");
+const tsProjectsSource = fs.readFileSync(tsProjectsPath, "utf-8");
+const transformedProjects = esbuild.transformSync(tsProjectsSource, { loader: "ts", format: "esm" });
+const projectsDataUrl = "data:text/javascript;base64," + Buffer.from(transformedProjects.code).toString("base64");
+const { projects } = await import(projectsDataUrl);
 
 // ── Read Vite build output ─────────────────────────────────────────────────
 
@@ -59,11 +69,256 @@ if (fs.existsSync(metaPath)) {
   articles = [];
 }
 
-const projects = [
-  { slug: "friday", name: "FRIDAY", tagline: "Immersive Engineering Visual Intelligence" },
-  { slug: "sentinel", name: "Sentinel", tagline: "Autonomous Competitive Intelligence" },
-  { slug: "midsphere", name: "MidSphere", tagline: "Autonomous Context Circuit-Breaker for Data Platforms" },
-];
+
+function renderNav() {
+  return `<nav aria-label="Main Navigation">
+  <a href="/">Home</a> | <a href="/about">About</a> | <a href="/articles">Articles</a> | <a href="/projects">Projects</a>
+</nav>`;
+}
+
+function renderHomeBody(articlesList, projectsList) {
+  const featured = articlesList.filter((a) => a.featured);
+  const featuredList = featured.length > 0 ? featured : articlesList.slice(0, 5);
+
+  const featuredItems = featuredList
+    .map(
+      (a) => `      <li>
+        <article>
+          <h3><a href="/articles/${escapeHtml(a.slug)}">${escapeHtml(a.title)}</a></h3>
+          <p><time datetime="${escapeHtml(a.dateISO || a.date)}">${escapeHtml(a.date || a.dateISO)}</time> · <span>${escapeHtml(a.form || "Article")}</span></p>
+          <p>${escapeHtml(a.excerpt || "")}</p>
+        </article>
+      </li>`
+    )
+    .join("\n");
+
+  const projectItems = projectsList
+    .map(
+      (p) => `      <li>
+        <article>
+          <h3><a href="/projects/${escapeHtml(p.slug)}">${escapeHtml(p.name)}</a></h3>
+          <p><strong>${escapeHtml(p.tagline)}</strong></p>
+          <p>${escapeHtml(p.description || p.excerpt || "")}</p>
+        </article>
+      </li>`
+    )
+    .join("\n");
+
+  return `<header>
+  ${renderNav()}
+  <h1>Aditya Gaurav</h1>
+  <p>AI Engineer &amp; Systems Architect</p>
+</header>
+<main>
+  <section aria-labelledby="bio-heading">
+    <h2 id="bio-heading">About Aditya Gaurav</h2>
+    <p>AI Engineer &amp; Systems Architect specializing in agentic systems, cognitive architectures, and MCP. Focused on building production-ready AI systems that reason, plan, and execute reliably.</p>
+  </section>
+  <section aria-labelledby="hero-heading">
+    <h2 id="hero-heading">Systems &amp; Cognitive Architecture</h2>
+    <p>Researching the layer between foundational models and enterprise infrastructure. Exploring dynamic agent state, context quarantine, multi-agent evaluation, and inference economics.</p>
+  </section>
+  <section aria-labelledby="featured-articles-heading">
+    <h2 id="featured-articles-heading">Featured Research &amp; Articles</h2>
+    <ul>
+${featuredItems}
+    </ul>
+    <p><a href="/articles">View all research articles &rarr;</a></p>
+  </section>
+  <section aria-labelledby="featured-projects-heading">
+    <h2 id="featured-projects-heading">Selected Projects</h2>
+    <ul>
+${projectItems}
+    </ul>
+    <p><a href="/projects">View all projects &rarr;</a></p>
+  </section>
+</main>
+<footer>
+  <p>&copy; ${new Date().getFullYear()} Aditya Gaurav. <a href="/">Home</a> · <a href="/about">About</a> · <a href="/articles">Articles</a> · <a href="/projects">Projects</a></p>
+</footer>`;
+}
+
+function renderAboutBody() {
+  return `<header>
+  ${renderNav()}
+  <h1>About Aditya Gaurav</h1>
+  <p>AI Researcher &amp; Systems Architect</p>
+</header>
+<main>
+  <section aria-labelledby="bio-heading">
+    <h2 id="bio-heading">Bio &amp; Focus</h2>
+    <p>I am an AI Researcher &amp; Systems Architect focused on cognitive architectures and scalable intelligence. My work bridges the gap between theoretical AI models and production-ready systems.</p>
+    <p>With a deep focus on agentic workflows, large language models, and scalable inference, I build systems that don't just predict the next token, but actively plan, reason, and execute complex tasks.</p>
+  </section>
+  <section aria-labelledby="credentials-heading">
+    <h2 id="credentials-heading">Honors &amp; Certifications</h2>
+    <ul>
+      <li><strong>Google DeepMind &times; Kaggle Winner:</strong> Vibe Code with Gemini 3 Pro Hackathon (Developer Tools track).</li>
+      <li><strong>Oracle Certified:</strong> AI Vector Search Professional, Cloud Infrastructure Associate, Data Platform Associate, and Data Science Professional.</li>
+      <li><strong>Cloud &amp; GenAI Certifications:</strong> Google Cloud Certified and OpenAI GenAI Certified.</li>
+      <li><strong>Design &amp; UI/UX:</strong> Udemy UI UX Mastery Certified.</li>
+    </ul>
+  </section>
+  <section aria-labelledby="explore-heading">
+    <h2 id="explore-heading">Explore My Work</h2>
+    <p>Read my deep dives on AI systems architecture, agentic evaluation, and inference economics in <a href="/articles">Articles</a>, or explore production AI engines in <a href="/projects">Projects</a>.</p>
+  </section>
+</main>
+<footer>
+  <p><a href="/">Back to Home</a> · <a href="/articles">Articles</a> · <a href="/projects">Projects</a></p>
+</footer>`;
+}
+
+function renderArticlesListBody(articlesList) {
+  const items = articlesList
+    .map(
+      (a) => `    <li>
+      <article>
+        <h2><a href="/articles/${escapeHtml(a.slug)}">${escapeHtml(a.title)}</a></h2>
+        <p><time datetime="${escapeHtml(a.dateISO || a.date)}">${escapeHtml(a.date || a.dateISO)}</time> · <span>${escapeHtml(a.form || "Article")}</span></p>
+        <p>${escapeHtml(a.excerpt || "")}</p>
+        <p><a href="/articles/${escapeHtml(a.slug)}">Read full article &rarr;</a></p>
+      </article>
+    </li>`
+    )
+    .join("\n");
+
+  return `<header>
+  ${renderNav()}
+  <h1>Research Articles &amp; Technical Deep Dives</h1>
+  <p>Infrequent, high-signal research on AI architecture, agentic systems, cognitive architectures, and systems design by Aditya Gaurav.</p>
+</header>
+<main>
+  <ul>
+${items}
+  </ul>
+</main>
+<footer>
+  <p><a href="/">Back to Home</a> · <a href="/projects">Projects</a> · <a href="/about">About</a></p>
+</footer>`;
+}
+
+function renderProjectsListBody(projectsList) {
+  const items = projectsList
+    .map(
+      (p) => `    <li>
+      <article>
+        <h2><a href="/projects/${escapeHtml(p.slug)}">${escapeHtml(p.name)}</a></h2>
+        <p><strong>${escapeHtml(p.tagline)}</strong></p>
+        <p>${escapeHtml(p.excerpt || "")}</p>
+        <p><a href="/projects/${escapeHtml(p.slug)}">View ${escapeHtml(p.name)} project brief &rarr;</a></p>
+      </article>
+    </li>`
+    )
+    .join("\n");
+  return `<header>
+  ${renderNav()}
+  <h1>AI Systems &amp; Open Source Projects</h1>
+  <p>Production AI systems and open-source architectures engineered by Aditya Gaurav.</p>
+</header>
+<main>
+  <ul>
+${items}
+  </ul>
+</main>
+<footer>
+  <p><a href="/">Back to Home</a> · <a href="/articles">Articles</a> · <a href="/about">About</a></p>
+</footer>`;
+}
+
+function renderProjectDetailBody(project) {
+  const renderedContent = project.content
+    ? renderToStaticMarkup(
+        React.createElement(ReactMarkdown, { remarkPlugins: [remarkGfm] }, project.content)
+      )
+    : `<p>${escapeHtml(project.excerpt || "")}</p>`;
+
+  const metricsList = Array.isArray(project.metrics) && project.metrics.length > 0
+    ? `    <section aria-labelledby="project-metrics">
+      <h2 id="project-metrics">Project Metrics</h2>
+      <ul>
+${project.metrics.map((m) => `        <li><strong>${escapeHtml(m.label)}:</strong> ${escapeHtml(m.value)}</li>`).join("\n")}
+      </ul>
+    </section>`
+    : "";
+
+  const stackLine = Array.isArray(project.stack) && project.stack.length > 0
+    ? `<p><strong>Stack:</strong> ${escapeHtml(project.stack.join(" · "))}</p>`
+    : "";
+
+  const awardLine = project.award
+    ? `<p><strong>Award:</strong> <a href="${escapeHtml(project.award.url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(project.award.label)}${project.award.sublabel ? ` (${escapeHtml(project.award.sublabel)})` : ""}</a></p>`
+    : "";
+
+  const linksLine = `    <p>
+      ${project.liveUrl ? `<a href="${escapeHtml(project.liveUrl)}" target="_blank" rel="noopener noreferrer">Live Site &rarr;</a>` : ""}
+      ${project.codeUrl ? ` | <a href="${escapeHtml(project.codeUrl)}" target="_blank" rel="noopener noreferrer">Source Code &rarr;</a>` : ""}
+    </p>`;
+
+  return `<header>
+  ${renderNav()}
+  <p><a href="/projects">&larr; Back to Projects</a> | <a href="/">Home</a></p>
+  <h1>${escapeHtml(project.name)}</h1>
+  <p><strong>${escapeHtml(project.tagline)}</strong></p>
+  ${stackLine}
+  ${awardLine}
+  ${linksLine}
+</header>
+<main>
+  <article>
+    <section aria-labelledby="overview-heading">
+      <h2 id="overview-heading">Overview</h2>
+      <p>${escapeHtml(project.excerpt || "")}</p>
+    </section>
+${metricsList}
+    <section aria-labelledby="architecture-heading">
+      <h2 id="architecture-heading">System Architecture &amp; Implementation</h2>
+${renderedContent}
+    </section>
+  </article>
+</main>
+<footer>
+  <p><a href="/projects">&larr; Return to Projects</a> | <a href="/articles">Browse Articles</a> | <a href="/about">About Aditya Gaurav</a></p>
+</footer>`;
+}
+
+function renderArticleDetailBody(article) {
+  const mdPath = path.resolve(__dirname, "..", "src", "content", "articles", `${article.slug}.md`);
+  let renderedMarkdown = "";
+  if (fs.existsSync(mdPath)) {
+    const rawMarkdown = fs.readFileSync(mdPath, "utf-8");
+    const cleanMarkdown = rawMarkdown
+      .replace(/^---\r?\n[\s\S]*?\r?\n---\r?\n?/, "")
+      .trimStart()
+      .replace(/^#\s+[^\r\n]+\r?\n?/, "");
+    renderedMarkdown = renderToStaticMarkup(
+      React.createElement(ReactMarkdown, { remarkPlugins: [remarkGfm] }, cleanMarkdown)
+    );
+  } else {
+    renderedMarkdown = `<p>${escapeHtml(article.excerpt || "")}</p>`;
+  }
+
+  const title = escapeHtml(article.title);
+  const dateStr = escapeHtml(article.date || article.dateISO || "");
+  const dateISO = escapeHtml(article.dateISO || article.date || "");
+  const form = escapeHtml(article.form || "Article");
+
+  return `<header>
+  ${renderNav()}
+  <p><a href="/articles">&larr; Back to Articles</a> | <a href="/">Home</a></p>
+  <h1>${title}</h1>
+  <p>By <strong>Aditya Gaurav</strong> · <time datetime="${dateISO}">${dateStr}</time> · <span>${form}</span></p>
+</header>
+<main>
+  <article>
+${renderedMarkdown}
+  </article>
+</main>
+<footer>
+  <p><a href="/articles">&larr; Back to Articles</a> | <a href="/">Return to Home</a> | <a href="/projects">Projects</a></p>
+</footer>`;
+}
+
 
 function headTags(title, description, canonical, ogType, jsonLd) {
   const safeTitle = escapeHtml(title);
@@ -103,20 +358,27 @@ ${jsonLd ? `    <script type="application/ld+json">${JSON.stringify(jsonLd).repl
 ${viteAssetsHead}`;
 }
 
-function writePage(routeDir, title, description, canonical, ogType, jsonLd) {
+function writePage(routeDir, title, description, canonical, ogType, jsonLd, pageBody = "") {
   const dir = path.join(DIST, routeDir);
   fs.mkdirSync(dir, { recursive: true });
+  const finalBodyContent = pageBody
+    ? bodyContent.replace(
+        '<div id="root"></div>',
+        () => '<div id="root"></div>\n    <noscript>\n      <div id="prerendered-content">\n' + pageBody + '\n      </div>\n    </noscript>'
+      )
+    : bodyContent;
   const html = `<!doctype html>
 <html lang="en">
   <head>
 ${headTags(title, description, canonical, ogType || "website", jsonLd)}
   </head>
   <body>
-${bodyContent}
+${finalBodyContent}
   </body>
 </html>`;
   fs.writeFileSync(path.join(dir, "index.html"), html, "utf-8");
 }
+
 
 console.log("🚀 Prerendering static pages for adityaai.dev...");
 let count = 0;
@@ -135,7 +397,7 @@ writePage(".", "Aditya Gaurav  -  AI Engineer · Systems Architect",
     url: `${SITE_URL}/`, inLanguage: "en",
     author: { "@type": "Person", name: "Aditya Gaurav", url: `${SITE_URL}/`, jobTitle: "AI Researcher & Systems Architect",
       sameAs: ["https://x.com/adityaaidev", "https://www.linkedin.com/in/adityaai/", "https://github.com/adi-IL"] },
-  });
+  }, renderHomeBody(articles, projects));
 count++;
 
 writePage("about", "About | Aditya Gaurav  -  AI Engineer & Systems Architect",
@@ -145,7 +407,7 @@ writePage("about", "About | Aditya Gaurav  -  AI Engineer & Systems Architect",
     itemListElement: [
       { "@type": "ListItem", position: 1, name: "Home", item: `${SITE_URL}/` },
       { "@type": "ListItem", position: 2, name: "About", item: `${SITE_URL}/about` }],
-  });
+  }, renderAboutBody());
 count++;
 
 writePage("articles", "Articles | Aditya Gaurav  -  Research on AI Architecture & Systems Design",
@@ -155,7 +417,7 @@ writePage("articles", "Articles | Aditya Gaurav  -  Research on AI Architecture 
     itemListElement: [
       { "@type": "ListItem", position: 1, name: "Home", item: `${SITE_URL}/` },
       { "@type": "ListItem", position: 2, name: "Articles", item: `${SITE_URL}/articles` }],
-  });
+  }, renderArticlesListBody(articles));
 count++;
 
 writePage("projects", "Projects | Aditya Gaurav  -  AI Systems & Open Source",
@@ -165,7 +427,7 @@ writePage("projects", "Projects | Aditya Gaurav  -  AI Systems & Open Source",
     itemListElement: [
       { "@type": "ListItem", position: 1, name: "Home", item: `${SITE_URL}/` },
       { "@type": "ListItem", position: 2, name: "Projects", item: `${SITE_URL}/projects` }],
-  });
+  }, renderProjectsListBody(projects));
 count++;
 
 for (const a of articles) {
@@ -186,7 +448,7 @@ for (const a of articles) {
     ...(typeof a.wordCount === "number" ? { wordCount: a.wordCount } : {}),
     ...(typeof a.readingTime === "number" ? { timeRequired: `PT${a.readingTime}M` } : {}),
     mainEntityOfPage: { "@type": "WebPage", "@id": canonical },
-  });
+  }, renderArticleDetailBody(a));
   count++;
 }
 
@@ -198,7 +460,7 @@ for (const p of projects) {
       { "@type": "ListItem", position: 1, name: "Home", item: `${SITE_URL}/` },
       { "@type": "ListItem", position: 2, name: "Projects", item: `${SITE_URL}/projects` },
       { "@type": "ListItem", position: 3, name: p.name, item: canonical }],
-  });
+  }, renderProjectDetailBody(p));
   count++;
 }
 

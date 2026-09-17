@@ -62,8 +62,7 @@ export async function handleSubscribe(req: ApiRequest, res: ApiResponse): Promis
   const ipRl = checkRateLimit('subscribe:ip', ip, ipLimit);
   applyRateLimitHeaders(res, ipRl, ipLimit.max);
   if (!ipRl.ok) {
-    // Still generic - don't teach attackers the limit shape via wording differences.
-    res.status(200).json(GENERIC_SUCCESS);
+    res.status(429).json({ error: 'Too many requests. Please try again later.' });
     return;
   }
 
@@ -74,13 +73,14 @@ export async function handleSubscribe(req: ApiRequest, res: ApiResponse): Promis
     return;
   }
 
-  const email = normalizeEmail(clamp(body.email, 200));
+  const email = normalizeEmail(clamp(body.email, 254));
   if (!email || !isValidEmail(email)) {
     res.status(400).json({ error: 'Valid email is required' });
     return;
   }
 
   // Per-address cap: stops using many IPs to spam one inbox with confirm mails.
+  // Return generic 200 success to prevent using this endpoint as an email enumeration oracle.
   const emailRl = checkRateLimit('subscribe:email', email, RATE_LIMITS['subscribe-email']);
   if (!emailRl.ok) {
     res.status(200).json(GENERIC_SUCCESS);

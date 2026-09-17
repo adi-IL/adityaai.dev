@@ -79,6 +79,7 @@ export default function SiteChatWidget() {
   const listRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
 
+  const lastSentRef = useRef<number>(0);
   useEffect(() => {
     setMessages(loadSession());
   }, []);
@@ -117,6 +118,13 @@ export default function SiteChatWidget() {
     const content = text.trim();
     if (!content || loading) return;
 
+    const now = Date.now();
+    if (now - lastSentRef.current < 2000) {
+      setError('Please wait a moment before sending another message.');
+      return;
+    }
+    lastSentRef.current = now;
+
     const next: Msg[] = [...messages, { role: 'user', content }];
     setMessages(next);
     saveSession(next);
@@ -154,7 +162,13 @@ export default function SiteChatWidget() {
       // Handle client-side tool execution
       if (data.functionCalls && data.functionCalls.length > 0) {
         for (const call of data.functionCalls) {
-          if (call.name === 'navigateTo' && typeof call.args?.path === 'string') {
+          if (
+            call.name === 'navigateTo' &&
+            typeof call.args?.path === 'string' &&
+            call.args.path.startsWith('/') &&
+            !call.args.path.startsWith('//') &&
+            !call.args.path.startsWith('/\\')
+          ) {
             // Close the chat widget slightly after navigating so they see the new page
             setTimeout(() => {
               navigate(call.args.path as string);
@@ -260,7 +274,39 @@ export default function SiteChatWidget() {
                 >
                   {m.role === 'assistant' ? (
                     <div className="prose prose-invert prose-sm max-w-none prose-p:my-1.5 prose-a:text-electric-lime prose-ul:my-1.5 prose-li:my-0">
-                      <Markdown>{m.content}</Markdown>
+                      <Markdown
+                        skipHtml
+                        allowedElements={[
+                          'p',
+                          'strong',
+                          'em',
+                          'code',
+                          'pre',
+                          'ul',
+                          'ol',
+                          'li',
+                          'a',
+                          'blockquote',
+                          'hr',
+                          'h1',
+                          'h2',
+                          'h3',
+                          'h4',
+                        ]}
+                        urlTransform={(url) => {
+                          if (
+                            url.startsWith('http://') ||
+                            url.startsWith('https://') ||
+                            (url.startsWith('/') && !url.startsWith('//') && !url.startsWith('/\\')) ||
+                            url.startsWith('mailto:')
+                          ) {
+                            return url;
+                          }
+                          return '';
+                        }}
+                      >
+                        {m.content}
+                      </Markdown>
                     </div>
                   ) : (
                     m.content
