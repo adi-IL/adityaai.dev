@@ -70,6 +70,8 @@ function normalizeMessages(raw: unknown): ChatMessage[] | null {
     const expectedRole: ChatRole = i % 2 === 0 ? 'user' : 'assistant';
     if (out[i].role !== expectedRole) return null;
   }
+  // Conversation must end with a user turn (odd number of turns)
+  if (out.length % 2 === 0) return null;
   return out;
 }
 
@@ -145,8 +147,8 @@ export async function handleChat(req: ApiRequest, res: ApiResponse): Promise<voi
     return;
   }
 
-  // 3. Pre-flight prompt injection / jailbreak guardrail across all message turns
-  const hasInjection = messages.some((m) => isPromptInjectionAttempt(m.content));
+  // 3. Pre-flight prompt injection / jailbreak guardrail across all user turns
+  const hasInjection = messages.some((m) => m.role === 'user' && isPromptInjectionAttempt(m.content));
   if (hasInjection) {
     res.status(200).json({
       reply:

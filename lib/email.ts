@@ -38,11 +38,13 @@ export function isValidEmail(email: string): boolean {
 export function stripHtml(s: string): string {
   let cleaned = s;
   let prev = '';
+  // Match actual HTML tags: starts with < followed by an optional / and an ASCII tag name or comment/doctype
+  const tagRegex = /<(?:\/?[a-zA-Z][a-zA-Z0-9:-]*(?:\s+[^>]*?)?\/?>|!--[\s\S]*?--|![^>]*>)/g;
   while (cleaned !== prev) {
     prev = cleaned;
-    cleaned = cleaned.replace(/<[^>]*>/g, '');
+    cleaned = cleaned.replace(tagRegex, '');
   }
-  return cleaned.replace(/[<>]/g, '').trim();
+  return cleaned.trim();
 }
 
 /**

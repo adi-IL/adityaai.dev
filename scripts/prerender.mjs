@@ -289,6 +289,7 @@ function renderArticleDetailBody(article) {
     const rawMarkdown = fs.readFileSync(mdPath, "utf-8");
     const cleanMarkdown = rawMarkdown
       .replace(/^---\r?\n[\s\S]*?\r?\n---\r?\n?/, "")
+      .trimStart()
       .replace(/^#\s+[^\r\n]+\r?\n?/, "");
     renderedMarkdown = renderToStaticMarkup(
       React.createElement(ReactMarkdown, { remarkPlugins: [remarkGfm] }, cleanMarkdown)
@@ -363,7 +364,7 @@ function writePage(routeDir, title, description, canonical, ogType, jsonLd, page
   const finalBodyContent = pageBody
     ? bodyContent.replace(
         '<div id="root"></div>',
-        () => '<div id="root"></div>\n    <div id="prerendered-content">\n' + pageBody + '\n    </div>'
+        () => '<div id="root"></div>\n    <noscript>\n      <div id="prerendered-content">\n' + pageBody + '\n      </div>\n    </noscript>'
       )
     : bodyContent;
   const html = `<!doctype html>

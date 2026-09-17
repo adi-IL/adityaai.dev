@@ -2,11 +2,8 @@ import type { ApiRequest, ApiResponse } from '../http.js';
 import { getClientIp, readBody } from '../http.js';
 import { applyRateLimitHeaders, checkRateLimit, RATE_LIMITS } from '../rate-limit.js';
 import { logError, publicErrorMessage } from '../errors.js';
-import { createRequire } from 'node:module';
 import { clamp, esc, getNotifyEmail, getResend, isHoneypotTripped, isValidEmail, stripHtml } from '../email.js';
-
-const require = createRequire(import.meta.url);
-const articlesMeta = require('../../scripts/articles-meta.json') as Array<{ slug: string }>;
+import articlesMeta from '../../scripts/articles-meta.json' with { type: 'json' };
 
 const ALLOWED_PROJECT_SLUGS: Record<string, true> = {
   friday: true,
