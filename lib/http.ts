@@ -23,15 +23,16 @@ export type ApiResponse = {
 };
 
 export function getClientIp(req: ApiRequest): string {
+  const realIp = req.headers['x-real-ip'];
+  if (typeof realIp === 'string' && realIp.trim()) return realIp.trim();
   const xf = req.headers['x-forwarded-for'];
   if (typeof xf === 'string' && xf.length > 0) {
-    return xf.split(',')[0]?.trim() || 'unknown';
+    const parts = xf.split(',').map((p) => p.trim()).filter(Boolean);
+    if (parts.length > 0) return parts[0];
   }
   if (Array.isArray(xf) && xf[0]) {
     return xf[0].split(',')[0]?.trim() || 'unknown';
   }
-  const realIp = req.headers['x-real-ip'];
-  if (typeof realIp === 'string' && realIp) return realIp.trim();
   if (typeof req.ip === 'string' && req.ip) return req.ip;
   return req.socket?.remoteAddress || 'unknown';
 }

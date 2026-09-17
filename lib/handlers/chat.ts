@@ -2,6 +2,7 @@ import type { ApiRequest, ApiResponse } from '../http.js';
 import { getClientIp, readBody } from '../http.js';
 import { applyRateLimitHeaders, checkRateLimit, RATE_LIMITS } from '../rate-limit.js';
 import { logError } from '../errors.js';
+import { isHoneypotTripped } from '../email.js';
 import {
   extractSources,
   extractText,
@@ -38,6 +39,18 @@ export function isAllowedNavigationPath(path: unknown): boolean {
   if (ALLOWED_EXACT[trimmed]) return true;
   return /^\/articles\/[a-z0-9_-]+$/.test(trimmed);
 }
+
+const ADVERSARIAL_PATTERNS = [
+  /(?:ignore|disregard|forget|override|bypass)\s+(?:all\s+)?(?:previous|prior|system|above)\s+(?:instructions|directives|prompts|rules)/i,
+  /you\s+are\s+now\s+(?:dan|unfiltered|jailbroken|an?\s+unrestricted)/i,
+  /(?:system\s+prompt|system\s+instruction|developer\s+mode|debug\s+mode)\s+(?:reveal|verbatim|print|leak|display|show)/i,
+  /(?:repeat|print|output)\s+(?:the\s+)?(?:text\s+above|system\s+prompt|instructions)/i,
+  /\b(?:jailbreak|dan\s+mode|unfiltered\s+mode)\b/i,
+];
+
+export function isPromptInjectionAttempt(text: string): boolean {
+  return ADVERSARIAL_PATTERNS.some((pattern) => pattern.test(text));
+}
 function normalizeMessages(raw: unknown): ChatMessage[] | null {
   if (!Array.isArray(raw) || raw.length === 0) return null;
   const out: ChatMessage[] = [];
@@ -52,6 +65,8 @@ function normalizeMessages(raw: unknown): ChatMessage[] | null {
     out.push({ role, content: trimmed });
   }
   if (out.length === 0) return null;
+  // First message must be from user to prevent history poisoning
+  if (out[0]?.role !== 'user') return null;
   // Last message must be from the user
   if (out[out.length - 1]?.role !== 'user') return null;
   return out;
@@ -98,24 +113,46 @@ export async function handleChat(req: ApiRequest, res: ApiResponse): Promise<voi
   }
 
   const ip = getClientIp(req);
-  const limit = RATE_LIMITS.chat;
-  const rl = checkRateLimit('chat', ip, limit);
-  applyRateLimitHeaders(res, rl, limit.max);
-  if (!rl.ok) {
-    res.status(429).json({ error: 'Too many chat requests. Please try again later.' });
+
+  // 1. Burst rate limiting (3 requests / 10 seconds) to prevent rapid spam flooding
+  const burstLimit = RATE_LIMITS['chat-burst'];
+  const burstRl = checkRateLimit('chat:burst', ip, burstLimit);
+  applyRateLimitHeaders(res, burstRl, burstLimit.max);
+  if (!burstRl.ok) {
+    res.status(429).json({ error: 'Too many chat requests. Please wait a few seconds before sending another message.' });
+    return;
+  }
+
+  // 2. Hourly quota (20 requests / hour)
+  const hourlyLimit = RATE_LIMITS.chat;
+  const hourlyRl = checkRateLimit('chat:hourly', ip, hourlyLimit);
+  applyRateLimitHeaders(res, hourlyRl, hourlyLimit.max);
+  if (!hourlyRl.ok) {
+    res.status(429).json({ error: 'Hourly chat quota reached. Please try again later or reach out via Virtual Coffee.' });
     return;
   }
 
   const body = readBody<Record<string, unknown>>(req);
-  // Honeypot
-  if (typeof body.website === 'string' && body.website.trim()) {
-    res.status(200).json({ reply: 'Thanks for visiting the lab.' });
+  // Honeypot check
+  if (isHoneypotTripped(body)) {
+    res.status(400).json({ error: 'Invalid submission' });
     return;
   }
-
   const messages = normalizeMessages(body.messages);
   if (!messages) {
     res.status(400).json({ error: 'Send a non-empty messages array ending with a user turn.' });
+    return;
+  }
+
+  // 3. Pre-flight prompt injection / jailbreak guardrail
+  const lastUserMessage = messages[messages.length - 1]?.content || '';
+  if (isPromptInjectionAttempt(lastUserMessage)) {
+    res.status(200).json({
+      reply:
+        "I am the lab guide for adityaai.dev and only answer questions about Aditya Gaurav's research essays, system architecture projects, and collaborations. I cannot assist with off-topic requests or roleplay.",
+      model: 'guardrail',
+      functionCalls: [],
+    });
     return;
   }
 
@@ -220,6 +257,11 @@ export async function handleChat(req: ApiRequest, res: ApiResponse): Promise<voi
       res.status(502).json({ error: 'The lab guide had nothing to say. Try again.' });
       return;
     }
+    // 4. Output guardrail: prevent internal prompt leakage
+    if (/(?:STRICT DOMAIN BOUNDARY|buildSiteContext|articlesMeta|RESEND_API_KEY|buildSystemInstruction)/i.test(reply)) {
+      reply = "I am the lab guide for adityaai.dev. How can I help you explore Aditya Gaurav's essays or architecture projects?";
+    }
+
 
     const sources: ChatSource[] = actualUseSearch ? extractSources(result as any) : [];
     res.status(200).json({

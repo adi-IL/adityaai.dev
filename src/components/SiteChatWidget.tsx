@@ -79,6 +79,7 @@ export default function SiteChatWidget() {
   const listRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
 
+  const lastSentRef = useRef<number>(0);
   useEffect(() => {
     setMessages(loadSession());
   }, []);
@@ -116,6 +117,13 @@ export default function SiteChatWidget() {
   async function send(text: string) {
     const content = text.trim();
     if (!content || loading) return;
+
+    const now = Date.now();
+    if (now - lastSentRef.current < 2000) {
+      setError('Please wait a moment before sending another message.');
+      return;
+    }
+    lastSentRef.current = now;
 
     const next: Msg[] = [...messages, { role: 'user', content }];
     setMessages(next);
