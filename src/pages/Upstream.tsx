@@ -16,11 +16,17 @@ const stagger = (i: number, n: number, span = 0.6): CSSProperties => ({
   animationDelay: `${(i * Math.min(0.08, span / Math.max(n - 1, 1))).toFixed(2)}s`,
 });
 
-function Tip({ children }: { children: ReactNode }) {
+const tipAlign = {
+  center: 'left-1/2 -translate-x-1/2',
+  start: 'left-0',
+  end: 'right-0',
+} as const;
+
+function Tip({ children, align = 'center' }: { children: ReactNode; align?: keyof typeof tipAlign }) {
   return (
     <span
       role="tooltip"
-      className="pointer-events-none absolute bottom-full left-1/2 z-20 mb-2 w-max max-w-[16rem] -translate-x-1/2 rounded-md border border-zinc-700 bg-zinc-900 px-3 py-2 text-left font-mono text-[11px] leading-snug text-zinc-200 opacity-0 shadow-lg transition-opacity duration-150 group-hover:opacity-100 group-focus-visible:opacity-100"
+      className={`pointer-events-none absolute bottom-full ${tipAlign[align]} z-20 mb-2 w-max max-w-[min(16rem,calc(100vw-3rem))] rounded-md border border-zinc-700 bg-zinc-900 px-3 py-2 text-left font-mono text-[11px] leading-snug text-zinc-200 opacity-0 shadow-lg transition-opacity duration-150 group-hover:opacity-100 group-focus-visible:opacity-100`}
     >
       {children}
     </span>
@@ -142,7 +148,7 @@ function MonthlyChart({ items }: { items: MergedPr[] }) {
                   <span className="absolute font-mono text-sm font-semibold text-zinc-100" style={{ bottom: `calc(${(m.merged / top) * 100}% + 0.5rem)`, top: 'auto' }}>
                     {m.merged}
                   </span>
-                  <Tip>
+                  <Tip align={i === 0 ? 'start' : i === months.length - 1 ? 'end' : 'center'}>
                     {m.label} · {m.merged} merged
                     {prs.length > 0 && <><br />{prs.map((p) => `${projectName(p.repo)} #${p.number}`).join(', ')}</>}
                   </Tip>
@@ -169,7 +175,7 @@ function TestGrid({ stats, items }: { stats: ProjectStat[]; items: MergedPr[] })
         {stats.map((s) => {
           const prs = items.filter((p) => p.repo === s.repo).sort((a, b) => Number(!a.test) - Number(!b.test));
           return (
-            <li key={s.repo} className="grid grid-cols-[6.5rem_1fr] items-center gap-3 px-2 sm:grid-cols-[12rem_1fr]" data-repo={s.repo} data-tested={s.tested} data-total={s.merged}>
+            <li key={s.repo} className="relative grid grid-cols-[6.5rem_1fr] items-center gap-3 px-2 sm:grid-cols-[12rem_1fr]" data-repo={s.repo} data-tested={s.tested} data-total={s.merged}>
               <span className="truncate font-mono text-xs text-zinc-200">{s.name}</span>
               <span className="flex flex-wrap items-center gap-1.5">
                 {prs.map((p) => {
@@ -181,10 +187,10 @@ function TestGrid({ stats, items }: { stats: ProjectStat[]; items: MergedPr[] })
                       target="_blank"
                       rel="noopener noreferrer"
                       aria-label={p.test ? `${s.name} #${p.number}: regression test ${p.test.label}` : `${s.name} #${p.number}: no regression test, opens the PR`}
-                      className={`group relative block h-5 w-5 rounded-[5px] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-electric-lime motion-safe:animate-[fadeIn_0.35s_ease-out_both] ${p.test ? 'bg-electric-lime hover:bg-white' : 'border border-zinc-600 hover:border-zinc-300'}`}
+                      className={`group block h-5 w-5 rounded-[5px] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-electric-lime motion-safe:animate-[fadeIn_0.35s_ease-out_both] ${p.test ? 'bg-electric-lime hover:bg-white' : 'border border-zinc-600 hover:border-zinc-300'}`}
                       style={stagger(i, items.length, 1.1)}
                     >
-                      <Tip>
+                      <Tip align="start">
                         {s.name} #{p.number}
                         <br />
                         {p.test ? p.test.label : 'No regression test'}

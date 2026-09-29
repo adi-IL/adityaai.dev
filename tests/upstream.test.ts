@@ -92,3 +92,22 @@ describe('upstream stats', () => {
     assert.deepEqual(monthStats(items).map((m) => [m.month, m.merged]), [['2026-07', 0], ['2026-08', 0], ['2026-09', 3]]);
   });
 });
+
+describe('upstream tooltips stay inside a narrow viewport', () => {
+  it('pins edge-column tooltips to their edge and caps every width to the viewport', async () => {
+    const { createElement } = await import('react');
+    const { renderToStaticMarkup } = await import('react-dom/server');
+    const { HelmetProvider } = await import('react-helmet-async');
+    const { default: Upstream } = await import('../src/pages/Upstream.tsx');
+    const html = renderToStaticMarkup(createElement(HelmetProvider, null, createElement(Upstream)));
+    const tips = [...html.matchAll(/<span role="tooltip" class="([^"]*)"/g)].map((m) => m[1]);
+    assert.ok(tips.length > 0);
+    for (const c of tips) assert.match(c, /max-w-\[min\(16rem,calc\(100vw-3rem\)\)\]/);
+
+    const monthTips = [...html.matchAll(/data-month="[^"]*"[^>]*>(?:(?!data-month)[\s\S])*?<span role="tooltip" class="([^"]*)"/g)].map((m) => m[1]);
+    assert.equal(monthTips.length, monthStats(mergedPrs).length);
+    assert.match(monthTips[0], /\bleft-0\b/);
+    assert.match(monthTips.at(-1)!, /\bright-0\b/);
+    assert.doesNotMatch(monthTips.at(-1)!, /translate-x/);
+  });
+});
