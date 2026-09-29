@@ -17,6 +17,7 @@ Decision tools for people who design production AI systems.
 - About: https://www.adityaai.dev/about
 - Essays: https://www.adityaai.dev/articles (13 curated; not a high-volume blog)
 - Projects: https://www.adityaai.dev/projects
+- Upstream: https://www.adityaai.dev/upstream (18 merged open-source PRs, generated from the GitHub profile ledger)
 
 ## Lab products
 - FRIDAY - https://friday.adityaai.dev - generative 3D engineering visualization

@@ -153,3 +153,35 @@ h1, h2, h3, h4, h5, h6 {
 .cv-auto {
   contain: layout paint;
 }
+
+/* /upstream charts: bars grow once, the monthly line draws in once.
+   motion-safe: variants skip all of it under prefers-reduced-motion. */
+@keyframes growX {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+
+@keyframes growY {
+  from { transform: scaleY(0); }
+  to { transform: scaleY(1); }
+}
+
+@keyframes drawLine {
+  from { stroke-dashoffset: 1; }
+  to { stroke-dashoffset: 0; }
+}
+
+@utility animate-grow-x {
+  transform-origin: left center;
+  animation: growX 0.6s cubic-bezier(0.32, 0.72, 0, 1) both;
+}
+
+@utility animate-grow-y {
+  transform-origin: center bottom;
+  animation: growY 0.6s cubic-bezier(0.32, 0.72, 0, 1) both;
+}
+
+@utility animate-draw-line {
+  stroke-dasharray: 1;
+  animation: drawLine 0.9s ease-in-out 0.5s both;
+}

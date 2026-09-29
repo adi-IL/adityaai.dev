@@ -16,7 +16,8 @@
     { "source": "/llms.txt", "destination": "/llms.txt" },
     { "source": "/articles/:path*", "destination": "/articles/:path*/index.html" },
     { "source": "/projects/:path*", "destination": "/projects/:path*/index.html" },
-    { "source": "/about", "destination": "/about/index.html" }
+    { "source": "/about", "destination": "/about/index.html" },
+    { "source": "/upstream", "destination": "/upstream/index.html" }
   ],
   "headers": [
     {

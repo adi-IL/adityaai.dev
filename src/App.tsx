@@ -9,6 +9,7 @@ import ArticleDetail from './pages/ArticleDetail';
 import Projects from './pages/Projects';
 import ProjectDetail from './pages/ProjectDetail';
 import About from './pages/About';
+import Upstream from './pages/Upstream';
 import NotFound from './pages/NotFound';
 import ScrollToTop from './components/ScrollToTop';
 import VirtualCoffeePopup from './components/VirtualCoffeePopup';
@@ -106,6 +107,7 @@ function AnimatedRoutes() {
           <Route path="/projects" element={<Projects />} />
           <Route path="/projects/:slug" element={<ProjectDetail />} />
           <Route path="/about" element={<About />} />
+          <Route path="/upstream" element={<Upstream />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </m.div>

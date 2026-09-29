@@ -85,6 +85,12 @@ export default function Projects() {
               </li>
             ))}
           </ul>
+          <Link
+            to="/upstream"
+            className="mt-8 inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-widest text-zinc-400 transition-colors hover:text-electric-lime"
+          >
+            All merged fixes, charted <ArrowUpRight size={14} />
+          </Link>
         </m.div>
       </section>
     </div>

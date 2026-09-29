@@ -19,6 +19,9 @@ const tsProjectsSource = fs.readFileSync(tsProjectsPath, "utf-8");
 const transformedProjects = esbuild.transformSync(tsProjectsSource, { loader: "ts", format: "esm" });
 const projectsDataUrl = "data:text/javascript;base64," + Buffer.from(transformedProjects.code).toString("base64");
 const { projects } = await import(projectsDataUrl);
+const upstreamLedger = JSON.parse(
+  fs.readFileSync(path.resolve(__dirname, "..", "src", "data", "upstream-ledger.json"), "utf-8"),
+);
 
 // ── Read Vite build output ─────────────────────────────────────────────────
 
@@ -226,6 +229,32 @@ ${items}
 </footer>`;
 }
 
+function renderUpstreamBody(items) {
+  const rows = items
+    .map(
+      (p) => `    <li>
+      <p><a href="${escapeHtml(p.url)}">${escapeHtml(p.repo)}#${p.number}</a>: ${escapeHtml(p.title)} (merged ${escapeHtml(p.mergedAt.slice(0, 10))}, +${p.additions} -${p.deletions})${
+        p.test ? ` · <a href="${escapeHtml(p.test.url)}">regression test ${escapeHtml(p.test.label)}</a>` : ""
+      }</p>
+    </li>`
+    )
+    .join("\n");
+  const tested = items.filter((p) => p.test).length;
+  return `<header>
+  ${renderNav()}
+  <h1>Upstream ledger</h1>
+  <p>${items.length} merged pull requests in open-source AI infrastructure. ${tested} of them ship a regression test.</p>
+</header>
+<main>
+  <ul>
+${rows}
+  </ul>
+</main>
+<footer>
+  <p><a href="/">Back to Home</a> · <a href="/projects">Projects</a> · <a href="/articles">Articles</a></p>
+</footer>`;
+}
+
 function renderProjectDetailBody(project) {
   const renderedContent = project.content
     ? renderToStaticMarkup(
@@ -430,6 +459,16 @@ writePage("projects", "Projects | Aditya Gaurav  -  AI Systems & Open Source",
   }, renderProjectsListBody(projects));
 count++;
 
+writePage("upstream", "Upstream | Aditya Gaurav  -  Merged open-source fixes",
+  `${upstreamLedger.items.length} merged pull requests in TensorFlow, gVisor, Grafana and more, with the regression test behind each fix.`,
+  `${SITE_URL}/upstream`, "website", {
+    "@context": "https://schema.org", "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Home", item: `${SITE_URL}/` },
+      { "@type": "ListItem", position: 2, name: "Upstream", item: `${SITE_URL}/upstream` }],
+  }, renderUpstreamBody(upstreamLedger.items));
+count++;
+
 for (const a of articles) {
   const canonical = `${SITE_URL}/articles/${a.slug}`;
   const description =
@@ -481,6 +520,7 @@ const entries = [
   { loc: `${SITE_URL}/about`, cf: "monthly", pr: "0.8", lm: buildDate },
   { loc: `${SITE_URL}/articles`, cf: "weekly", pr: "0.9", lm: newestDate },
   { loc: `${SITE_URL}/projects`, cf: "monthly", pr: "0.9", lm: buildDate },
+  { loc: `${SITE_URL}/upstream`, cf: "weekly", pr: "0.8", lm: buildDate },
 ];
 for (const p of projects) {
   entries.push({ loc: `${SITE_URL}/projects/${p.slug}`, cf: "monthly", pr: "0.8", lm: buildDate });
@@ -546,6 +586,7 @@ Decision tools for people who design production AI systems.
 - About: ${SITE_URL}/about
 - Essays: ${SITE_URL}/articles (${articleCount} curated; not a high-volume blog)
 - Projects: ${SITE_URL}/projects
+- Upstream: ${SITE_URL}/upstream (${upstreamLedger.items.length} merged open-source PRs, generated from the GitHub profile ledger)
 
 ## Lab products
 - FRIDAY - https://friday.adityaai.dev - generative 3D engineering visualization
