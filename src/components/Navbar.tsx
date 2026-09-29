@@ -23,6 +23,7 @@ export default function Navbar() {
     { name: 'Home', path: '/' },
     { name: 'Essays', path: '/articles' },
     { name: 'Projects', path: '/projects' },
+    { name: 'Upstream', path: '/upstream' },
     { name: 'About', path: '/about' },
   ];
 

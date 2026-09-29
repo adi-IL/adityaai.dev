@@ -75,7 +75,7 @@ if (fs.existsSync(metaPath)) {
 
 function renderNav() {
   return `<nav aria-label="Main Navigation">
-  <a href="/">Home</a> | <a href="/about">About</a> | <a href="/articles">Articles</a> | <a href="/projects">Projects</a>
+  <a href="/">Home</a> | <a href="/about">About</a> | <a href="/articles">Articles</a> | <a href="/projects">Projects</a> | <a href="/upstream">Upstream</a>
 </nav>`;
 }
 
