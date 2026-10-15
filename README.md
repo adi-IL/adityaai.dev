@@ -26,9 +26,11 @@ The public site is a Vite + React SPA on Vercel, with serverless functions for n
 | Essays | `/articles` | Curated shelf. UI says Essays. URL stays `/articles`. |
 | Projects | `/projects` | FRIDAY, Sentinel, MidSphere write-ups |
 | About | `/about` | Bio and certifications |
+| Upstream | `/upstream` | Merged open-source PR ledger (`src/pages/Upstream.tsx`, `src/data/upstream-ledger.json`) |
 | Newsletter | `POST /api/subscribe` | Double opt-in via Resend |
 | Virtual coffee | `POST /api/virtual-coffee` | Lead form, two emails |
 | Lab guide | `POST /api/chat` | Gemini chat, site-first |
+| C2H report | `POST /api/c2h-report` | Setup report email to owner (`lib/handlers/c2h-report.ts`) |
 
 Source is public. Copyright stays with Aditya Gaurav. See [LICENSE](./LICENSE). This is not MIT or Apache.
 

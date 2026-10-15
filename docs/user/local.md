@@ -24,6 +24,7 @@ npm run dev
 | `npm run lint` | `tsc --noEmit` |
 | `npm test` | `tsx --test tests/*.test.ts` |
 | `npm run meta` | Write `scripts/articles-meta.json` only |
+| `npm run sync:ledger` | `node scripts/sync-ledger.mjs`, refreshes `src/data/upstream-ledger.json` and runs the upstream guard |
 
 ## Environment
 

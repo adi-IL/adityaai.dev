@@ -57,10 +57,11 @@ Doctor must exit `0` and print `ok` lines for:
 2. `GET /projects` → 200
 3. `GET /articles` → 200
 4. `GET /about` → 200
-5. `GET /essays` → permanent redirect to `/articles` (308 or 301; follow off)
-6. `GET /articles/does-not-exist-verify-adityaai` → 404 (hard, not soft-200)
-7. `GET /llms.txt` → 200 and body contains `adityaai.dev`
-8. `GET /sitemap.xml` → 200 and body contains `www.adityaai.dev`
+5. `GET /upstream` → 200
+6. `GET /essays` → permanent redirect to `/articles` (308 or 301; follow off)
+7. `GET /articles/does-not-exist-verify-adityaai` → 404 (hard, not soft-200)
+8. `GET /llms.txt` → 200 and body contains `adityaai.dev`
+9. `GET /sitemap.xml` → 200 and body contains `www.adityaai.dev`
 
 If doctor fails, stop. Fix the site or the base URL before driving UI.
 

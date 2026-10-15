@@ -1,6 +1,6 @@
 # Architecture
 
-adityaai.dev is the root site of the adityaai lab: twelve essays, a three-project registry, About, newsletter, virtual coffee, and the lab guide chat.
+adityaai.dev is the root site of the adityaai lab: thirteen essays, a three-project registry, About, Upstream, newsletter, virtual coffee, and the lab guide chat.
 
 Sibling products live on their own hosts. This repo is the brand home and the control surface.
 
@@ -34,19 +34,20 @@ Shared logic lives in `lib/` so Express and Vercel stay thin wrappers.
 
 ```
 api/                      Vercel entrypoints (thin)
+  c2h-report.ts
   chat.ts
   feedback.ts
   subscribe.ts
   subscribe/confirm.ts
   virtual-coffee.ts
 lib/                      Shared server logic
-  handlers/               chat, subscribe, feedback, virtual-coffee
+  handlers/               chat, subscribe, feedback, virtual-coffee, c2h-report.ts
   vertex.ts               Gemini / Vertex client
   site-context.ts         Chat system prompt
   email.ts, errors.ts, http.ts, rate-limit.ts
   subscribe-token.ts      Double opt-in HMAC
 src/                      React SPA
-  pages/
+  pages/                  Home.tsx, Articles.tsx, ArticleDetail.tsx, Projects.tsx, ProjectDetail.tsx, About.tsx, Upstream.tsx, NotFound.tsx
   components/
   content/articles/       Essay markdown
   lib/                    articles.ts, projects.ts, gpu/
@@ -75,9 +76,10 @@ docs/
 | `/projects` | Project grid | `src/lib/projects.ts` |
 | `/projects/:slug` | Project detail | Markdown in the registry |
 | `/about` | Bio / certs | Static plus external cert links |
+| `/upstream` | `src/pages/Upstream.tsx` | Open-source merged PR ledger |
 | `*` | NotFound | `noIndex` SEO |
 
-SEO is `react-helmet-async` plus prerendered HTML (title, OG, JSON-LD). Lightweight GPU shader backgrounds (`src/lib/gpu`) load on Home only, with WebGPU negotiation, WebGL2 fallback, and visibility/reduced-motion pausing.
+SEO is `react-helmet-async` plus prerendered HTML (title, OG, JSON-LD). `Home` defers loading `AtmosphericBackground` and `NetworkBackground` (`three` and `vanta`) via `requestIdleCallback`, while `src/lib/gpu` holds the standalone WebGPU/WebGL2 shader runtime tested in `tests/gpu.test.ts`.
 
 ## Backend
 

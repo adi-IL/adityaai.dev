@@ -46,7 +46,7 @@ Request:
 | --- | --- |
 | 400 | Invalid messages |
 | 405 | Not POST |
-| 429 | 20 / hour / IP |
+| 429 | 3 / 10s / IP (burst) and 20 / hour / IP |
 | 500 / 502 | Upstream failure, generic message |
 
 ## `POST /api/subscribe`
@@ -108,9 +108,9 @@ Confirm attempts: 10 / hour / (IP + email). Rate-limited confirms redirect to `i
 
 | Field | Requirement | Clamp |
 | --- | --- | --- |
-| `name` | Required | 100 chars |
-| `email` | Required | 150 chars |
-| `role` | Optional | 100 chars |
+| `name` | Required | 120 chars |
+| `email` | Required | 200 chars |
+| `role` | Optional | 200 chars |
 | `message` | Optional | 2,000 chars |
 | `website` | Optional | Honeypot |
 

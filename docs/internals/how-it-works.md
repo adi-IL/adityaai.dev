@@ -6,7 +6,7 @@
 2. Vercel rewrite serves prerendered `dist/articles/<slug>/index.html` when that file exists.
 3. Hashed JS/CSS load. React hydrates the SPA.
 4. Client router handles further navigation.
-5. On Home only, lightweight procedural GPU shader backgrounds lazy-load via `src/lib/gpu`.
+5. `Home` defers loading `AtmosphericBackground` and `NetworkBackground` (`three` and `vanta`) via `requestIdleCallback`.
 
 Unknown paths fall through SPA `index.html` to React `NotFound` with `noindex`.
 
@@ -75,7 +75,7 @@ POST /api/subscribe { email }
 
 No welcome and no list write until confirm.
 
-Rate-limited subscribe calls still return the generic 200 body so the endpoint does not leak whether an address is new.
+Per-email subscribe rate limits (`subscribe:email`, 2 per 24 hours) return the generic `200` body so the endpoint does not leak whether an address is new, while per-IP limits (`subscribe:ip`, 5 per hour) return `429`.
 
 ## Virtual coffee
 
@@ -121,20 +121,22 @@ MidSphere source on GitHub is [adi-IL/MidSphere](https://github.com/adi-IL/MidSp
 | `vite build` | `dist/assets/*`, `dist/index.html` |
 | `prerender.mjs` | `dist/<route>/index.html`, `dist/sitemap.xml`, `public/llms.txt` and `dist/llms.txt` |
 
-Prerender injects title, description, canonical, OG, and JSON-LD per essay and project. The body still hydrates in React.
+`scripts/prerender.mjs` injects title, description, canonical, OG, and JSON-LD per route, and injects semantic HTML inside `<noscript><div id="prerendered-content">`. `src/main.tsx` removes `#prerendered-content` before mounting into `#root`.
 
 ## Rate limits
 
 From `lib/rate-limit.ts` and inline checks in `lib/handlers/subscribe.ts`. In-memory. Per Node process locally, per serverless isolate on Vercel. Not Redis.
 
-Local Express also wraps `/api/` with `express-rate-limit` at 30 / minute. That middleware is not in the Vercel functions. `RATE_LIMITS.api` is defined as 30 / minute but no handler reads it.
+Local Express also wraps `/api/` with `express-rate-limit` at 30 / minute. That middleware is not in the Vercel functions.
 
 | Namespace | Window | Max |
 | --- | --- | --- |
 | Chat | 1 hour | 20 / IP |
+| `chat-burst` | 10 seconds | 3 / IP |
 | Subscribe | 1 hour | 5 / IP |
 | Subscribe per email | 24 hours | 2 / address |
 | Subscribe confirm | 1 hour | 10 / (IP + email) |
 | Subscribe welcome + notify | 24 hours | 1 / email |
 | Virtual coffee | 1 hour | 5 / IP |
 | Feedback | 1 hour | 15 / IP |
+| `c2h-report` | 1 hour | 15 / IP |

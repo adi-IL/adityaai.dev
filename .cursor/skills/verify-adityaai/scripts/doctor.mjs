@@ -30,7 +30,7 @@ async function redirOf(url) {
 
 say(`doctor base=${base} verify_dir=${verifyDir}`);
 
-for (const path of ['/', '/projects', '/articles', '/about']) {
+for (const path of ['/', '/projects', '/articles', '/about', '/upstream']) {
   const c = await codeOf(`${base}${path}`);
   if (c !== 200) fail(`${path} expected 200 got ${c}`);
   say(`ok ${path} ${c}`);
