@@ -50,6 +50,7 @@ if (viteHeadMatch) {
 }
 
 const SITE_URL = "https://www.adityaai.dev";
+const SITE = SITE_URL;
 const OG_IMAGE = "https://res.cloudinary.com/df95kzdir/image/upload/v1768829921/Frame_11_2_i0mo2o.png";
 
 function escapeHtml(value) {
@@ -81,7 +82,7 @@ function renderNav() {
 
 function renderHomeBody(articlesList, projectsList) {
   const featured = articlesList.filter((a) => a.featured);
-  const featuredList = featured.length > 0 ? featured : articlesList.slice(0, 5);
+  const featuredList = featured.length > 0 ? featured : articlesList.slice(0, 4);
 
   const featuredItems = featuredList
     .map(
@@ -567,6 +568,13 @@ const essayLinesForLlms = articles
   })
   .join("\n");
 
+const productLines = projects
+  .map(
+    (p) =>
+      `- [${p.name}](${p.liveUrl}): ${p.tagline} — ${p.excerpt} Deep dive: ${SITE}/projects/${p.slug} · Source: ${p.codeUrl}`,
+  )
+  .join("\n");
+
 const llms = `# adityaai.dev
 
 Personal lab site for Aditya Gaurav - AI Engineer & Systems Architect.
@@ -589,9 +597,7 @@ Decision tools for people who design production AI systems.
 - Upstream: ${SITE_URL}/upstream (${upstreamLedger.items.length} merged open-source PRs, generated from the GitHub profile ledger)
 
 ## Lab products
-- FRIDAY - https://friday.adityaai.dev - generative 3D engineering visualization
-- Sentinel - https://sentinel.adityaai.dev - multi-agent competitive intelligence
-- MidSphere - https://midsphere.vercel.app - autonomous context circuit-breaker for data platforms
+${productLines}
 
 ## Critical impacts in open source
 Static curated receipts on /projects (not a live GitHub feed):

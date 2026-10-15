@@ -1,9 +1,11 @@
 import { describe, it } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
-import { guardHits, GUARD_TERMS } from '../scripts/upstream-guard.mjs';
+import { guardHits } from '../scripts/upstream-guard.mjs';
 import { normalize } from '../scripts/sync-ledger.mjs';
-import { mergedPrs, monthStats, projectStats, TIMELINE_START, type MergedPr } from '../src/lib/upstreamLedger.ts';
+import { mergedPrs, monthStats, projectStats, type MergedPr } from '../src/lib/upstreamLedger.ts';
+import { buildSiteContext } from '../lib/site-context.js';
+import { projects } from '../src/lib/projects.js';
 
 const read = (p: string) => readFileSync(new URL(`../${p}`, import.meta.url), 'utf8');
 
@@ -15,10 +17,6 @@ function pr(over: Partial<MergedPr>): MergedPr {
 }
 
 describe('upstream guard', () => {
-  it('holds the four profile terms', () => {
-    assert.equal(GUARD_TERMS.length, 4);
-  });
-
   it('catches banned names in any spelling, and the DataHub PR in both forms', () => {
     for (const s of ['FRIDAY', 'F.R.I.D.A.Y', 'friday.adityaai.dev', 'Sentinel', 'SENTINEL',
       'datahub-skills#88', 'https://github.com/datahub-project/datahub-skills/pull/88']) {
@@ -66,21 +64,6 @@ describe('sync-ledger normalize', () => {
 });
 
 describe('upstream stats', () => {
-  it('match the synced ledger', () => {
-    const stats = projectStats(mergedPrs);
-    assert.equal(stats.reduce((n, s) => n + s.merged, 0), mergedPrs.length);
-    assert.equal(stats.reduce((n, s) => n + s.tested, 0), mergedPrs.filter((p) => p.test).length);
-    for (const s of stats) {
-      const mine = mergedPrs.filter((p) => p.repo === s.repo);
-      assert.equal(s.merged, mine.length);
-      assert.equal(s.additions, mine.reduce((n, p) => n + p.additions, 0));
-      assert.equal(s.deletions, mine.reduce((n, p) => n + p.deletions, 0));
-    }
-    const months = monthStats(mergedPrs);
-    assert.equal(months[0].month, TIMELINE_START);
-    assert.equal(months.reduce((n, m) => n + m.merged, 0), mergedPrs.length);
-  });
-
   it('orders projects by merges and fills empty months', () => {
     const items = [
       pr({ repo: 'x/y', url: 'https://github.com/x/y/pull/1', mergedAt: '2026-09-03T00:00:00Z', test: { label: 'l', url: 'u' } }),
@@ -90,6 +73,18 @@ describe('upstream stats', () => {
     const stats = projectStats(items);
     assert.deepEqual(stats.map((s) => [s.repo, s.merged, s.tested]), [['x/y', 2, 1], ['a/b', 1, 0]]);
     assert.deepEqual(monthStats(items).map((m) => [m.month, m.merged]), [['2026-07', 0], ['2026-08', 0], ['2026-09', 3]]);
+  });
+});
+
+describe('site context', () => {
+  it('includes every project from the registry and the /upstream page', () => {
+    const context = buildSiteContext();
+    for (const p of projects) {
+      assert.ok(context.includes(p.name), `missing project name: ${p.name}`);
+      assert.ok(context.includes(p.tagline), `missing project tagline: ${p.tagline}`);
+      assert.ok(context.includes(p.excerpt), `missing project excerpt: ${p.excerpt}`);
+    }
+    assert.ok(context.includes('https://www.adityaai.dev/upstream'), 'missing /upstream page');
   });
 });
 

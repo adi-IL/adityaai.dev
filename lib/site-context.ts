@@ -1,4 +1,5 @@
 import { createRequire } from 'node:module';
+import { projects } from '../src/lib/projects.js';
 
 const SITE = 'https://www.adityaai.dev';
 
@@ -17,36 +18,6 @@ const require = createRequire(import.meta.url);
 // Chat inventory is derived from scripts/articles-meta.json (all shelf slugs,
 // including shared-caches-beat-sandbox-walls after meta regen) — do not hardcode.
 const articlesMeta = require('../scripts/articles-meta.json') as EssayMeta[];
-
-const PROJECTS = [
-  {
-    name: 'FRIDAY',
-    slug: 'friday',
-    tagline: 'Immersive Engineering Visual Intelligence',
-    excerpt:
-      'Generative 3D engineering visualization engine - voice, sketches, or prompts into interactive mechanical assemblies. Official Winner in the Google DeepMind × Kaggle Gemini 3 Pro Hackathon (Developer Tools).',
-    liveUrl: 'https://friday.adityaai.dev',
-    codeUrl: 'https://github.com/adi-IL/friday-visual-engine',
-  },
-  {
-    name: 'Sentinel',
-    slug: 'sentinel',
-    tagline: 'Autonomous Competitive Intelligence',
-    excerpt:
-      'Multi-agent chain that hunts the web, scores SWOT dimensions, and drafts C-level briefs.',
-    liveUrl: 'https://sentinel.adityaai.dev',
-    codeUrl: 'https://github.com/adi-IL/sentinel',
-  },
-  {
-    name: 'MidSphere',
-    slug: 'midsphere',
-    tagline: 'Autonomous Context Circuit-Breaker for Data Platforms',
-    excerpt:
-      'Autonomous context circuit-breaker engine for DataHub and enterprise catalogs - audits schema drift and PII, scores selective blast radius, applies advisory quarantine.',
-    liveUrl: 'https://midsphere.vercel.app',
-    codeUrl: 'https://github.com/adi-IL/MidSphere',
-  },
-];
 
 /**
  * Compact site knowledge injected into every chat turn.
@@ -67,14 +38,16 @@ export function buildSiteContext(): string {
     })
     .join('\n');
 
-  const projectLines = PROJECTS.map(
-    (p) =>
-      `- ${p.name} (${p.tagline})
+  const projectLines = projects
+    .map(
+      (p) =>
+        `- ${p.name} (${p.tagline})
   page: ${SITE}/projects/${p.slug}
   live: ${p.liveUrl}
   source: ${p.codeUrl}
   about: ${p.excerpt}`,
-  ).join('\n');
+    )
+    .join('\n');
 
   return `SITE: adityaai.dev (canonical ${SITE})
 PERSON: Aditya Gaurav - AI Engineer & Systems Architect (Sonipat, Haryana, India).
@@ -87,7 +60,7 @@ ${essayLines}
 PROJECTS:
 ${projectLines}
 
-OTHER PAGES: ${SITE}/ about · ${SITE}/articles · ${SITE}/projects
+OTHER PAGES: ${SITE}/about · ${SITE}/articles · ${SITE}/projects · ${SITE}/upstream
 `;
 }
 

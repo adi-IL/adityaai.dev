@@ -431,7 +431,7 @@ export default function Home() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 items-start">
             <div className="flex flex-col gap-6 md:gap-8">
-              {(featuredArticles.length ? featuredArticles : articles).slice(0, 4).map((article, i) =>
+              {(featuredArticles.length ? featuredArticles : articles.slice(0, 4)).map((article, i) =>
                 i % 2 === 0 ? (
                   <ArticleCard key={article.slug} article={article} index={i} />
                 ) : null
@@ -439,7 +439,7 @@ export default function Home() {
             </div>
 
             <div className="flex flex-col gap-6 md:gap-8 md:mt-16">
-              {(featuredArticles.length ? featuredArticles : articles).slice(0, 4).map((article, i) =>
+              {(featuredArticles.length ? featuredArticles : articles.slice(0, 4)).map((article, i) =>
                 i % 2 !== 0 ? (
                   <ArticleCard key={article.slug} article={article} index={i} />
                 ) : null
