@@ -15,8 +15,25 @@ import {
 import { buildSystemInstruction } from '../site-context.js';
 import { Type } from '@google/genai';
 
-const MAX_MESSAGES = 12;
+const MAX_MESSAGES = 11;
 const MAX_CONTENT_CHARS = 2000;
+
+const NAVIGATE_TO_DECLARATION = {
+  name: 'navigateTo',
+  description:
+    'Navigates the user to a different page on the site. Use this when the user asks to see a project, essay, or the about page.',
+  parameters: {
+    type: Type.OBJECT,
+    properties: {
+      path: {
+        type: Type.STRING,
+        description:
+          'The relative path to navigate to (e.g. /projects, /about, /articles/memory-stacks-for-agents)',
+      },
+    },
+    required: ['path'],
+  },
+};
 
 type ChatRole = 'user' | 'assistant';
 type ChatMessage = { role: ChatRole; content: string };
@@ -35,6 +52,7 @@ export function isAllowedNavigationPath(path: unknown): boolean {
     '/projects/friday': true,
     '/projects/sentinel': true,
     '/projects/midsphere': true,
+    '/upstream': true,
   };
   if (ALLOWED_EXACT[trimmed]) return true;
   return /^\/articles\/[a-z0-9_-]+$/.test(trimmed);
@@ -54,17 +72,16 @@ export function isPromptInjectionAttempt(text: string): boolean {
 function normalizeMessages(raw: unknown): ChatMessage[] | null {
   if (!Array.isArray(raw) || raw.length === 0) return null;
   const out: ChatMessage[] = [];
-  for (const item of raw.slice(-MAX_MESSAGES)) {
-    if (!item || typeof item !== 'object') continue;
+  for (const item of raw) {
+    if (!item || typeof item !== 'object') return null;
     const role = (item as { role?: unknown }).role;
     const content = (item as { content?: unknown }).content;
-    if (role !== 'user' && role !== 'assistant') continue;
-    if (typeof content !== 'string') continue;
+    if (role !== 'user' && role !== 'assistant') return null;
+    if (typeof content !== 'string') return null;
     const trimmed = content.trim().slice(0, MAX_CONTENT_CHARS);
-    if (!trimmed) continue;
+    if (!trimmed) return null;
     out.push({ role, content: trimmed });
   }
-  if (out.length === 0) return null;
   // Enforce strict alternating turns: user -> assistant -> user -> ...
   for (let i = 0; i < out.length; i++) {
     const expectedRole: ChatRole = i % 2 === 0 ? 'user' : 'assistant';
@@ -72,7 +89,7 @@ function normalizeMessages(raw: unknown): ChatMessage[] | null {
   }
   // Conversation must end with a user turn (odd number of turns)
   if (out.length % 2 === 0) return null;
-  return out;
+  return out.length > MAX_MESSAGES ? out.slice(-MAX_MESSAGES) : out;
 }
 
 function toGeminiContents(messages: ChatMessage[]) {
@@ -179,24 +196,7 @@ export async function handleChat(req: ApiRequest, res: ApiResponse): Promise<voi
           maxOutputTokens: 1024,
           tools: [
             ...(useSearch ? [{ googleSearch: {} }] : []),
-            {
-              functionDeclarations: [
-                {
-                  name: 'navigateTo',
-                  description: 'Navigates the user to a different page on the site. Use this when the user asks to see a project, essay, or the about page.',
-                  parameters: {
-                    type: Type.OBJECT,
-                    properties: {
-                      path: {
-                        type: Type.STRING,
-                        description: 'The relative path to navigate to (e.g. /projects, /about, /articles/memory-stacks-for-agents)',
-                      },
-                    } as any,
-                    required: ['path'],
-                  } as any,
-                } as any,
-              ],
-            } as any,
+            { functionDeclarations: [NAVIGATE_TO_DECLARATION] },
           ],
         },
       });
@@ -211,26 +211,7 @@ export async function handleChat(req: ApiRequest, res: ApiResponse): Promise<voi
             systemInstruction: buildSystemInstruction(searchEnabled),
             temperature: 0.4,
             maxOutputTokens: 1024,
-            tools: [
-              {
-                functionDeclarations: [
-                  {
-                    name: 'navigateTo',
-                    description: 'Navigates the user to a different page on the site. Use this when the user asks to see a project, essay, or the about page.',
-                    parameters: {
-                      type: Type.OBJECT,
-                      properties: {
-                        path: {
-                          type: Type.STRING,
-                          description: 'The relative path to navigate to (e.g. /projects, /about, /articles/memory-stacks-for-agents)',
-                        },
-                      } as any,
-                      required: ['path'],
-                    } as any,
-                  } as any,
-                ],
-              },
-            ],
+            tools: [{ functionDeclarations: [NAVIGATE_TO_DECLARATION] }],
           },
         });
       } else {

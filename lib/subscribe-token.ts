@@ -43,7 +43,7 @@ export function createConfirmToken(email: string, nowSec = Math.floor(Date.now()
 export function verifyConfirmToken(
   token: string,
   nowSec = Math.floor(Date.now() / 1000),
-): { ok: true; email: string } | { ok: false; reason: string } {
+): { ok: true; email: string } | { ok: false; reason: 'invalid' | 'expired' } {
   if (!token || token.length > 600) {
     return { ok: false, reason: 'invalid' };
   }

@@ -80,7 +80,7 @@ export async function handleFeedback(req: ApiRequest, res: ApiResponse): Promise
 
   try {
     const resend = getResend();
-    await resend.emails.send({
+    const sendResult = await resend.emails.send({
       from: 'adityaai.dev <aiexpert@adityaai.dev>',
       to: notifyTo,
       ...(safeEmail && { replyTo: safeEmail }),
@@ -94,6 +94,12 @@ export async function handleFeedback(req: ApiRequest, res: ApiResponse): Promise
         email: safeEmail,
       }),
     });
+
+    if (sendResult.error) {
+      logError('feedback:send', sendResult.error);
+      res.status(502).json({ error: 'Unable to send feedback right now. Please try again.' });
+      return;
+    }
 
     res.status(200).json({ success: true });
   } catch (error: unknown) {

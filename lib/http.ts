@@ -22,22 +22,25 @@ export type ApiResponse = {
   statusCode?: number;
 };
 
-export function getClientIp(req: ApiRequest): string {
-  const vff = req.headers['x-vercel-forwarded-for'];
-  const vercelIp = Array.isArray(vff) ? vff[0] : vff;
-  if (typeof vercelIp === 'string' && vercelIp.trim()) return vercelIp.split(',')[0].trim();
+function firstForwardedIp(header: string | string[] | undefined): string | undefined {
+  const raw = Array.isArray(header) ? header[0] : header;
+  if (typeof raw !== 'string') return undefined;
+  return raw
+    .split(',')
+    .map((s) => s.trim())
+    .find(Boolean);
+}
 
-  const rawRealIp = req.headers['x-real-ip'];
-  const realIp = Array.isArray(rawRealIp) ? rawRealIp[0] : rawRealIp;
-  if (typeof realIp === 'string' && realIp.trim()) return realIp.split(',')[0].trim();
-  const xf = req.headers['x-forwarded-for'];
-  if (typeof xf === 'string' && xf.length > 0) {
-    const parts = xf.split(',').map((p) => p.trim()).filter(Boolean);
-    if (parts.length > 0) return parts[0];
-  }
-  if (Array.isArray(xf) && xf[0]) {
-    return xf[0].split(',')[0]?.trim() || 'unknown';
-  }
+export function getClientIp(req: ApiRequest): string {
+  const vercelIp = firstForwardedIp(req.headers['x-vercel-forwarded-for']);
+  if (vercelIp) return vercelIp;
+
+  const realIp = firstForwardedIp(req.headers['x-real-ip']);
+  if (realIp) return realIp;
+
+  const forwardedIp = firstForwardedIp(req.headers['x-forwarded-for']);
+  if (forwardedIp) return forwardedIp;
+
   if (typeof req.ip === 'string' && req.ip) return req.ip;
   return req.socket?.remoteAddress || 'unknown';
 }
