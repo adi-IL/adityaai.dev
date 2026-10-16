@@ -2,6 +2,86 @@
   "source": "adi-IL/adi-IL data/ledger.json",
   "items": [
     {
+      "url": "https://github.com/tensorflow/tensorflow/pull/126450",
+      "repo": "tensorflow/tensorflow",
+      "number": 126450,
+      "title": "[LinSpace] Register half and bfloat16 OpKernels for LinSpace",
+      "mergedAt": "2026-10-15T21:35:00Z",
+      "additions": 190,
+      "deletions": 2,
+      "test": null
+    },
+    {
+      "url": "https://github.com/tensorflow/tensorflow/pull/128149",
+      "repo": "tensorflow/tensorflow",
+      "number": 128149,
+      "title": "Validate constant num_bits in XLA QuantizeAndDequantizeV3",
+      "mergedAt": "2026-10-15T09:44:44Z",
+      "additions": 59,
+      "deletions": 0,
+      "test": null
+    },
+    {
+      "url": "https://github.com/grafana/grafana/pull/133648",
+      "repo": "grafana/grafana",
+      "number": 133648,
+      "title": "TraceToLogs: use V2 query when customQuery is omitted",
+      "mergedAt": "2026-10-14T14:23:44Z",
+      "additions": 104,
+      "deletions": 3,
+      "test": null
+    },
+    {
+      "url": "https://github.com/tensorflow/tensorflow/pull/126448",
+      "repo": "tensorflow/tensorflow",
+      "number": 126448,
+      "title": "fix(gpu): prevent integer overflow in RollKernel on large tensors",
+      "mergedAt": "2026-10-13T10:34:34Z",
+      "additions": 80,
+      "deletions": 39,
+      "test": null
+    },
+    {
+      "url": "https://github.com/huggingface/peft/pull/3886",
+      "repo": "huggingface/peft",
+      "number": 3886,
+      "title": "Fix OSF merge applying the delta twice on repeated merge",
+      "mergedAt": "2026-10-12T15:32:41Z",
+      "additions": 22,
+      "deletions": 3,
+      "test": null
+    },
+    {
+      "url": "https://github.com/google/gvisor/pull/15291",
+      "repo": "google/gvisor",
+      "number": 15291,
+      "title": "tcp: update TS.Recent from a zero-window probe",
+      "mergedAt": "2026-10-08T23:35:50Z",
+      "additions": 48,
+      "deletions": 0,
+      "test": null
+    },
+    {
+      "url": "https://github.com/google/gvisor/pull/15301",
+      "repo": "google/gvisor",
+      "number": 15301,
+      "title": "netstack: remove only the first matching route on RTM_DELROUTE",
+      "mergedAt": "2026-10-06T23:09:17Z",
+      "additions": 183,
+      "deletions": 2,
+      "test": null
+    },
+    {
+      "url": "https://github.com/tensorflow/tensorflow/pull/125946",
+      "repo": "tensorflow/tensorflow",
+      "number": 125946,
+      "title": "fix: validate filter and out_backprop dimensions in Conv2DBackpropInput to prevent crash on invalid rank",
+      "mergedAt": "2026-09-29T14:14:40Z",
+      "additions": 48,
+      "deletions": 2,
+      "test": null
+    },
+    {
       "url": "https://github.com/google/gvisor/pull/14505",
       "repo": "google/gvisor",
       "number": 14505,
