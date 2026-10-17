@@ -12,6 +12,9 @@ const label = 'font-mono text-[10px] uppercase tracking-[0.22em]';
 export default function Projects() {
   const upstreamReposCount = projectStats(mergedPrs).length;
   const testedUpstreamCount = mergedPrs.filter((p) => p.test).length;
+  const liveProjectsCount = projects.filter((p) => p.status === 'Live').length;
+  const categories = [...new Set(projects.map((p) => p.category))];
+  const awardedProjectsCount = projects.filter((p) => p.award).length;
 
   return (
     <div className="min-h-screen pt-32 pb-24">
@@ -67,26 +70,26 @@ export default function Projects() {
               <dd className="mt-2 font-sans text-4xl font-semibold tracking-tight text-zinc-50 md:text-5xl">
                 {projects.length}
               </dd>
-              <p className="mt-1.5 font-mono text-[11px] text-zinc-400">
-                100% live in production
+              <p className="mt-1.5 font-mono text-[11px] tabular-nums text-zinc-400">
+                {liveProjectsCount} of {projects.length} live in production
               </p>
             </div>
             <div className="bg-[#0a0a0a] p-5 md:p-6">
               <dt className={`${label} text-zinc-400`}>Form factors</dt>
               <dd className="mt-2 font-sans text-4xl font-semibold tracking-tight text-zinc-50 md:text-5xl">
-                3
+                {categories.length}
               </dd>
               <p className="mt-1.5 font-mono text-[11px] text-zinc-400">
-                Product · Platform · CLI
+                {categories.join(' · ')}
               </p>
             </div>
             <div className="bg-[#0a0a0a] p-5 md:p-6">
               <dt className={`${label} text-zinc-400`}>Global recognition</dt>
               <dd className="mt-2 font-sans text-3xl font-semibold tracking-tight text-amber-300 md:text-4xl">
-                Winner
+                {awardedProjectsCount > 0 ? 'Winner' : 'Shipped'}
               </dd>
               <p className="mt-1.5 font-mono text-[11px] text-zinc-400">
-                Google DeepMind × Kaggle
+                {projects.find((p) => p.award)?.award?.label ?? 'Production AI systems'}
               </p>
             </div>
             <div className="bg-[#0a0a0a] p-5 md:p-6">

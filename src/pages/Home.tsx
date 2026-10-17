@@ -160,7 +160,11 @@ export default function Home() {
             {/* 4-Tile Lab Telemetry Bar */}
             <dl className="grid grid-cols-2 gap-px overflow-hidden rounded-2xl border border-zinc-800/80 bg-zinc-800/60 lg:grid-cols-4">
               <div className="bg-[#0a0a0a]">
-                <Link to="/articles" className="group block h-full p-5 md:p-6 transition-colors hover:bg-zinc-900/50">
+                <Link
+                  to="/articles"
+                  aria-label={`Decision tools: ${articles.length} curated systems essays`}
+                  className="group block h-full p-5 md:p-6 transition-colors hover:bg-zinc-900/50"
+                >
                   <dt className="font-mono text-[10px] uppercase tracking-[0.22em] text-zinc-400 flex items-center justify-between">
                     <span>Decision tools</span>
                     <ArrowUpRight size={12} className="text-zinc-600 group-hover:text-electric-lime transition-colors" />
@@ -174,7 +178,11 @@ export default function Home() {
                 </Link>
               </div>
               <div className="bg-[#0a0a0a]">
-                <Link to="/projects" className="group block h-full p-5 md:p-6 transition-colors hover:bg-zinc-900/50">
+                <Link
+                  to="/projects"
+                  aria-label={`Production lab: ${projects.length} shipped systems (${projects.map((p) => p.name).join(', ')})`}
+                  className="group block h-full p-5 md:p-6 transition-colors hover:bg-zinc-900/50"
+                >
                   <dt className="font-mono text-[10px] uppercase tracking-[0.22em] text-zinc-400 flex items-center justify-between">
                     <span>Production lab</span>
                     <ArrowUpRight size={12} className="text-zinc-600 group-hover:text-electric-lime transition-colors" />
@@ -183,12 +191,16 @@ export default function Home() {
                     {projects.length}
                   </dd>
                   <p className="mt-1.5 font-mono text-[11px] text-zinc-400">
-                    FRIDAY · Sentinel · MidSphere
+                    {projects.map((p) => p.name).join(' · ')}
                   </p>
                 </Link>
               </div>
               <div className="bg-[#0a0a0a]">
-                <Link to="/upstream" className="group block h-full p-5 md:p-6 transition-colors hover:bg-zinc-900/50">
+                <Link
+                  to="/upstream"
+                  aria-label={`Upstream ledger: ${mergedPrs.length} merged open-source fixes`}
+                  className="group block h-full p-5 md:p-6 transition-colors hover:bg-zinc-900/50"
+                >
                   <dt className="font-mono text-[10px] uppercase tracking-[0.22em] text-zinc-400 flex items-center justify-between">
                     <span>Upstream ledger</span>
                     <ArrowUpRight size={12} className="text-zinc-600 group-hover:text-electric-lime transition-colors" />
@@ -202,7 +214,11 @@ export default function Home() {
                 </Link>
               </div>
               <div className="bg-[#0a0a0a]">
-                <Link to="/about" className="group block h-full p-5 md:p-6 transition-colors hover:bg-zinc-900/50">
+                <Link
+                  to="/about"
+                  aria-label="Global recognition: Winner, DeepMind × Kaggle Hackathon"
+                  className="group block h-full p-5 md:p-6 transition-colors hover:bg-zinc-900/50"
+                >
                   <dt className="font-mono text-[10px] uppercase tracking-[0.22em] text-zinc-400 flex items-center justify-between">
                     <span>Global recognition</span>
                     <ArrowUpRight size={12} className="text-zinc-600 group-hover:text-electric-lime transition-colors" />
