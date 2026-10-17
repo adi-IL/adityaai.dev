@@ -41,10 +41,14 @@ export const articles: ArticleMeta[] = (articlesMeta as ArticleMeta[]).map((a) =
 
 export const featuredArticles = articles.filter((a) => a.featured);
 
-const contentLoaders = import.meta.glob('/src/content/articles/*.md', {
-  query: '?raw',
-  import: 'default',
-}) as Record<string, () => Promise<string>>;
+const contentLoaders = (
+  typeof import.meta.glob === 'function'
+    ? import.meta.glob('/src/content/articles/*.md', {
+        query: '?raw',
+        import: 'default',
+      })
+    : {}
+) as Record<string, () => Promise<string>>;
 
 function contentPathForSlug(slug: string): string {
   return `/src/content/articles/${slug}.md`;

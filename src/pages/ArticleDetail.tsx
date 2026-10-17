@@ -1,7 +1,7 @@
 import { useParams, Link } from 'react-router-dom';
 import { useEffect, useMemo, useState, memo } from 'react';
 import { m, useScroll } from 'motion/react';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, Check, Share2 } from 'lucide-react';
 import Markdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { getArticleMeta, loadArticle, type Article } from '../lib/articles';
@@ -10,6 +10,8 @@ import NewsletterPrompt from '../components/NewsletterPrompt';
 import RelatedArticles from '../components/RelatedArticles';
 import FixedBackButton from '../components/FixedBackButton';
 import ArticleFeedback from '../components/ArticleFeedback';
+
+const label = 'font-mono text-[10px] uppercase tracking-[0.22em]';
 
 /**
  * Isolated markdown body so it stays perfectly stable across any re-render
@@ -24,18 +26,18 @@ const ArticleMarkdown = memo(function ArticleMarkdown({ content }: { content: st
       remarkPlugins={[remarkGfm]}
       components={{
         table: ({ node, ...props }) => (
-          <div className="overflow-x-auto w-full my-8 rounded-lg border border-zinc-800/50">
-            <table className="w-full text-left border-collapse text-sm whitespace-nowrap" {...props} />
+          <div className="my-8 w-full overflow-x-auto rounded-2xl border border-zinc-800/80 bg-[#0a0a0a]">
+            <table className="w-full border-collapse text-left text-sm whitespace-nowrap" {...props} />
           </div>
         ),
-        thead: ({ node, ...props }) => <thead className="bg-zinc-900/50" {...props} />,
+        thead: ({ node, ...props }) => <thead className="border-b border-zinc-800 bg-zinc-900/60 font-mono text-xs uppercase tracking-wider" {...props} />,
         th: ({ node, ...props }) => (
-          <th className="border-b border-zinc-800/50 py-3 px-4 text-zinc-300 font-semibold" {...props} />
+          <th className="border-b border-zinc-800/70 px-4 py-3 font-semibold text-zinc-200" {...props} />
         ),
         td: ({ node, ...props }) => (
-          <td className="border-b border-zinc-800/50 py-3 px-4 text-zinc-400" {...props} />
+          <td className="border-b border-zinc-900 px-4 py-3 text-zinc-300 tabular-nums" {...props} />
         ),
-        tr: ({ node, ...props }) => <tr className="last:border-0" {...props} />,
+        tr: ({ node, ...props }) => <tr className="last:border-0 hover:bg-zinc-900/30" {...props} />,
       }}
     >
       {content}
@@ -89,11 +91,20 @@ export default function ArticleDetail() {
   if (!meta) {
     return (
       <div className="min-h-screen pt-40 pb-16 flex flex-col items-center justify-center text-center px-6">
-        <h1 className="font-display font-semibold text-4xl text-zinc-50 mb-4">Essay Not Found</h1>
-        <p className="text-zinc-400 mb-8">This essay isn't on the shelf - the library was restarted with a smaller curated set.</p>
-        <Link to="/articles" className="text-electric-lime hover:underline">
-          Back to Essays
-        </Link>
+        <div className="max-w-lg rounded-3xl border border-zinc-800/70 bg-[#0a0a0a] p-10 md:p-12">
+          <p className={`${label} mb-3 text-electric-lime`}>404 · Shelf lookup</p>
+          <h1 className="font-display font-semibold text-3xl md:text-4xl text-zinc-50 mb-4">Essay Not Found</h1>
+          <p className="text-zinc-400 mb-8 text-sm md:text-base leading-relaxed">
+            This essay isn't on the shelf - the library was restarted with a smaller curated set.
+          </p>
+          <Link
+            to="/articles"
+            className="inline-flex items-center gap-2 rounded-full border border-electric-lime bg-electric-lime/10 px-5 py-2.5 font-mono text-xs uppercase tracking-widest text-electric-lime transition-colors hover:bg-electric-lime hover:text-zinc-950"
+          >
+            <ArrowLeft size={14} />
+            Back to Essays
+          </Link>
+        </div>
       </div>
     );
   }
@@ -118,9 +129,9 @@ export default function ArticleDetail() {
   };
 
   return (
-    <div className="min-h-screen pt-32 pb-16">
+    <div className="min-h-screen pt-32 pb-24">
       <m.div
-        className="fixed top-0 left-0 right-0 h-1 bg-electric-lime transform-gpu z-50 origin-left"
+        className="fixed top-0 left-0 right-0 h-1 bg-electric-lime transform-gpu z-50 origin-left shadow-[0_0_12px_rgba(202,255,74,0.8)]"
         style={{ scaleX: scrollYProgress }}
       />
       <SEO
@@ -147,34 +158,84 @@ export default function ArticleDetail() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: [0.32, 0.72, 0, 1] }}
         >
-          <Link
-            to="/articles"
-            className="inline-flex items-center gap-2 py-2 text-zinc-600 hover:text-zinc-400 transition-colors mb-12 font-mono text-xs uppercase tracking-widest"
-          >
-            <ArrowLeft size={14} />
-            Back
-          </Link>
+          <div className="mb-10 flex items-center justify-between gap-4">
+            <Link
+              to="/articles"
+              className="inline-flex items-center gap-2 rounded-full border border-zinc-800 bg-[#0a0a0a] px-4 py-1.5 text-zinc-400 hover:border-zinc-600 hover:text-zinc-100 transition-colors font-mono text-[10px] uppercase tracking-widest"
+            >
+              <ArrowLeft size={13} />
+              Back to shelf
+            </Link>
 
-          <header className="mb-16">
-            <div className="flex items-center gap-3 font-mono text-sm uppercase tracking-wider mb-6 flex-wrap">
-              <span className="text-electric-lime">{meta.form}</span>
+            <button
+              type="button"
+              onClick={handleShare}
+              className="inline-flex items-center gap-1.5 rounded-full border border-zinc-800 bg-[#0a0a0a] px-4 py-1.5 font-mono text-[10px] uppercase tracking-widest text-zinc-400 transition-colors hover:border-electric-lime hover:text-electric-lime"
+            >
+              {isShared ? <Check size={12} className="text-electric-lime" /> : <Share2 size={12} />}
+              {isShared ? 'Link Copied' : 'Share'}
+            </button>
+          </div>
+
+          <header className="mb-14 border-b border-zinc-800/60 pb-10">
+            <div className="mb-5 flex flex-wrap items-center gap-2.5">
+              <span className="inline-flex items-center gap-1.5 rounded-md border border-zinc-800 bg-[#0a0a0a] px-2.5 py-1 font-mono text-[10px] uppercase tracking-widest text-electric-lime">
+                <span aria-hidden className="size-1.5 rounded-full bg-electric-lime shadow-[0_0_8px_rgba(202,255,74,0.8)]" />
+                {meta.form}
+              </span>
               {meta.featured && (
-                <>
-                  <span className="text-zinc-700">•</span>
-                  <span className="text-zinc-500">Start here</span>
-                </>
+                <span className="rounded-md border border-electric-lime/30 bg-electric-lime/10 px-2.5 py-1 font-mono text-[10px] uppercase tracking-widest text-electric-lime">
+                  Start here
+                </span>
               )}
-              <span className="text-zinc-700">•</span>
-              <span className="text-zinc-500">{meta.date}</span>
-              <span className="text-zinc-700">•</span>
-              <span className="text-zinc-500">{meta.readingTime} min read</span>
             </div>
-            <h1 className="font-display font-semibold text-[clamp(2rem,5vw,3.5rem)] leading-[1.1] tracking-[-0.02em] text-zinc-50 mb-6">
+
+            <h1 className="font-display font-semibold text-[clamp(2rem,5vw,3.5rem)] leading-[1.08] tracking-[-0.02em] text-zinc-50 mb-5">
               {meta.title}
             </h1>
+
+            <p className="text-zinc-400 text-base md:text-lg leading-relaxed mb-8 font-light">
+              {meta.excerpt}
+            </p>
+
+            {/* Reading Telemetry Strip */}
+            <dl className="grid grid-cols-3 gap-px overflow-hidden rounded-2xl border border-zinc-800/80 bg-zinc-800/60">
+              <div className="bg-[#0a0a0a] p-4">
+                <dt className={`${label} text-zinc-500`}>Published</dt>
+                <dd className="mt-1.5 font-mono text-xs md:text-sm font-semibold tabular-nums text-zinc-200">
+                  {meta.date}
+                </dd>
+              </div>
+              <div className="bg-[#0a0a0a] p-4">
+                <dt className={`${label} text-zinc-500`}>Reading time</dt>
+                <dd className="mt-1.5 font-mono text-xs md:text-sm font-semibold tabular-nums text-electric-lime">
+                  {meta.readingTime} min read
+                </dd>
+              </div>
+              <div className="bg-[#0a0a0a] p-4">
+                <dt className={`${label} text-zinc-500`}>Length</dt>
+                <dd className="mt-1.5 font-mono text-xs md:text-sm font-semibold tabular-nums text-zinc-200">
+                  {meta.wordCount.toLocaleString()} words
+                </dd>
+              </div>
+            </dl>
+
+            {meta.topics.length > 0 && (
+              <div className="mt-5 flex flex-wrap items-center gap-2">
+                <span className={`${label} mr-1 text-zinc-500`}>Topics</span>
+                {meta.topics.map((topic) => (
+                  <span
+                    key={topic}
+                    className="rounded-full border border-zinc-800/80 bg-[#0a0a0a] px-3 py-1 font-mono text-[10px] text-zinc-300"
+                  >
+                    {topic}
+                  </span>
+                ))}
+              </div>
+            )}
           </header>
 
-          <div className="article-body prose prose-invert prose-zinc max-w-none prose-headings:font-display prose-headings:font-semibold prose-a:text-electric-lime hover:prose-a:text-electric-lime/80 prose-p:leading-[1.7] prose-p:text-zinc-300">
+          <div className="article-body prose prose-invert prose-zinc max-w-none prose-headings:font-display prose-headings:font-semibold prose-a:text-electric-lime hover:prose-a:text-electric-lime/80 prose-p:leading-[1.75] prose-p:text-zinc-300 prose-li:text-zinc-300 prose-strong:text-zinc-100 prose-code:text-electric-lime prose-code:bg-zinc-900/60 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:before:content-none prose-code:after:content-none prose-pre:bg-[#0a0a0a] prose-pre:border prose-pre:border-zinc-800/80 prose-pre:rounded-2xl">
             {loadState === 'loading' && !article && (
               <p className="text-zinc-500 font-mono text-sm">Loading article…</p>
             )}
@@ -184,12 +245,12 @@ export default function ArticleDetail() {
             {article && <ArticleMarkdown content={contentWithoutTitle} />}
           </div>
 
-          <div className="mt-20 pt-10 border-t border-zinc-800/50 flex flex-col sm:flex-row gap-6 justify-between items-start sm:items-center">
+          <div className="mt-20 rounded-3xl border border-zinc-800/70 bg-[#0a0a0a] p-6 md:p-8 flex flex-col sm:flex-row gap-6 justify-between items-start sm:items-center">
             <div className="flex items-center gap-4">
               <img
                 src="https://res.cloudinary.com/dpdttqyow/image/upload/f_auto,q_auto,w_100/v1768512786/Screenshot_2026-01-198_v3bwry.png"
                 alt="Aditya Gaurav"
-                className="size-12 object-contain"
+                className="size-12 object-contain rounded-xl border border-zinc-800/80 bg-zinc-950 p-1"
                 referrerPolicy="no-referrer"
                 loading="lazy"
                 decoding="async"
@@ -197,16 +258,17 @@ export default function ArticleDetail() {
                 height={48}
               />
               <div>
-                <div className="font-medium text-zinc-100">Aditya Gaurav</div>
-                <div className="text-sm text-zinc-500">AI Researcher & Systems Architect</div>
+                <div className="font-display font-semibold text-base text-zinc-100">Aditya Gaurav</div>
+                <div className="font-mono text-xs text-zinc-400">AI Researcher · Systems Architect</div>
               </div>
             </div>
 
             <button
               type="button"
               onClick={handleShare}
-              className="w-full sm:w-auto border border-zinc-700 text-zinc-300 hover:border-zinc-500 hover:text-zinc-100 rounded-full px-6 py-3 sm:py-2 text-xs uppercase tracking-widest font-mono transition-colors active:scale-[0.98]"
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 border border-zinc-800 bg-zinc-950 text-zinc-200 hover:border-electric-lime hover:text-electric-lime rounded-full px-6 py-2.5 text-xs uppercase tracking-widest font-mono transition-colors active:scale-[0.98]"
             >
+              {isShared ? <Check size={14} className="text-electric-lime" /> : <Share2 size={14} />}
               {isShared ? 'Link Copied!' : 'Share Essay'}
             </button>
           </div>

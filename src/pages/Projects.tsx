@@ -3,12 +3,18 @@ import { Link } from 'react-router-dom';
 import { ArrowUpRight, ExternalLink, Github, Trophy } from 'lucide-react';
 import { projects, Project } from '../lib/projects';
 import { upstreamReceipts } from '../lib/upstream';
+import { mergedPrs, projectStats } from '../lib/upstreamLedger';
 import SEO from '../components/SEO';
 import ProjectSignature from '../components/ProjectSignature';
 
+const label = 'font-mono text-[10px] uppercase tracking-[0.22em]';
+
 export default function Projects() {
+  const upstreamReposCount = projectStats(mergedPrs).length;
+  const testedUpstreamCount = mergedPrs.filter((p) => p.test).length;
+
   return (
-    <div className="min-h-screen pt-32 pb-16">
+    <div className="min-h-screen pt-32 pb-24">
       <SEO
         title="Projects | Aditya Gaurav - AI Engineer & Systems Architect"
         description="Shipping AI products: 3D engineering engine (FRIDAY), competitive intelligence (Sentinel), context circuit-breaker (MidSphere), and more."
@@ -19,21 +25,81 @@ export default function Projects() {
         ]}
       />
 
-      <section className="max-w-6xl mx-auto px-6 md:px-8 lg:px-12 py-20">
-        <m.div
+      <section className="max-w-6xl mx-auto px-6 md:px-8 lg:px-12 py-12 md:py-16">
+        <m.header
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: [0.32, 0.72, 0, 1] }}
-          className="mb-16 border-b border-zinc-800/50 pb-8"
+          className="relative mb-14 border-b border-zinc-800/60 pb-10"
         >
-          <h1 className="font-display font-semibold text-[clamp(2.5rem,8vw,4rem)] leading-[1.1] tracking-[-0.02em] text-zinc-50 mb-4">
+          <div
+            aria-hidden
+            className="pointer-events-none absolute -top-12 -left-12 h-64 w-96 rounded-full bg-electric-lime/[0.04] blur-3xl"
+          />
+          <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
+            <p className={`${label} flex items-center gap-2.5 text-electric-lime`}>
+              <span
+                aria-hidden
+                className="size-1.5 rounded-full bg-electric-lime shadow-[0_0_8px_rgba(202,255,74,0.8)]"
+              />
+              Lab · production systems
+            </p>
+            <Link
+              to="/upstream"
+              className="inline-flex items-center gap-1.5 rounded-full border border-zinc-800 bg-[#0a0a0a] px-3 py-1 font-mono text-[10px] uppercase tracking-widest text-zinc-400 transition-colors hover:border-electric-lime hover:text-electric-lime"
+            >
+              Upstream ledger ({mergedPrs.length}) <ArrowUpRight size={12} />
+            </Link>
+          </div>
+
+          <h1 className="font-display font-semibold text-[clamp(2.5rem,8vw,4rem)] leading-[1.08] tracking-[-0.02em] text-zinc-50 mb-4">
             Projects
           </h1>
           <p className="text-zinc-400 text-lg max-w-2xl leading-relaxed">
             Shipped products and platforms. Each one built end-to-end: architecture, code,
             deployment, docs. Click any card for the full engineering write-up.
           </p>
-        </m.div>
+
+          {/* 4-Tile Lab Telemetry Bar */}
+          <dl className="mt-8 grid grid-cols-2 gap-px overflow-hidden rounded-2xl border border-zinc-800/80 bg-zinc-800/60 lg:grid-cols-4">
+            <div className="bg-[#0a0a0a] p-5 md:p-6">
+              <dt className={`${label} text-zinc-400`}>Flagship systems</dt>
+              <dd className="mt-2 font-sans text-4xl font-semibold tracking-tight text-zinc-50 md:text-5xl">
+                {projects.length}
+              </dd>
+              <p className="mt-1.5 font-mono text-[11px] text-zinc-400">
+                100% live in production
+              </p>
+            </div>
+            <div className="bg-[#0a0a0a] p-5 md:p-6">
+              <dt className={`${label} text-zinc-400`}>Form factors</dt>
+              <dd className="mt-2 font-sans text-4xl font-semibold tracking-tight text-zinc-50 md:text-5xl">
+                3
+              </dd>
+              <p className="mt-1.5 font-mono text-[11px] text-zinc-400">
+                Product · Platform · CLI
+              </p>
+            </div>
+            <div className="bg-[#0a0a0a] p-5 md:p-6">
+              <dt className={`${label} text-zinc-400`}>Global recognition</dt>
+              <dd className="mt-2 font-sans text-3xl font-semibold tracking-tight text-amber-300 md:text-4xl">
+                Winner
+              </dd>
+              <p className="mt-1.5 font-mono text-[11px] text-zinc-400">
+                Google DeepMind × Kaggle
+              </p>
+            </div>
+            <div className="bg-[#0a0a0a] p-5 md:p-6">
+              <dt className={`${label} text-zinc-400`}>Open-source impact</dt>
+              <dd className="mt-2 font-sans text-4xl font-semibold tracking-tight text-electric-lime md:text-5xl">
+                {mergedPrs.length}
+              </dd>
+              <p className="mt-1.5 font-mono text-[11px] tabular-nums text-zinc-400">
+                Merged PRs across {upstreamReposCount} repos ({testedUpstreamCount} tested)
+              </p>
+            </div>
+          </dl>
+        </m.header>
 
         <div className="grid grid-cols-1 gap-6 md:gap-8">
           {projects.map((project, i) => (
@@ -43,34 +109,61 @@ export default function Projects() {
       </section>
 
       {/* Curated upstream receipts. Static. Not a live GitHub feed. */}
-      <section className="max-w-6xl mx-auto px-6 md:px-8 lg:px-12 pb-28 cv-auto">
+      <section className="max-w-6xl mx-auto px-6 md:px-8 lg:px-12 pt-8 pb-20 cv-auto">
         <m.div
           initial={{ opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-80px' }}
           transition={{ duration: 0.7, ease: [0.32, 0.72, 0, 1] }}
+          className="relative overflow-hidden rounded-3xl border border-zinc-800/70 bg-[#0a0a0a] p-6 md:p-10"
         >
-          <h2 className="font-display font-semibold text-[clamp(1.5rem,3.5vw,2.25rem)] leading-tight tracking-[-0.02em] text-zinc-50 mb-10">
-            Critical impacts in open source
-          </h2>
+          <div
+            aria-hidden
+            className="pointer-events-none absolute inset-x-10 top-0 h-px bg-gradient-to-r from-transparent via-zinc-700/60 to-transparent"
+          />
+          <div className="mb-8 flex flex-col gap-4 border-b border-zinc-800/70 pb-6 sm:flex-row sm:items-end sm:justify-between">
+            <div>
+              <p className={`${label} mb-2 flex items-center gap-2 text-electric-lime`}>
+                <span aria-hidden className="size-1.5 rounded-full bg-electric-lime shadow-[0_0_8px_rgba(202,255,74,0.8)]" />
+                Selected upstream receipts
+              </p>
+              <h2 className="font-display font-semibold text-[clamp(1.5rem,3.5vw,2.25rem)] leading-tight tracking-[-0.02em] text-zinc-50">
+                Critical impacts in open source
+              </h2>
+            </div>
+            <Link
+              to="/upstream"
+              className="inline-flex items-center gap-2 rounded-full border border-electric-lime/35 bg-electric-lime/10 px-4 py-2 font-mono text-[10px] uppercase tracking-widest text-electric-lime transition-colors hover:bg-electric-lime hover:text-zinc-950 self-start sm:self-auto"
+            >
+              All {mergedPrs.length} merged fixes, charted <ArrowUpRight size={13} />
+            </Link>
+          </div>
 
-          <ul className="border-t border-zinc-800/70">
+          <ul className="divide-y divide-zinc-800/70">
             {upstreamReceipts.map((receipt) => (
               <li
                 key={receipt.url}
-                className="flex flex-col gap-4 border-b border-zinc-800/70 py-6 sm:flex-row sm:items-start sm:justify-between sm:gap-8"
+                className="group flex flex-col gap-4 py-6 transition-colors sm:flex-row sm:items-start sm:justify-between sm:gap-8 sm:px-3 sm:-mx-3 sm:rounded-2xl sm:hover:bg-zinc-900/35"
               >
                 <div className="min-w-0 flex-1">
-                  <p className="font-mono text-[11px] uppercase tracking-widest text-zinc-500 mb-3">
-                    {receipt.org}/{receipt.repo}{' '}
-                    <span className="text-electric-lime/80">#{receipt.pr}</span>
+                  <p className="font-mono text-[11px] uppercase tracking-widest text-zinc-400 mb-3 flex flex-wrap items-center gap-2">
+                    <span className="rounded-md border border-zinc-800 bg-zinc-950 px-2 py-0.5 text-[10px] text-zinc-200">
+                      {receipt.org}/{receipt.repo}
+                    </span>
+                    <span className="text-electric-lime tabular-nums">#{receipt.pr}</span>
                   </p>
                   <div className="space-y-2 text-sm md:text-base leading-relaxed">
                     <p className="text-zinc-300">
-                      <span className="text-zinc-500">Issue</span> {receipt.issue}
+                      <span className="inline-block w-14 font-mono text-[10px] uppercase tracking-widest text-zinc-500">
+                        Issue
+                      </span>{' '}
+                      {receipt.issue}
                     </p>
-                    <p className="text-zinc-300">
-                      <span className="text-zinc-500">Fix</span> {receipt.fix}
+                    <p className="text-zinc-200">
+                      <span className="inline-block w-14 font-mono text-[10px] uppercase tracking-widest text-electric-lime">
+                        Fix
+                      </span>{' '}
+                      {receipt.fix}
                     </p>
                   </div>
                 </div>
@@ -78,19 +171,13 @@ export default function Projects() {
                   href={receipt.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex shrink-0 items-center self-start rounded-full border border-zinc-800 px-4 py-2 font-mono text-[10px] uppercase tracking-widest text-zinc-400 transition-colors hover:border-electric-lime hover:text-electric-lime"
+                  className="inline-flex shrink-0 items-center gap-1.5 self-start rounded-full border border-zinc-800 bg-zinc-950 px-4 py-2 font-mono text-[10px] uppercase tracking-widest text-zinc-300 transition-colors hover:border-electric-lime hover:text-electric-lime"
                 >
-                  Inspect
+                  Inspect <ArrowUpRight size={12} />
                 </a>
               </li>
             ))}
           </ul>
-          <Link
-            to="/upstream"
-            className="mt-8 inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-widest text-zinc-400 transition-colors hover:text-electric-lime"
-          >
-            All merged fixes, charted <ArrowUpRight size={14} />
-          </Link>
         </m.div>
       </section>
     </div>
@@ -107,27 +194,32 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
     >
       <Link
         to={`/projects/${project.slug}`}
-        className="block group relative rounded-3xl overflow-hidden border border-zinc-800/60 hover:border-zinc-600 transition-colors duration-500"
+        className="block group relative rounded-3xl overflow-hidden border border-zinc-800/70 bg-[#0a0a0a] hover:border-zinc-600 transition-all duration-500"
       >
-        <div className="absolute inset-0 bg-zinc-900/0 group-hover:bg-zinc-900/30 transition-colors duration-500 -z-10" />
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-x-10 top-0 z-20 h-px bg-gradient-to-r from-transparent via-zinc-700/60 to-transparent transition-opacity group-hover:via-electric-lime/50"
+        />
 
-        <div className="grid grid-cols-1 md:grid-cols-[1.1fr_1fr]">
+        <div className="grid grid-cols-1 md:grid-cols-[1.15fr_1fr]">
           {/* Text side */}
-          <div className="p-8 md:p-12 flex flex-col justify-between min-h-[360px]">
+          <div className="p-8 md:p-10 lg:p-12 flex flex-col justify-between min-h-[380px]">
             <div>
-              <div className="flex items-center gap-3 font-mono text-[10px] uppercase tracking-widest mb-6 flex-wrap">
-                <span className="text-electric-lime">{project.category}</span>
+              <div className="flex items-center gap-2.5 font-mono text-[10px] uppercase tracking-widest mb-6 flex-wrap">
+                <span className="rounded-md border border-zinc-800 bg-zinc-950 px-2.5 py-0.5 text-electric-lime">
+                  {project.category}
+                </span>
                 <span className="text-zinc-700">•</span>
-                <span className="text-zinc-500">{project.year}</span>
+                <span className="tabular-nums text-zinc-400">{project.year}</span>
                 <span className="text-zinc-700">•</span>
-                <span className="flex items-center gap-1.5 text-zinc-400">
+                <span className="flex items-center gap-1.5 text-zinc-300">
                   <span className="size-1.5 rounded-full bg-electric-lime shadow-[0_0_8px_rgba(204,255,0,0.8)]" />
                   {project.status}
                 </span>
                 {project.award && (
                   <>
                     <span className="text-zinc-700">•</span>
-                    <span className="inline-flex items-center gap-1 text-amber-300">
+                    <span className="inline-flex items-center gap-1 rounded-md border border-amber-500/30 bg-amber-500/10 px-2 py-0.5 text-amber-300">
                       <Trophy size={11} className="shrink-0" />
                       {project.award.label}
                     </span>
@@ -135,46 +227,63 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
                 )}
               </div>
 
-              <h2 className="font-display font-semibold text-[clamp(2rem,4vw,3rem)] leading-[1.05] tracking-[-0.02em] text-zinc-50 group-hover:text-white transition-colors mb-3">
+              <h2 className="font-display font-semibold text-[clamp(2rem,4vw,3rem)] leading-[1.05] tracking-[-0.02em] text-zinc-50 group-hover:text-white transition-colors mb-2.5">
                 {project.name}
               </h2>
 
-              <p className={`font-display font-medium text-base md:text-lg leading-tight ${project.accent} mb-5`}>
+              <p className={`font-display font-medium text-base md:text-lg leading-tight ${project.accent} mb-4`}>
                 {project.tagline}
               </p>
 
-              <p className="text-zinc-400 text-sm md:text-base leading-relaxed line-clamp-3">
+              <p className="text-zinc-400 text-sm md:text-base leading-relaxed line-clamp-3 mb-6">
                 {project.excerpt}
               </p>
+
+              {/* Inline Project Telemetry Strip */}
+              <dl className="grid grid-cols-3 gap-px overflow-hidden rounded-xl border border-zinc-800/80 bg-zinc-800/60">
+                {project.metrics.map((mItem) => (
+                  <div key={mItem.label} className="bg-zinc-950/90 p-3">
+                    <dt className="truncate font-mono text-[9px] uppercase tracking-wider text-zinc-500">
+                      {mItem.label}
+                    </dt>
+                    <dd className={`mt-1 font-mono text-xs md:text-sm font-semibold tabular-nums ${project.accent}`}>
+                      {mItem.value}
+                    </dd>
+                  </div>
+                ))}
+              </dl>
             </div>
 
-            <div className="mt-8 flex flex-wrap items-center gap-3">
-              <div className="flex flex-wrap gap-2">
-                {project.stack.slice(0, 4).map((tech) => (
+            <div className="mt-6 flex flex-wrap items-center justify-between gap-3 border-t border-zinc-900 pt-5">
+              <div className="flex flex-wrap gap-1.5">
+                {project.stack.slice(0, 5).map((tech) => (
                   <span
                     key={tech}
-                    className="border border-zinc-800 text-zinc-400 rounded-full px-3 py-1 text-[10px] font-mono"
+                    className="border border-zinc-800 bg-zinc-950 text-zinc-300 rounded-full px-3 py-1 text-[10px] font-mono"
                   >
                     {tech}
                   </span>
                 ))}
-                {project.stack.length > 4 && (
-                  <span className="text-zinc-600 text-[10px] font-mono self-center">
-                    +{project.stack.length - 4}
+                {project.stack.length > 5 && (
+                  <span className="text-zinc-500 text-[10px] font-mono self-center tabular-nums">
+                    +{project.stack.length - 5}
                   </span>
                 )}
               </div>
+              <span className="font-mono text-[10px] uppercase tracking-widest text-zinc-400 group-hover:text-electric-lime transition-colors inline-flex items-center gap-1">
+                Read write-up <ArrowUpRight size={12} />
+              </span>
             </div>
           </div>
 
           {/* Visual side */}
-          <div className="relative bg-[#0a0a0a] border-t md:border-t-0 md:border-l border-zinc-800/50 overflow-hidden">
+          <div className="relative bg-[#070707] border-t md:border-t-0 md:border-l border-zinc-800/60 overflow-hidden">
             <ProjectSignature slug={project.slug} />
-            <div className="absolute inset-0 bg-gradient-to-br from-transparent via-transparent to-black/40 pointer-events-none" />
+            <div className="absolute inset-0 bg-gradient-to-br from-transparent via-transparent to-black/50 pointer-events-none" />
 
-            <div className="relative z-10 h-full min-h-[220px] md:min-h-[360px] flex flex-col justify-between p-6 md:p-8 pointer-events-none">
+            <div className="relative z-10 h-full min-h-[240px] md:min-h-[380px] flex flex-col justify-between p-6 md:p-8 pointer-events-none">
               <div className="flex justify-end">
-                <div className="bg-zinc-950/80 backdrop-blur border border-zinc-800/60 rounded-full p-2.5 group-hover:border-electric-lime transition-colors pointer-events-auto">
+                <div className="bg-zinc-950/85 backdrop-blur border border-zinc-800/80 rounded-full p-2.5 group-hover:border-electric-lime transition-colors pointer-events-auto">
                   <ArrowUpRight
                     size={16}
                     className="text-zinc-400 group-hover:text-electric-lime transition-all duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
@@ -213,7 +322,7 @@ function ExternalActionChip({
       target="_blank"
       rel="noopener noreferrer"
       onClick={(e) => e.stopPropagation()}
-      className="inline-flex items-center gap-1.5 bg-zinc-950/80 backdrop-blur border border-zinc-800/60 hover:border-electric-lime hover:text-electric-lime rounded-full px-3 py-1.5 text-[10px] font-mono uppercase tracking-widest text-zinc-300 transition-colors"
+      className="inline-flex items-center gap-1.5 bg-zinc-950/85 backdrop-blur border border-zinc-800/80 hover:border-electric-lime hover:text-electric-lime rounded-full px-3.5 py-1.5 text-[10px] font-mono uppercase tracking-widest text-zinc-200 transition-colors"
     >
       {icon}
       {children}

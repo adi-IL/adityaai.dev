@@ -4,6 +4,7 @@ import { CheckCircle2, XCircle, ArrowUpRight } from 'lucide-react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { articles, featuredArticles, type ArticleMeta } from '../lib/articles';
 import { projects } from '../lib/projects';
+import { mergedPrs } from '../lib/upstreamLedger';
 import SEO from '../components/SEO';
 import Magnetic from '../components/Magnetic';
 import TypewriterText from '../components/TypewriterText';
@@ -138,20 +139,83 @@ export default function Home() {
         </section>
 
         {/* Manifesto Section */}
-        <section className="max-w-6xl mx-auto px-6 md:px-8 lg:px-12 py-32 md:py-48">
+        <section className="max-w-6xl mx-auto px-6 md:px-8 lg:px-12 py-24 md:py-36">
           <m.div
             initial={{ opacity: 0, y: 40 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-100px" }}
             transition={{ duration: 1, ease: [0.32, 0.72, 0, 1] }}
-            className="max-w-4xl"
           >
-            <h2 className="font-display font-medium text-[clamp(2rem,5vw,4rem)] leading-[1.1] tracking-[-0.02em] text-zinc-100 mb-8">
+            <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-electric-lime mb-5 flex items-center gap-2.5">
+              <span aria-hidden className="size-1.5 rounded-full bg-electric-lime shadow-[0_0_8px_rgba(202,255,74,0.8)]" />
+              Lab thesis · Software 3.0
+            </p>
+            <h2 className="font-display font-medium text-[clamp(2rem,5vw,4rem)] leading-[1.1] tracking-[-0.02em] text-zinc-100 mb-8 max-w-4xl">
               Intelligence is not just scaled; it is architected. We are moving from stochastic parrots to <span className="text-zinc-500">reasoning engines</span>.
             </h2>
-            <p className="text-zinc-400 text-xl md:text-2xl font-light leading-relaxed max-w-2xl">
+            <p className="text-zinc-400 text-xl md:text-2xl font-light leading-relaxed max-w-2xl mb-12">
               My research focuses on bridging the gap between theoretical cognitive models and production-ready, scalable AI systems.
             </p>
+
+            {/* 4-Tile Lab Telemetry Bar */}
+            <dl className="grid grid-cols-2 gap-px overflow-hidden rounded-2xl border border-zinc-800/80 bg-zinc-800/60 lg:grid-cols-4">
+              <div className="bg-[#0a0a0a]">
+                <Link to="/articles" className="group block h-full p-5 md:p-6 transition-colors hover:bg-zinc-900/50">
+                  <dt className="font-mono text-[10px] uppercase tracking-[0.22em] text-zinc-400 flex items-center justify-between">
+                    <span>Decision tools</span>
+                    <ArrowUpRight size={12} className="text-zinc-600 group-hover:text-electric-lime transition-colors" />
+                  </dt>
+                  <dd className="mt-2 font-sans text-4xl font-semibold tracking-tight text-zinc-50 md:text-5xl">
+                    {articles.length}
+                  </dd>
+                  <p className="mt-1.5 font-mono text-[11px] text-zinc-400">
+                    Curated systems essays
+                  </p>
+                </Link>
+              </div>
+              <div className="bg-[#0a0a0a]">
+                <Link to="/projects" className="group block h-full p-5 md:p-6 transition-colors hover:bg-zinc-900/50">
+                  <dt className="font-mono text-[10px] uppercase tracking-[0.22em] text-zinc-400 flex items-center justify-between">
+                    <span>Production lab</span>
+                    <ArrowUpRight size={12} className="text-zinc-600 group-hover:text-electric-lime transition-colors" />
+                  </dt>
+                  <dd className="mt-2 font-sans text-4xl font-semibold tracking-tight text-zinc-50 md:text-5xl">
+                    {projects.length}
+                  </dd>
+                  <p className="mt-1.5 font-mono text-[11px] text-zinc-400">
+                    FRIDAY · Sentinel · MidSphere
+                  </p>
+                </Link>
+              </div>
+              <div className="bg-[#0a0a0a]">
+                <Link to="/upstream" className="group block h-full p-5 md:p-6 transition-colors hover:bg-zinc-900/50">
+                  <dt className="font-mono text-[10px] uppercase tracking-[0.22em] text-zinc-400 flex items-center justify-between">
+                    <span>Upstream ledger</span>
+                    <ArrowUpRight size={12} className="text-zinc-600 group-hover:text-electric-lime transition-colors" />
+                  </dt>
+                  <dd className="mt-2 font-sans text-4xl font-semibold tracking-tight text-electric-lime md:text-5xl">
+                    {mergedPrs.length}
+                  </dd>
+                  <p className="mt-1.5 font-mono text-[11px] tabular-nums text-zinc-400">
+                    Merged open-source fixes
+                  </p>
+                </Link>
+              </div>
+              <div className="bg-[#0a0a0a]">
+                <Link to="/about" className="group block h-full p-5 md:p-6 transition-colors hover:bg-zinc-900/50">
+                  <dt className="font-mono text-[10px] uppercase tracking-[0.22em] text-zinc-400 flex items-center justify-between">
+                    <span>Global recognition</span>
+                    <ArrowUpRight size={12} className="text-zinc-600 group-hover:text-electric-lime transition-colors" />
+                  </dt>
+                  <dd className="mt-2 font-sans text-3xl font-semibold tracking-tight text-amber-300 md:text-4xl">
+                    Winner
+                  </dd>
+                  <p className="mt-1.5 font-mono text-[11px] text-zinc-400">
+                    DeepMind × Kaggle Hackathon
+                  </p>
+                </Link>
+              </div>
+            </dl>
           </m.div>
         </section>
 
@@ -159,7 +223,7 @@ export default function Home() {
         <SignalSection />
 
         {/* Lab Architecture Stack Section */}
-        <section className="max-w-6xl mx-auto px-6 md:px-8 lg:px-12 py-24 relative">
+        <section className="max-w-6xl mx-auto px-6 md:px-8 lg:px-12 py-20 relative">
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80%] h-[50%] bg-zinc-800/20 blur-[120px] rounded-full pointer-events-none" />
 
           <m.div
@@ -167,35 +231,38 @@ export default function Home() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: '-100px' }}
             transition={{ duration: 0.8, ease: [0.32, 0.72, 0, 1] }}
-            className="rounded-2xl overflow-hidden border border-zinc-800 bg-[#0a0a0a] shadow-2xl relative z-10 max-w-4xl mx-auto"
+            className="rounded-3xl overflow-hidden border border-zinc-800/80 bg-[#0a0a0a] shadow-2xl relative z-10"
           >
+            <div
+              aria-hidden
+              className="pointer-events-none absolute inset-x-10 top-0 h-px bg-gradient-to-r from-transparent via-zinc-700/60 to-transparent"
+            />
             {/* Window chrome header */}
-            <div className="flex items-center px-5 py-3.5 border-b border-zinc-800/80 bg-[#111]">
+            <div className="flex items-center px-6 py-4 border-b border-zinc-800/80 bg-zinc-950/80">
               <div className="flex gap-2">
-                <div className="size-3 rounded-full bg-zinc-700/80" />
-                <div className="size-3 rounded-full bg-zinc-700/80" />
-                <div className="size-3 rounded-full bg-zinc-700/80" />
+                <div className="size-2.5 rounded-full bg-zinc-700/80" />
+                <div className="size-2.5 rounded-full bg-zinc-700/80" />
+                <div className="size-2.5 rounded-full bg-zinc-700/80" />
               </div>
-              <div className="mx-auto text-xs font-mono uppercase tracking-widest text-zinc-500">
+              <div className="mx-auto text-[10px] font-mono uppercase tracking-[0.22em] text-zinc-400 flex items-center gap-2">
+                <span aria-hidden className="size-1.5 rounded-full bg-electric-lime" />
                 systems architecture · production stack
               </div>
-              <div className="text-[11px] font-mono text-zinc-600 hidden sm:block">
+              <div className="text-[10px] font-mono uppercase tracking-widest text-electric-lime hidden sm:block">
                 Software 3.0
               </div>
             </div>
 
             {/* Architecture stack body */}
             <div className="p-6 md:p-8 space-y-4">
-              
               {/* Layer 3: Production Surfaces */}
-              <div className="rounded-xl border border-zinc-800/80 bg-zinc-950/60 p-5 hover:border-zinc-700 transition-colors">
-                <div className="flex items-center justify-between mb-3 flex-wrap gap-2">
-                  <div className="flex items-center gap-2">
-                    <span className="font-mono text-[10px] uppercase tracking-widest text-electric-lime font-semibold">
+              <div className="rounded-2xl border border-zinc-800/80 bg-zinc-950/60 p-5 md:p-6 hover:border-zinc-700 transition-colors">
+                <div className="flex items-center justify-between mb-4 flex-wrap gap-2">
+                  <div className="flex items-center gap-2.5">
+                    <span className="rounded-md border border-zinc-800 bg-zinc-950 px-2 py-0.5 font-mono text-[10px] uppercase tracking-widest text-electric-lime font-semibold">
                       Layer 3
                     </span>
-                    <span className="text-zinc-700">•</span>
-                    <span className="font-mono text-xs uppercase tracking-wider text-zinc-300">
+                    <span className="font-mono text-xs uppercase tracking-wider text-zinc-200">
                       Autonomous Production Surfaces
                     </span>
                   </div>
@@ -206,45 +273,45 @@ export default function Home() {
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                   <Link
                     to="/projects/friday"
-                    className="p-3 rounded-lg border border-zinc-800/60 bg-zinc-900/30 hover:border-cyan-400/50 hover:bg-zinc-900/60 transition-all group"
+                    className="p-4 rounded-xl border border-zinc-800/70 bg-[#0a0a0a] hover:border-cyan-400/50 hover:bg-zinc-900/50 transition-all group"
                   >
-                    <div className="flex items-center justify-between mb-1">
-                      <span className="font-display font-medium text-sm text-zinc-100 group-hover:text-cyan-300 transition-colors">
+                    <div className="flex items-center justify-between mb-1.5">
+                      <span className="font-display font-semibold text-base text-zinc-100 group-hover:text-cyan-300 transition-colors">
                         F.R.I.D.A.Y
                       </span>
                       <ArrowUpRight size={13} className="text-zinc-600 group-hover:text-cyan-300 transition-colors" />
                     </div>
-                    <p className="text-xs text-zinc-500 font-light">
+                    <p className="text-xs text-zinc-400 font-light">
                       Generative 3D CAD engine · DeepMind winner
                     </p>
                   </Link>
 
                   <Link
                     to="/projects/sentinel"
-                    className="p-3 rounded-lg border border-zinc-800/60 bg-zinc-900/30 hover:border-blue-400/50 hover:bg-zinc-900/60 transition-all group"
+                    className="p-4 rounded-xl border border-zinc-800/70 bg-[#0a0a0a] hover:border-blue-400/50 hover:bg-zinc-900/50 transition-all group"
                   >
-                    <div className="flex items-center justify-between mb-1">
-                      <span className="font-display font-medium text-sm text-zinc-100 group-hover:text-blue-300 transition-colors">
+                    <div className="flex items-center justify-between mb-1.5">
+                      <span className="font-display font-semibold text-base text-zinc-100 group-hover:text-blue-300 transition-colors">
                         Sentinel
                       </span>
                       <ArrowUpRight size={13} className="text-zinc-600 group-hover:text-blue-300 transition-colors" />
                     </div>
-                    <p className="text-xs text-zinc-500 font-light">
+                    <p className="text-xs text-zinc-400 font-light">
                       Autonomous competitive intelligence FSM
                     </p>
                   </Link>
 
                   <Link
                     to="/projects/midsphere"
-                    className="p-3 rounded-lg border border-zinc-800/60 bg-zinc-900/30 hover:border-emerald-400/50 hover:bg-zinc-900/60 transition-all group"
+                    className="p-4 rounded-xl border border-zinc-800/70 bg-[#0a0a0a] hover:border-emerald-400/50 hover:bg-zinc-900/50 transition-all group"
                   >
-                    <div className="flex items-center justify-between mb-1">
-                      <span className="font-display font-medium text-sm text-zinc-100 group-hover:text-emerald-300 transition-colors">
+                    <div className="flex items-center justify-between mb-1.5">
+                      <span className="font-display font-semibold text-base text-zinc-100 group-hover:text-emerald-300 transition-colors">
                         MidSphere
                       </span>
                       <ArrowUpRight size={13} className="text-zinc-600 group-hover:text-emerald-300 transition-colors" />
                     </div>
-                    <p className="text-xs text-zinc-500 font-light">
+                    <p className="text-xs text-zinc-400 font-light">
                       Context circuit-breaker for DataHub
                     </p>
                   </Link>
@@ -252,14 +319,13 @@ export default function Home() {
               </div>
 
               {/* Layer 2: Deterministic Harness & Arbiters */}
-              <div className="rounded-xl border border-zinc-800/80 bg-zinc-950/60 p-5 hover:border-zinc-700 transition-colors">
-                <div className="flex items-center justify-between mb-3 flex-wrap gap-2">
-                  <div className="flex items-center gap-2">
-                    <span className="font-mono text-[10px] uppercase tracking-widest text-electric-lime font-semibold">
+              <div className="rounded-2xl border border-zinc-800/80 bg-zinc-950/60 p-5 md:p-6 hover:border-zinc-700 transition-colors">
+                <div className="flex items-center justify-between mb-4 flex-wrap gap-2">
+                  <div className="flex items-center gap-2.5">
+                    <span className="rounded-md border border-zinc-800 bg-zinc-950 px-2 py-0.5 font-mono text-[10px] uppercase tracking-widest text-electric-lime font-semibold">
                       Layer 2
                     </span>
-                    <span className="text-zinc-700">•</span>
-                    <span className="font-mono text-xs uppercase tracking-wider text-zinc-300">
+                    <span className="font-mono text-xs uppercase tracking-wider text-zinc-200">
                       Deterministic Harnesses & Arbiters
                     </span>
                   </div>
@@ -270,48 +336,47 @@ export default function Home() {
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 font-mono text-xs">
                   <Link
                     to="/articles/the-verification-gap"
-                    className="p-3 rounded-lg border border-zinc-800/60 bg-zinc-900/30 hover:border-electric-lime/50 transition-all group"
+                    className="p-4 rounded-xl border border-zinc-800/70 bg-[#0a0a0a] hover:border-electric-lime/50 transition-all group"
                   >
-                    <div className="flex items-center justify-between text-zinc-200 group-hover:text-electric-lime mb-1">
+                    <div className="flex items-center justify-between text-zinc-100 group-hover:text-electric-lime mb-1.5">
                       <span>Deterministic Arbiters</span>
                       <ArrowUpRight size={12} className="text-zinc-600 group-hover:text-electric-lime" />
                     </div>
-                    <span className="text-[11px] text-zinc-500 block">Compilers · Linters · Pytest · AST</span>
+                    <span className="text-[11px] text-zinc-400 block">Compilers · Linters · Pytest · AST</span>
                   </Link>
 
                   <Link
                     to="/articles/context-circuit-breakers"
-                    className="p-3 rounded-lg border border-zinc-800/60 bg-zinc-900/30 hover:border-electric-lime/50 transition-all group"
+                    className="p-4 rounded-xl border border-zinc-800/70 bg-[#0a0a0a] hover:border-electric-lime/50 transition-all group"
                   >
-                    <div className="flex items-center justify-between text-zinc-200 group-hover:text-electric-lime mb-1">
+                    <div className="flex items-center justify-between text-zinc-100 group-hover:text-electric-lime mb-1.5">
                       <span>Circuit Breakers</span>
                       <ArrowUpRight size={12} className="text-zinc-600 group-hover:text-electric-lime" />
                     </div>
-                    <span className="text-[11px] text-zinc-500 block">Stagnation Gates · Output Quarantine</span>
+                    <span className="text-[11px] text-zinc-400 block">Stagnation Gates · Output Quarantine</span>
                   </Link>
 
                   <Link
                     to="/articles/sandboxing-architectures-for-agents"
-                    className="p-3 rounded-lg border border-zinc-800/60 bg-zinc-900/30 hover:border-electric-lime/50 transition-all group"
+                    className="p-4 rounded-xl border border-zinc-800/70 bg-[#0a0a0a] hover:border-electric-lime/50 transition-all group"
                   >
-                    <div className="flex items-center justify-between text-zinc-200 group-hover:text-electric-lime mb-1">
+                    <div className="flex items-center justify-between text-zinc-100 group-hover:text-electric-lime mb-1.5">
                       <span>Runtime Isolation</span>
                       <ArrowUpRight size={12} className="text-zinc-600 group-hover:text-electric-lime" />
                     </div>
-                    <span className="text-[11px] text-zinc-500 block">Firecracker MicroVMs · gVisor · Proxies</span>
+                    <span className="text-[11px] text-zinc-400 block">Firecracker MicroVMs · gVisor · Proxies</span>
                   </Link>
                 </div>
               </div>
 
               {/* Layer 1: Protocol & Inference Foundation */}
-              <div className="rounded-xl border border-zinc-800/80 bg-zinc-950/60 p-5 hover:border-zinc-700 transition-colors">
-                <div className="flex items-center justify-between mb-3 flex-wrap gap-2">
-                  <div className="flex items-center gap-2">
-                    <span className="font-mono text-[10px] uppercase tracking-widest text-electric-lime font-semibold">
+              <div className="rounded-2xl border border-zinc-800/80 bg-zinc-950/60 p-5 md:p-6 hover:border-zinc-700 transition-colors">
+                <div className="flex items-center justify-between mb-4 flex-wrap gap-2">
+                  <div className="flex items-center gap-2.5">
+                    <span className="rounded-md border border-zinc-800 bg-zinc-950 px-2 py-0.5 font-mono text-[10px] uppercase tracking-widest text-electric-lime font-semibold">
                       Layer 1
                     </span>
-                    <span className="text-zinc-700">•</span>
-                    <span className="font-mono text-xs uppercase tracking-wider text-zinc-300">
+                    <span className="font-mono text-xs uppercase tracking-wider text-zinc-200">
                       Inference, State & Protocol Foundation
                     </span>
                   </div>
@@ -322,39 +387,38 @@ export default function Home() {
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 font-mono text-xs">
                   <Link
                     to="/articles/the-chat-template-trap"
-                    className="p-3 rounded-lg border border-zinc-800/60 bg-zinc-900/30 hover:border-electric-lime/50 transition-all group"
+                    className="p-4 rounded-xl border border-zinc-800/70 bg-[#0a0a0a] hover:border-electric-lime/50 transition-all group"
                   >
-                    <div className="flex items-center justify-between text-zinc-200 group-hover:text-electric-lime mb-1">
+                    <div className="flex items-center justify-between text-zinc-100 group-hover:text-electric-lime mb-1.5">
                       <span>Provider Transforms</span>
                       <ArrowUpRight size={12} className="text-zinc-600 group-hover:text-electric-lime" />
                     </div>
-                    <span className="text-[11px] text-zinc-500 block">Chat Templates · Prompt Cache Partition</span>
+                    <span className="text-[11px] text-zinc-400 block">Chat Templates · Prompt Cache Partition</span>
                   </Link>
 
                   <Link
                     to="/articles/memory-stacks-for-agents"
-                    className="p-3 rounded-lg border border-zinc-800/60 bg-zinc-900/30 hover:border-electric-lime/50 transition-all group"
+                    className="p-4 rounded-xl border border-zinc-800/70 bg-[#0a0a0a] hover:border-electric-lime/50 transition-all group"
                   >
-                    <div className="flex items-center justify-between text-zinc-200 group-hover:text-electric-lime mb-1">
+                    <div className="flex items-center justify-between text-zinc-100 group-hover:text-electric-lime mb-1.5">
                       <span>Memory Stacks</span>
                       <ArrowUpRight size={12} className="text-zinc-600 group-hover:text-electric-lime" />
                     </div>
-                    <span className="text-[11px] text-zinc-500 block">Episodic · Semantic · Procedural</span>
+                    <span className="text-[11px] text-zinc-400 block">Episodic · Semantic · Procedural</span>
                   </Link>
 
                   <Link
                     to="/articles/inference-economics-for-agents"
-                    className="p-3 rounded-lg border border-zinc-800/60 bg-zinc-900/30 hover:border-electric-lime/50 transition-all group"
+                    className="p-4 rounded-xl border border-zinc-800/70 bg-[#0a0a0a] hover:border-electric-lime/50 transition-all group"
                   >
-                    <div className="flex items-center justify-between text-zinc-200 group-hover:text-electric-lime mb-1">
+                    <div className="flex items-center justify-between text-zinc-100 group-hover:text-electric-lime mb-1.5">
                       <span>Inference Economics</span>
                       <ArrowUpRight size={12} className="text-zinc-600 group-hover:text-electric-lime" />
                     </div>
-                    <span className="text-[11px] text-zinc-500 block">Token Multipliers · Retry Budgets</span>
+                    <span className="text-[11px] text-zinc-400 block">Token Multipliers · Retry Budgets</span>
                   </Link>
                 </div>
               </div>
-
             </div>
           </m.div>
 
@@ -367,7 +431,7 @@ export default function Home() {
           >
             <Link
               to="/articles"
-              className="inline-flex items-center gap-2 text-zinc-500 hover:text-electric-lime transition-colors font-mono text-xs uppercase tracking-widest"
+              className="inline-flex items-center gap-2 text-zinc-400 hover:text-electric-lime transition-colors font-mono text-xs uppercase tracking-widest"
             >
               Explore the architectural frameworks
               <ArrowUpRight size={14} />
@@ -376,7 +440,7 @@ export default function Home() {
         </section>
 
         {/* Marquee Section */}
-        <section className="py-20 overflow-hidden border-y border-zinc-900 bg-[#050505]">
+        <section className="py-16 overflow-hidden border-y border-zinc-900 bg-[#050505]">
           <div className="flex whitespace-nowrap">
             <m.div
               animate={{ x: ["0%", "-50%"] }}
@@ -408,24 +472,28 @@ export default function Home() {
         </section>
 
         {/* Articles Section */}
-        <section className="max-w-6xl mx-auto px-6 md:px-8 lg:px-12 py-32 cv-auto">
+        <section className="max-w-6xl mx-auto px-6 md:px-8 lg:px-12 py-28 cv-auto">
           <m.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-100px" }}
             transition={{ duration: 0.8, ease: [0.32, 0.72, 0, 1] }}
-            className="mb-12 flex items-baseline justify-between border-b border-zinc-800/50 pb-6"
+            className="mb-12 flex flex-wrap items-end justify-between gap-4 border-b border-zinc-800/60 pb-6"
           >
             <div>
-              <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-electric-lime mb-2">
-                Start here
+              <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-electric-lime mb-2 flex items-center gap-2">
+                <span aria-hidden className="size-1.5 rounded-full bg-electric-lime shadow-[0_0_8px_rgba(202,255,74,0.8)]" />
+                Start here · curated shelf
               </p>
               <h2 className="font-display font-semibold text-[clamp(1.75rem,4vw,2.5rem)] text-zinc-50">
                 Decision tools
               </h2>
             </div>
-            <Link to="/articles" className="text-zinc-500 hover:text-electric-lime transition-colors text-xs font-mono uppercase tracking-widest flex items-center gap-1 py-2">
-              Full shelf ({articles.length}) <ArrowUpRight size={14} />
+            <Link
+              to="/articles"
+              className="inline-flex items-center gap-1.5 rounded-full border border-zinc-800 bg-[#0a0a0a] px-4 py-2 text-zinc-300 hover:border-electric-lime hover:text-electric-lime transition-colors text-[10px] font-mono uppercase tracking-widest"
+            >
+              Full shelf ({articles.length}) <ArrowUpRight size={13} />
             </Link>
           </m.div>
 
@@ -438,7 +506,7 @@ export default function Home() {
               )}
             </div>
 
-            <div className="flex flex-col gap-6 md:gap-8 md:mt-16">
+            <div className="flex flex-col gap-6 md:gap-8 md:mt-14">
               {(featuredArticles.length ? featuredArticles : articles.slice(0, 4)).map((article, i) =>
                 i % 2 !== 0 ? (
                   <ArticleCard key={article.slug} article={article} index={i} />
@@ -449,19 +517,28 @@ export default function Home() {
         </section>
 
         {/* Projects Section */}
-        <section className="max-w-6xl mx-auto px-6 md:px-8 lg:px-12 py-32 cv-auto">
+        <section className="max-w-6xl mx-auto px-6 md:px-8 lg:px-12 py-24 cv-auto">
           <m.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-100px" }}
             transition={{ duration: 0.8, ease: [0.32, 0.72, 0, 1] }}
-            className="mb-12 flex items-baseline justify-between border-b border-zinc-800/50 pb-6"
+            className="mb-12 flex flex-wrap items-end justify-between gap-4 border-b border-zinc-800/60 pb-6"
           >
-            <h2 className="font-display font-semibold text-[clamp(1.75rem,4vw,2.5rem)] text-zinc-50">
-              Projects
-            </h2>
-            <Link to="/projects" className="text-zinc-500 hover:text-electric-lime transition-colors text-xs font-mono uppercase tracking-widest flex items-center gap-1 py-2">
-              View all <ArrowUpRight size={14} />
+            <div>
+              <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-electric-lime mb-2 flex items-center gap-2">
+                <span aria-hidden className="size-1.5 rounded-full bg-electric-lime shadow-[0_0_8px_rgba(202,255,74,0.8)]" />
+                Shipped architectures
+              </p>
+              <h2 className="font-display font-semibold text-[clamp(1.75rem,4vw,2.5rem)] text-zinc-50">
+                Projects
+              </h2>
+            </div>
+            <Link
+              to="/projects"
+              className="inline-flex items-center gap-1.5 rounded-full border border-zinc-800 bg-[#0a0a0a] px-4 py-2 text-zinc-300 hover:border-electric-lime hover:text-electric-lime transition-colors text-[10px] font-mono uppercase tracking-widest"
+            >
+              View all <ArrowUpRight size={13} />
             </Link>
           </m.div>
 
@@ -473,18 +550,30 @@ export default function Home() {
         </section>
 
         {/* Newsletter Section */}
-        <section className="max-w-2xl mx-auto px-6 md:px-8 py-20 cv-auto">
+        <section className="max-w-4xl mx-auto px-6 md:px-8 py-20 cv-auto">
           <m.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-100px" }}
             transition={{ duration: 0.8, ease: [0.32, 0.72, 0, 1] }}
-            className="border-t border-zinc-800/50 pt-16 text-center"
+            className="relative overflow-hidden rounded-3xl border border-zinc-800/70 bg-[#0a0a0a] p-8 md:p-12 text-center"
           >
-            <h2 className="font-display font-medium text-2xl text-zinc-100 mb-4">Join the Newsletter</h2>
-            <p className="text-zinc-500 font-light mb-8">Decision tools for systems designers. Infrequent - confirm your email to join.</p>
+            <div
+              aria-hidden
+              className="pointer-events-none absolute inset-x-10 top-0 h-px bg-gradient-to-r from-transparent via-zinc-700/60 to-transparent"
+            />
+            <div className="inline-flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.22em] text-electric-lime mb-4">
+              <span className="size-1.5 rounded-full bg-electric-lime shadow-[0_0_8px_rgba(202,255,74,0.8)] animate-pulse" />
+              Dispatches · zero noise
+            </div>
+            <h2 className="font-display font-semibold text-2xl md:text-3xl text-zinc-100 mb-3">
+              Join the Newsletter
+            </h2>
+            <p className="text-zinc-400 font-light mb-8 max-w-md mx-auto text-sm md:text-base">
+              Decision tools for systems designers. Infrequent - confirm your email to join.
+            </p>
 
-            <form className="flex flex-col sm:flex-row gap-4 max-w-md mx-auto relative" onSubmit={handleSubscribe}>
+            <form className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto relative" onSubmit={handleSubscribe}>
               <label htmlFor="email" className="sr-only">Email address</label>
               <input
                 type="text"
@@ -503,17 +592,17 @@ export default function Home() {
                 onChange={(e) => setEmail(e.target.value)}
                 disabled={status === 'loading' || status === 'success'}
                 placeholder="you@example.com"
-                className="flex-1 bg-transparent border-b border-zinc-800 px-4 py-3 text-zinc-100 focus:outline-none focus:border-electric-lime transition-colors disabled:opacity-50 font-light placeholder:text-zinc-700"
+                className="flex-1 rounded-full border border-zinc-800 bg-zinc-950 px-5 py-3 text-sm text-zinc-100 focus:outline-none focus:border-electric-lime transition-colors disabled:opacity-50 font-mono placeholder:text-zinc-600"
                 required
               />
               <Magnetic>
                 <button
                   type="submit"
                   disabled={status === 'loading' || status === 'success'}
-                  className="border border-zinc-800 rounded-full px-6 py-3 text-zinc-400 hover:text-electric-lime hover:border-electric-lime font-mono text-xs uppercase tracking-widest transition-colors active:scale-[0.98] disabled:opacity-50 disabled:hover:text-zinc-400 disabled:hover:border-zinc-800 min-w-[120px] flex items-center justify-center"
+                  className="rounded-full bg-electric-lime px-6 py-3 text-zinc-950 hover:bg-electric-lime/90 font-mono text-xs font-semibold uppercase tracking-widest transition-colors active:scale-[0.98] disabled:opacity-50 min-w-[140px] flex items-center justify-center"
                 >
                   {status === 'loading' ? (
-                    <div className="size-4 border border-zinc-700 border-t-electric-lime rounded-full animate-spin" />
+                    <div className="size-4 border-2 border-zinc-900 border-t-transparent rounded-full animate-spin" />
                   ) : status === 'success' ? (
                     'Subscribed'
                   ) : (
@@ -596,38 +685,56 @@ function ArticleCard({ article, index }: { article: ArticleMeta; index: number }
         onBlur={handleBlur}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
-        className="block group relative p-6 md:p-8 border-t border-zinc-800 hover:border-electric-lime transition-colors duration-500 overflow-hidden"
+        className="block group relative p-6 md:p-8 rounded-3xl border border-zinc-800/70 bg-[#0a0a0a] hover:border-electric-lime/50 transition-all duration-300 overflow-hidden"
       >
-        <div className="absolute inset-0 bg-zinc-900/0 group-hover:bg-zinc-900/20 group-active:bg-zinc-900/30 transition-colors duration-500 -z-10" />
         <div
-          className="pointer-events-none absolute -inset-px transition-opacity duration-300 -z-10"
+          aria-hidden
+          className="pointer-events-none absolute inset-x-8 top-0 h-px bg-gradient-to-r from-transparent via-zinc-700/60 to-transparent"
+        />
+        <div
+          className="pointer-events-none absolute -inset-px transition-opacity duration-300"
           style={{
             opacity,
-            background: `radial-gradient(600px circle at ${position.x}px ${position.y}px, rgba(255,255,255,.05), transparent 40%)`,
+            background: `radial-gradient(500px circle at ${position.x}px ${position.y}px, rgba(202,255,74,.05), transparent 40%)`,
           }}
         />
-        <div className="flex justify-between items-start mb-4">
-          <div className="flex items-center gap-3 flex-wrap">
-            <span className="font-mono text-[10px] uppercase tracking-widest text-electric-lime">
-              {article.form}
-            </span>
-            <span className="text-zinc-800">•</span>
-            <span className="font-mono text-[10px] uppercase tracking-widest text-zinc-500">
+        <div className="relative z-10">
+          <div className="flex justify-between items-start gap-4 mb-4">
+            <div className="flex items-center gap-2.5 flex-wrap">
+              <span className="inline-flex items-center gap-1.5 rounded-md border border-zinc-800 bg-zinc-950 px-2.5 py-0.5 font-mono text-[10px] uppercase tracking-widest text-electric-lime">
+                <span aria-hidden className="size-1.5 rounded-full bg-electric-lime" />
+                {article.form}
+              </span>
+              <span className="font-mono text-[10px] uppercase tracking-widest tabular-nums text-zinc-400">
+                {article.readingTime} min · {article.wordCount.toLocaleString()}w
+              </span>
+            </div>
+            <div className="flex size-8 shrink-0 items-center justify-center rounded-full border border-zinc-800/80 bg-zinc-950 text-zinc-500 transition-colors group-hover:border-electric-lime/50 group-hover:text-electric-lime">
+              <ArrowUpRight size={15} className="transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+            </div>
+          </div>
+          <h3 className="font-display font-semibold text-xl md:text-2xl text-zinc-100 mb-3 leading-snug group-hover:text-white transition-colors">
+            {article.title}
+          </h3>
+          <p className="text-zinc-400 text-sm leading-relaxed line-clamp-3 font-light mb-5">
+            {article.excerpt}
+          </p>
+          <div className="flex items-center justify-between gap-3 border-t border-zinc-900 pt-4">
+            <div className="flex flex-wrap gap-1.5">
+              {article.topics.slice(0, 2).map((topic) => (
+                <span
+                  key={topic}
+                  className="rounded-full border border-zinc-800/80 bg-zinc-950 px-2.5 py-0.5 font-mono text-[10px] text-zinc-400"
+                >
+                  {topic}
+                </span>
+              ))}
+            </div>
+            <span className="font-mono text-[10px] uppercase tracking-widest tabular-nums text-zinc-500">
               {article.date}
             </span>
-            <span className="text-zinc-800">•</span>
-            <span className="font-mono text-[10px] uppercase tracking-widest text-zinc-500">
-              {article.readingTime} min read
-            </span>
           </div>
-          <ArrowUpRight size={18} className="text-zinc-700 group-hover:text-electric-lime transition-colors duration-300 transform group-hover:translate-x-1 group-hover:-translate-y-1" />
         </div>
-        <h3 className="font-display font-medium text-[clamp(1.25rem,2vw,1.5rem)] text-zinc-100 mb-3 leading-tight group-hover:text-white transition-colors">
-          {article.title}
-        </h3>
-        <p className="text-zinc-500 text-sm leading-relaxed line-clamp-3 font-light">
-          {article.excerpt}
-        </p>
       </Link>
     </m.div>
   );

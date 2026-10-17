@@ -5,11 +5,7 @@ import { CheckCircle2, XCircle } from 'lucide-react';
 /**
  * Compact inline newsletter prompt for end-of-article / end-of-project
  * placements. Shares the `/api/subscribe` endpoint with the home page
- * form; the visual treatment is lighter to fit inside a content flow.
- *
- * Props let callers tune the headline + subhead per surface so the copy
- * can match the context (e.g. "Get the next one in your inbox" on an
- * article vs "Watch the next launch" on a project page).
+ * form; the visual treatment matches the #0a0a0a observatory cards.
  */
 export default function NewsletterPrompt({
   headline = 'Get the next one in your inbox.',
@@ -44,7 +40,7 @@ export default function NewsletterPrompt({
           typeof data.error === 'string' ? data.error : 'Something went wrong. Please try again.',
         );
       }
-    } catch (err) {
+    } catch {
       setStatus('error');
       setErrorMessage('Failed to connect to the server. Please try again later.');
     }
@@ -53,16 +49,20 @@ export default function NewsletterPrompt({
   return (
     <aside
       aria-label="Newsletter signup"
-      className="mt-20 rounded-2xl border border-zinc-800/60 bg-zinc-950/50 px-6 py-8 md:px-10 md:py-10"
+      className="relative mt-12 overflow-hidden rounded-3xl border border-zinc-800/70 bg-[#0a0a0a] px-6 py-8 md:px-10 md:py-10"
     >
-      <div className="flex items-center gap-3 mb-4 font-mono text-[10px] uppercase tracking-[0.22em] text-electric-lime">
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-x-10 top-0 h-px bg-gradient-to-r from-transparent via-zinc-700/60 to-transparent"
+      />
+      <div className="flex items-center gap-2.5 mb-3 font-mono text-[10px] uppercase tracking-[0.22em] text-electric-lime">
         <span className="size-1.5 rounded-full bg-electric-lime shadow-[0_0_8px_rgba(204,255,0,0.8)] animate-pulse" />
-        Newsletter
+        Newsletter · dispatches
       </div>
-      <h3 className="font-display font-medium text-xl md:text-2xl text-zinc-100 mb-3 leading-tight">
+      <h3 className="font-display font-semibold text-xl md:text-2xl text-zinc-100 mb-2 leading-tight">
         {headline}
       </h3>
-      <p className="text-zinc-500 text-sm md:text-base font-light leading-relaxed mb-6 max-w-xl">
+      <p className="text-zinc-400 text-sm md:text-base font-light leading-relaxed mb-6 max-w-xl">
         {subhead}
       </p>
       <form
@@ -72,7 +72,6 @@ export default function NewsletterPrompt({
         <label htmlFor="inline-newsletter-email" className="sr-only">
           Email address
         </label>
-        {/* Honeypot - leave empty. Hidden from assistive tech and sighted users. */}
         <input
           type="text"
           name="website"
@@ -90,16 +89,16 @@ export default function NewsletterPrompt({
           onChange={(e) => setEmail(e.target.value)}
           disabled={status === 'loading' || status === 'success'}
           placeholder="you@example.com"
-          className="flex-1 bg-transparent border-b border-zinc-800 px-3 py-2.5 text-zinc-100 focus:outline-none focus:border-electric-lime transition-colors disabled:opacity-50 font-light placeholder:text-zinc-700"
+          className="flex-1 rounded-full border border-zinc-800 bg-zinc-950 px-5 py-2.5 text-sm text-zinc-100 focus:outline-none focus:border-electric-lime transition-colors disabled:opacity-50 font-mono placeholder:text-zinc-600"
           required
         />
         <button
           type="submit"
           disabled={status === 'loading' || status === 'success'}
-          className="border border-zinc-800 rounded-full px-5 py-2.5 text-zinc-400 hover:text-electric-lime hover:border-electric-lime font-mono text-xs uppercase tracking-widest transition-colors active:scale-[0.98] disabled:opacity-50 disabled:hover:text-zinc-400 disabled:hover:border-zinc-800 min-w-[120px] flex items-center justify-center"
+          className="rounded-full bg-electric-lime px-6 py-2.5 text-zinc-950 hover:bg-electric-lime/90 font-mono text-xs font-semibold uppercase tracking-widest transition-colors active:scale-[0.98] disabled:opacity-50 min-w-[130px] flex items-center justify-center"
         >
           {status === 'loading' ? (
-            <div className="size-4 border border-zinc-700 border-t-electric-lime rounded-full animate-spin" />
+            <div className="size-4 border-2 border-zinc-900 border-t-transparent rounded-full animate-spin" />
           ) : status === 'success' ? (
             'Subscribed'
           ) : (

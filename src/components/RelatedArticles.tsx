@@ -34,14 +34,22 @@ export default function RelatedArticles({ currentSlug }: { currentSlug: string }
   return (
     <section
       aria-labelledby="related-articles-heading"
-      className="mt-24 pt-12 border-t border-zinc-800/50"
+      className="mt-20 pt-12 border-t border-zinc-800/60"
     >
-      <div className="flex items-center gap-3 mb-8 font-mono text-[10px] uppercase tracking-[0.22em] text-zinc-500">
-        <span className="size-1.5 rounded-full bg-electric-lime shadow-[0_0_8px_rgba(204,255,0,0.8)]" />
-        <h2 id="related-articles-heading">Continue on the shelf</h2>
+      <div className="flex items-center justify-between gap-3 mb-8">
+        <div className="flex items-center gap-2.5 font-mono text-[10px] uppercase tracking-[0.22em] text-zinc-400">
+          <span className="size-1.5 rounded-full bg-electric-lime shadow-[0_0_8px_rgba(204,255,0,0.8)]" />
+          <h2 id="related-articles-heading">Continue on the shelf</h2>
+        </div>
+        <Link
+          to="/articles"
+          className="font-mono text-[10px] uppercase tracking-widest text-zinc-400 hover:text-electric-lime transition-colors inline-flex items-center gap-1"
+        >
+          All essays <ArrowUpRight size={12} />
+        </Link>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-5">
         {related.map((article, i) => (
           <m.div
             key={article.slug}
@@ -52,26 +60,26 @@ export default function RelatedArticles({ currentSlug }: { currentSlug: string }
           >
             <Link
               to={`/articles/${article.slug}`}
-              className="group block h-full rounded-xl border border-zinc-800/60 hover:border-electric-lime/50 transition-colors duration-500 p-5 bg-zinc-950/40 hover:bg-zinc-900/40"
+              className="group relative flex flex-col justify-between h-full rounded-2xl border border-zinc-800/70 hover:border-electric-lime/50 transition-all duration-300 p-5 bg-[#0a0a0a]"
             >
-              <div className="flex items-center justify-between mb-3">
-                <div className="flex items-center gap-2 flex-wrap">
-                  <span className="font-mono text-[10px] uppercase tracking-widest text-electric-lime">
+              <div>
+                <div className="flex items-center justify-between gap-2 mb-3">
+                  <span className="rounded-md border border-zinc-800 bg-zinc-950 px-2 py-0.5 font-mono text-[10px] uppercase tracking-widest text-electric-lime">
                     {article.form}
                   </span>
-                  <span className="text-zinc-800">•</span>
-                  <span className="font-mono text-[10px] uppercase tracking-widest text-zinc-500">
-                    {article.readingTime} min read
-                  </span>
+                  <ArrowUpRight
+                    size={14}
+                    className="text-zinc-600 group-hover:text-electric-lime transition-all duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+                  />
                 </div>
-                <ArrowUpRight
-                  size={14}
-                  className="text-zinc-700 group-hover:text-electric-lime transition-all duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
-                />
+                <h3 className="font-display font-semibold text-base text-zinc-100 leading-snug group-hover:text-white transition-colors line-clamp-3 mb-4">
+                  {article.title}
+                </h3>
               </div>
-              <h3 className="font-display font-medium text-base text-zinc-100 leading-snug group-hover:text-white transition-colors line-clamp-3">
-                {article.title}
-              </h3>
+              <div className="border-t border-zinc-900 pt-3 flex items-center justify-between font-mono text-[10px] uppercase tracking-widest tabular-nums text-zinc-500">
+                <span>{article.readingTime} min read</span>
+                <span>{article.date}</span>
+              </div>
             </Link>
           </m.div>
         ))}
