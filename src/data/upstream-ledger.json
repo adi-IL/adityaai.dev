@@ -2,6 +2,16 @@
   "source": "adi-IL/adi-IL data/ledger.json",
   "items": [
     {
+      "url": "https://github.com/can1357/oh-my-pi/pull/15770",
+      "repo": "can1357/oh-my-pi",
+      "number": 15770,
+      "title": "fix(catalog): preserve authoritative caches in resolveProviderModels",
+      "mergedAt": "2026-10-16T18:11:42Z",
+      "additions": 95,
+      "deletions": 20,
+      "test": null
+    },
+    {
       "url": "https://github.com/tensorflow/tensorflow/pull/126450",
       "repo": "tensorflow/tensorflow",
       "number": 126450,
