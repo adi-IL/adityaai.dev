@@ -37,6 +37,8 @@ const PROJECT_NAMES: Record<string, string> = {
   'pvlib/pvlib-python': 'pvlib',
   'GoogleCloudPlatform/dataflow-solution-guides': 'Dataflow guides',
   'google/mug': 'Mug',
+  'huggingface/peft': 'PEFT',
+  'can1357/oh-my-pi': 'oh-my-pi',
 };
 
 const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];

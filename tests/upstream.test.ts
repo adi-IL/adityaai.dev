@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { guardHits } from '../scripts/upstream-guard.mjs';
 import { normalize } from '../scripts/sync-ledger.mjs';
-import { mergedPrs, monthStats, projectStats, type MergedPr } from '../src/lib/upstreamLedger.ts';
+import { mergedPrs, monthStats, projectName, projectStats, type MergedPr } from '../src/lib/upstreamLedger.ts';
 import { buildSiteContext } from '../lib/site-context.js';
 import { projects } from '../src/lib/projects.js';
 
@@ -73,6 +73,13 @@ describe('upstream stats', () => {
     const stats = projectStats(items);
     assert.deepEqual(stats.map((s) => [s.repo, s.merged, s.tested]), [['x/y', 2, 1], ['a/b', 1, 0]]);
     assert.deepEqual(monthStats(items).map((m) => [m.month, m.merged]), [['2026-07', 0], ['2026-08', 0], ['2026-09', 3]]);
+  });
+
+  it('maps every repository in the synced ledger to a friendly display name', () => {
+    for (const item of mergedPrs) {
+      const name = projectName(item.repo);
+      assert.ok(!name.includes('/'), `unmapped repo slug: ${item.repo}`);
+    }
   });
 });
 
