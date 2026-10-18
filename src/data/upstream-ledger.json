@@ -2,6 +2,46 @@
   "source": "adi-IL/adi-IL data/ledger.json",
   "items": [
     {
+      "url": "https://github.com/can1357/oh-my-pi/pull/16054",
+      "repo": "can1357/oh-my-pi",
+      "number": 16054,
+      "title": "fix(catalog): keep authoritative cache retention across a failed refresh",
+      "mergedAt": "2026-10-17T12:01:07Z",
+      "additions": 58,
+      "deletions": 1,
+      "test": null
+    },
+    {
+      "url": "https://github.com/can1357/oh-my-pi/pull/16055",
+      "repo": "can1357/oh-my-pi",
+      "number": 16055,
+      "title": "fix(tui): shorten the resolved path in the read result notice",
+      "mergedAt": "2026-10-17T12:01:07Z",
+      "additions": 34,
+      "deletions": 1,
+      "test": null
+    },
+    {
+      "url": "https://github.com/can1357/oh-my-pi/pull/16056",
+      "repo": "can1357/oh-my-pi",
+      "number": 16056,
+      "title": "fix(coding-agent): resolve video timestamp selectors outside the session cwd",
+      "mergedAt": "2026-10-17T12:01:07Z",
+      "additions": 56,
+      "deletions": 4,
+      "test": null
+    },
+    {
+      "url": "https://github.com/can1357/oh-my-pi/pull/16064",
+      "repo": "can1357/oh-my-pi",
+      "number": 16064,
+      "title": "fix(ai): require a complete tool name before hermes in-band toolStart",
+      "mergedAt": "2026-10-17T12:01:07Z",
+      "additions": 88,
+      "deletions": 22,
+      "test": null
+    },
+    {
       "url": "https://github.com/can1357/oh-my-pi/pull/15770",
       "repo": "can1357/oh-my-pi",
       "number": 15770,
