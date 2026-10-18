@@ -16,7 +16,8 @@
     "lint": "tsc --noEmit",
     "test": "tsx --test tests/*.test.ts",
     "meta": "node scripts/generate-articles-meta.mjs",
-    "sync:ledger": "node scripts/sync-ledger.mjs"
+    "sync:ledger": "node scripts/sync-ledger.mjs",
+    "doctor": "node .cursor/skills/verify-adityaai/scripts/doctor.mjs"
   },
   "dependencies": {
     "@google/genai": "^2.15.0",

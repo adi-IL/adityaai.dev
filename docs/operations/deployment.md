@@ -27,7 +27,7 @@ Related apps, not this repo:
 push to main
         │
         ▼
-GitHub Actions ci.yml: npm ci → lint → test → build
+GitHub Actions ci.yml: npm ci → lint → build → test → artifact & dist guard
         │
         ▼
 Vercel
@@ -47,9 +47,9 @@ Pushes to `main` run CI, then Vercel Git integration deploys production. PRs get
 
 ## CI
 
-On push to `main` and on every PR, matrix Node 20 / 22 / 24:
+On push to `main` and on every PR (`ubuntu-24.04`, matrix Node 20 / 22 / 24):
 
-`npm ci` → `npm run lint` → `npm test` → `npm run build`, then `git diff --exit-code` on `scripts/articles-meta.json` and `public/llms.txt`.
+`npm ci` → `npm run lint` → `npm run build` → `npm test`, then `git diff --exit-code` on `scripts/articles-meta.json` and `public/llms.txt` plus `dist/` artifact and `upstream-guard.mjs` checks.
 
 `package.json` `engines.node` is `>=20.0.0`.
 

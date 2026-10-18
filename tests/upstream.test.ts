@@ -92,6 +92,10 @@ describe('site context', () => {
       assert.ok(context.includes(p.excerpt), `missing project excerpt: ${p.excerpt}`);
     }
     assert.ok(context.includes('https://www.adityaai.dev/upstream'), 'missing /upstream page');
+    assert.ok(
+      context.includes(`UPSTREAM LEDGER (${mergedPrs.length} merged open-source PRs`),
+      'missing upstream ledger summary in site context',
+    );
   });
 });
 

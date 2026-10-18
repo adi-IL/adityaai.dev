@@ -41,6 +41,16 @@ if (![301, 308].includes(essays.status)) fail(`/essays expected 301 or 308 got $
 if (!essays.location.includes('/articles')) fail(`/essays Location missing /articles (${essays.location})`);
 say(`ok /essays ${essays.status} -> ${essays.location}`);
 
+const opalserve = await redirOf(`${base}/projects/opalserve`);
+if (![301, 308].includes(opalserve.status)) fail(`/projects/opalserve expected 301 or 308 got ${opalserve.status}`);
+if (!opalserve.location.includes('/projects')) fail(`/projects/opalserve Location missing /projects (${opalserve.location})`);
+say(`ok /projects/opalserve ${opalserve.status} -> ${opalserve.location}`);
+
+const legacyArc = await redirOf(`${base}/articles/44_arc_agi_3_failure_architecture`);
+if (![301, 308].includes(legacyArc.status)) fail(`legacy arc essay expected 301 or 308 got ${legacyArc.status}`);
+if (!legacyArc.location.includes('/articles/the-verification-gap')) fail(`legacy arc essay Location missing /articles/the-verification-gap (${legacyArc.location})`);
+say(`ok /articles/44_arc_agi_3_failure_architecture ${legacyArc.status} -> ${legacyArc.location}`);
+
 const dead = await codeOf(`${base}/articles/does-not-exist-verify-adityaai`);
 if (dead !== 404) fail(`dead essay expected 404 got ${dead}`);
 say(`ok dead-essay ${dead}`);

@@ -21,14 +21,14 @@ const MAX_CONTENT_CHARS = 2000;
 const NAVIGATE_TO_DECLARATION = {
   name: 'navigateTo',
   description:
-    'Navigates the user to a different page on the site. Use this when the user asks to see a project, essay, or the about page.',
+    'Navigates the user to a different page on the site. Use this when the user asks to see a project, essay, the upstream open-source ledger, or the about page.',
   parameters: {
     type: Type.OBJECT,
     properties: {
       path: {
         type: Type.STRING,
         description:
-          'The relative path to navigate to (e.g. /projects, /about, /articles/memory-stacks-for-agents)',
+          'The relative path to navigate to (e.g. /projects, /upstream, /about, /articles/memory-stacks-for-agents)',
       },
     },
     required: ['path'],
@@ -268,7 +268,7 @@ export async function handleChat(req: ApiRequest, res: ApiResponse): Promise<voi
 function shouldLikelyNeedSearch(messages: ChatMessage[]): boolean {
   const last = messages[messages.length - 1]?.content.toLowerCase() || '';
   if (
-    /(essay|article|shelf|aditya|friday|sentinel|midsphere|memory stack|inference economic|mcp security|software 3|virtual coffee|newsletter|project)/i.test(
+    /(essay|article|shelf|aditya|friday|sentinel|midsphere|upstream|ledger|open-source|open source|memory stack|inference economic|mcp security|software 3|virtual coffee|newsletter|project)/i.test(
       last,
     )
   ) {
