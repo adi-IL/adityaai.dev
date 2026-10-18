@@ -3,6 +3,8 @@ form: Architecture
 date: 2026-03-05
 topics: [architecture]
 featured: false
+seoTitle: "Comparing Scalable AI Architectures: 5 Production Paradigms (2020-2026)"
+seoDescription: "Compare scalable AI architecture options for enterprise teams: monolith ML APIs, microservice inference, RAG stacks, agentic pipelines and agent fleets, with a tradeoff table."
 ---
 # The Big AI Systems Architecture Comparison
 

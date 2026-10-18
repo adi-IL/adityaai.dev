@@ -417,12 +417,12 @@ const articleCountLabel = `${articleCount} research articles`;
 const buildDate = new Date().toISOString().slice(0, 10);
 
 // Homepage - no fake SearchAction (site has no search endpoint).
-writePage(".", "Aditya Gaurav  -  AI Engineer · Systems Architect",
+writePage(".", "Aditya Gaurav - AI Engineer · Systems Architect",
   `AI Engineer & Systems Architect specializing in agentic systems, cognitive architectures, and MCP. ${articleCountLabel} on building production-ready AI systems.`,
   `${SITE_URL}/`, "website", {
     "@context": "https://schema.org", "@type": "WebSite",
     name: "adityaai.dev",
-    headline: "Aditya Gaurav  -  AI Engineer · Systems Architect",
+    headline: "Aditya Gaurav - AI Engineer · Systems Architect",
     description: "AI Engineer & Systems Architect. Building agentic systems, cognitive architectures, and the MCP ecosystem.",
     url: `${SITE_URL}/`, inLanguage: "en",
     author: { "@type": "Person", name: "Aditya Gaurav", url: `${SITE_URL}/`, jobTitle: "AI Researcher & Systems Architect",
@@ -430,7 +430,7 @@ writePage(".", "Aditya Gaurav  -  AI Engineer · Systems Architect",
   }, renderHomeBody(articles, projects));
 count++;
 
-writePage("about", "About | Aditya Gaurav  -  AI Engineer & Systems Architect",
+writePage("about", "About | Aditya Gaurav - AI Engineer & Systems Architect",
   `AI Engineer & Systems Architect building cognitive architectures, agentic workflows, and the MCP ecosystem. Kaggle winner, Oracle certified, ${articleCount} articles.`,
   `${SITE_URL}/about`, "profile", {
     "@context": "https://schema.org", "@type": "BreadcrumbList",
@@ -440,7 +440,7 @@ writePage("about", "About | Aditya Gaurav  -  AI Engineer & Systems Architect",
   }, renderAboutBody());
 count++;
 
-writePage("articles", "Articles | Aditya Gaurav  -  Research on AI Architecture & Systems Design",
+writePage("articles", "Articles | Aditya Gaurav - Research on AI Architecture & Systems Design",
   `Infrequent, high-signal research articles on AI architecture, agentic systems, cognitive architectures, MCP, and inference economics. ${articleCount} technical deep dives.`,
   `${SITE_URL}/articles`, "website", {
     "@context": "https://schema.org", "@type": "BreadcrumbList",
@@ -450,8 +450,8 @@ writePage("articles", "Articles | Aditya Gaurav  -  Research on AI Architecture 
   }, renderArticlesListBody(articles));
 count++;
 
-writePage("projects", "Projects | Aditya Gaurav  -  AI Systems & Open Source",
-  "Production AI systems and open-source projects by Aditya Gaurav  -  FRIDAY (3D engineering visual intelligence), Sentinel (competitive intelligence), MidSphere (autonomous context circuit-breaker).",
+writePage("projects", "Projects | Aditya Gaurav - AI Systems & Open Source",
+  "Production AI systems and open-source projects by Aditya Gaurav - FRIDAY (3D engineering visual intelligence), Sentinel (competitive intelligence), MidSphere (autonomous context circuit-breaker).",
   `${SITE_URL}/projects`, "website", {
     "@context": "https://schema.org", "@type": "BreadcrumbList",
     itemListElement: [
@@ -460,7 +460,7 @@ writePage("projects", "Projects | Aditya Gaurav  -  AI Systems & Open Source",
   }, renderProjectsListBody(projects));
 count++;
 
-writePage("upstream", "Upstream | Aditya Gaurav  -  Merged open-source fixes",
+writePage("upstream", "Upstream | Aditya Gaurav - Merged open-source fixes",
   `${upstreamLedger.items.length} merged pull requests in TensorFlow, gVisor, Grafana and more, with the regression test behind each fix.`,
   `${SITE_URL}/upstream`, "website", {
     "@context": "https://schema.org", "@type": "BreadcrumbList",
@@ -473,8 +473,8 @@ count++;
 for (const a of articles) {
   const canonical = `${SITE_URL}/articles/${a.slug}`;
   const description =
-    a.excerpt || "Research article by Aditya Gaurav on AI architecture and systems design.";
-  writePage(`articles/${a.slug}`, `${a.title} | Aditya Gaurav`, description, canonical, "article", {
+    a.seoDescription || a.excerpt || "Research article by Aditya Gaurav on AI architecture and systems design.";
+  writePage(`articles/${a.slug}`, `${a.seoTitle || a.title} | Aditya Gaurav`, description, canonical, "article", {
     "@context": "https://schema.org",
     "@type": a.form === "Principle" ? "Article" : "ScholarlyArticle",
     headline: a.title,

@@ -183,6 +183,8 @@ const articles = fs
       slug,
       title,
       excerpt,
+      ...(data.seoTitle ? { seoTitle: data.seoTitle } : {}),
+      ...(data.seoDescription ? { seoDescription: data.seoDescription } : {}),
       dateISO,
       date: formatDisplayDate(dateISO),
       form,

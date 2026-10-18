@@ -180,6 +180,8 @@
     "slug": "ai-systems-architecture-comparison",
     "title": "The Big AI Systems Architecture Comparison",
     "excerpt": "Raschka compared LLM architectures across 7 years. This compares AI systems paradigms across 5 years of production deployment.",
+    "seoTitle": "Comparing Scalable AI Architectures: 5 Production Paradigms (2020-2026)",
+    "seoDescription": "Compare scalable AI architecture options for enterprise teams: monolith ML APIs, microservice inference, RAG stacks, agentic pipelines and agent fleets, with a tradeoff table.",
     "dateISO": "2026-03-05",
     "date": "MAR 05, 2026",
     "form": "Architecture",
