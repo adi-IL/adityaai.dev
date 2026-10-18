@@ -55,11 +55,12 @@ featured: false
 
 | Field | Required | Values |
 | --- | --- | --- |
-| `form` | Recommended | `Framework`, `Architecture`, or `Principle` |
+| `form` | Recommended | `Framework`, `Architecture`, or `Principle` (legacy alias `category`) |
 | `date` | Recommended | `YYYY-MM-DD` |
 | `topics` | Optional | List. Used by related-essay scoring |
 | `featured` | Optional | `true` only for Start here |
 | `title` / `excerpt` | Optional | Override auto extraction |
+| `seoTitle` / `seoDescription` | Optional | Override prerendered `<title>` and meta description |
 
 If neither frontmatter `date` nor `scripts/article-dates.json` has the slug, generation uses `2026-01-01`.
 
@@ -76,7 +77,7 @@ Also runs on `npm run dev` and as `prebuild` before `npm run build`.
 1. Reads every `.md` in `src/content/articles/`
 2. Parses frontmatter, first heading, excerpt
 3. Estimates reading time at about 220 words per minute
-4. Sorts featured first, then newest `dateISO`
+4. Sorts featured first, then newest `dateISO`, then alphabetical `slug`
 5. Writes `scripts/articles-meta.json`
 
 Do not hand-edit `articles-meta.json` or `public/llms.txt` for lasting changes. Edit the markdown and regenerate. `scripts/prerender.mjs` writes `llms.txt` with the full shelf. CI fails if those files drift from the committed copies.
@@ -92,9 +93,9 @@ Related essays (`RelatedArticles`) score other posts by same `form` (+3), overla
 
 ## Projects
 
-Projects are not markdown files. The registry is `src/lib/projects.ts`: `slug`, `name`, `tagline`, `excerpt`, `stack`, `metrics`, `liveUrl`, `codeUrl`, `ogImage`, and a long-form `content` string rendered on the project detail page.
+Projects are not markdown files. The registry is `src/lib/projects.ts`: `slug`, `name`, `tagline`, `excerpt`, `category`, `status`, `year`, `stack`, `liveUrl`, `codeUrl`, `ogImage`, `accent`, `metrics`, optional `award`, and a long-form `content` string rendered on the project detail page.
 
-When you add a project, `scripts/prerender.mjs` must still list the route so sitemap and prerender HTML stay in sync.
+`scripts/prerender.mjs`, `lib/site-context.ts`, and `public/llms.txt` read `src/lib/projects.ts` automatically. When you add a project, add its `/projects/<slug>` route to `ALLOWED_EXACT` in `lib/handlers/chat.ts` so the lab guide can navigate to it.
 
 Canonical brand files for sibling sites:
 
@@ -107,6 +108,6 @@ Canonical brand files for sibling sites:
 
 1. Create `src/content/articles/your-slug.md` with frontmatter.
 2. Optionally add `"your-slug": "YYYY-MM-DD"` to `scripts/article-dates.json`.
-3. Run `npm run meta` or `npm run dev`.
+3. Run `npm run build` so both `scripts/articles-meta.json` and `public/llms.txt` regenerate.
 4. Check `/articles` filters and the detail page.
 5. Commit `scripts/articles-meta.json` and `public/llms.txt` with the markdown.

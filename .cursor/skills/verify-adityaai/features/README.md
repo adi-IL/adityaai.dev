@@ -13,7 +13,7 @@ Maintained source for visitor-facing proofs of https://www.adityaai.dev (and loc
 ## Driving conventions
 
 - Start from doctor green unless a feature says otherwise.
-- Prefer link names (`Home`, `Essays`, `Projects`, `About`) and route paths over CSS or coordinates.
+- Prefer link names (`Home`, `Essays`, `Projects`, `Upstream`, `About`) and route paths over CSS or coordinates.
 - Treat commands in feature files as literal.
 - HTTP checks use `scripts/http-probe.mjs` and `scripts/doctor.mjs`.
 - Browser checks use a browser/desktop subagent; record screenshots under `$ADITYAAI_VERIFY_DIR/artifacts/`.
@@ -33,7 +33,7 @@ Each feature file: H1, one paragraph, then exactly four H2s in order: `Sub-featu
 
 ## Features
 
-- [Navigation and core pages](./nav-core-pages.md) home, essays list, projects list, about.
+- [Navigation and core pages](./nav-core-pages.md) home, essays list, projects list, upstream ledger, about.
 - [Projects Upstream strip](./projects-upstream.md) Critical impacts in open source on `/projects`.
 - [Essay redirect and hard 404](./essays-redirect-404.md) `/essays` to `/articles`, missing slug hard 404.
 - [Brand files](./brand-files.md) `llms.txt`, `sitemap.xml`, `robots.txt`.

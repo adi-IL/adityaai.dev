@@ -35,6 +35,7 @@ function normalizeEmail(email: string): string {
 }
 
 function sendRedirect(res: ApiResponse, url: string): void {
+  res.setHeader?.('Cache-Control', 'no-store');
   // Express
   if (typeof (res as { redirect?: (code: number, u: string) => void }).redirect === 'function') {
     (res as { redirect: (code: number, u: string) => void }).redirect(302, url);
@@ -42,7 +43,6 @@ function sendRedirect(res: ApiResponse, url: string): void {
   }
   // Vercel / Node-style
   res.setHeader?.('Location', url);
-  res.setHeader?.('Cache-Control', 'no-store');
   if (typeof (res as { end?: (body?: string) => void }).end === 'function') {
     (res as { statusCode?: number; end: (body?: string) => void }).statusCode = 302;
     (res as { end: (body?: string) => void }).end();

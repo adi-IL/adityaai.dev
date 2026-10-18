@@ -1,6 +1,6 @@
 # adityaai.dev
 
-adityaai.dev is the root site for the adityaai lab. A Vite + React SPA on Vercel, with serverless functions for newsletter, virtual coffee, article feedback, and a Gemini lab guide chat.
+adityaai.dev is the root site for the adityaai lab. A Vite + React SPA on Vercel, with serverless functions for newsletter, virtual coffee, article feedback, C2H support reports, and a Gemini lab guide chat.
 
 Live site: https://www.adityaai.dev
 
@@ -46,7 +46,7 @@ Thirteen essays is the current shelf. Prefer updating a thesis in place over add
 
 A change that works on one page and lies on another is unfinished.
 
-- **Registry.** Home, Projects, LabStrip, chat context, and prerender all read `src/lib/projects.ts`.
+- **Registry.** Home, Projects, ProjectDetail, About, LabStrip, chat context, and prerender all read `src/lib/projects.ts`.
 - **Brand files.** `BrandStamp.tsx`, `LabStrip.tsx`, `ProjectSignature.tsx` are the lab marks. Sibling sites copy these. Do not fork them here.
 - **Essays.** Markdown, `articles-meta.json`, prerender HTML, sitemap, and `llms.txt` must agree.
 - **APIs.** Vercel `api/*.ts` and local `server.ts` share `lib/handlers/*`. Change the handler, not one wrapper.
@@ -95,11 +95,14 @@ Most code changes do not need a docs change. Agents can read the code.
 - `src/` React SPA. Routes in `src/App.tsx`.
 - `src/content/articles/` essay markdown.
 - `src/lib/projects.ts` project registry.
+- `src/data/upstream-ledger.json`, `src/lib/upstreamLedger.ts`, `src/lib/upstream.ts` upstream PR ledger and curated receipts.
+- `src/lib/gpu/` WebGPU and WebGL2 shader runtime.
 - `lib/` server logic shared by Express and Vercel.
 - `api/` Vercel serverless entrypoints.
 - `server.ts` local Express + Vite.
 - `scripts/generate-articles-meta.mjs` essay index.
 - `scripts/prerender.mjs` per-route HTML, sitemap, `llms.txt`.
+- `scripts/sync-ledger.mjs`, `scripts/upstream-guard.mjs` upstream ledger sync and banned-term guard.
 - `tests/` Node test runner via `tsx --test`.
 
 ## Taste

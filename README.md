@@ -19,16 +19,18 @@ Live site: [www.adityaai.dev](https://www.adityaai.dev)
 
 ## What this repo is
 
-The public site is a Vite + React SPA on Vercel, with serverless functions for newsletter, virtual coffee, article feedback, and the lab guide chat.
+The public site is a Vite + React SPA on Vercel, with serverless functions for newsletter, virtual coffee, article feedback, C2H support reports, and the lab guide chat.
 
 | Surface | Route | What it does |
 | --- | --- | --- |
-| Essays | `/articles` | Curated shelf. UI says Essays. URL stays `/articles`. |
-| Projects | `/projects` | FRIDAY, Sentinel, MidSphere write-ups |
-| About | `/about` | Bio and certifications |
+| Home | `/` | Landing page, featured essays, and lab architecture stack |
+| Essays | `/articles`, `/articles/:slug` | Curated shelf (`13` essays). UI says Essays. `/essays` redirects to `/articles`. |
+| Projects | `/projects`, `/projects/:slug` | FRIDAY, Sentinel, MidSphere write-ups |
+| About | `/about` | Bio, architectural focus, and certifications |
 | Upstream | `/upstream` | Merged open-source PR ledger (`src/pages/Upstream.tsx`, `src/data/upstream-ledger.json`) |
-| Newsletter | `POST /api/subscribe` | Double opt-in via Resend |
+| Newsletter | `POST /api/subscribe`, `GET /api/subscribe/confirm` | Double opt-in via Resend |
 | Virtual coffee | `POST /api/virtual-coffee` | Lead form, two emails |
+| Article feedback | `POST /api/feedback` | Reaction and optional comment email to owner |
 | Lab guide | `POST /api/chat` | Gemini chat, site-first |
 | C2H report | `POST /api/c2h-report` | Setup report email to owner (`lib/handlers/c2h-report.ts`) |
 

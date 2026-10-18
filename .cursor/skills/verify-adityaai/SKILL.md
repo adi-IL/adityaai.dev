@@ -59,9 +59,11 @@ Doctor must exit `0` and print `ok` lines for:
 4. `GET /about` → 200
 5. `GET /upstream` → 200
 6. `GET /essays` → permanent redirect to `/articles` (308 or 301; follow off)
-7. `GET /articles/does-not-exist-verify-adityaai` → 404 (hard, not soft-200)
-8. `GET /llms.txt` → 200 and body contains `adityaai.dev`
-9. `GET /sitemap.xml` → 200 and body contains `www.adityaai.dev`
+7. `GET /projects/opalserve` → permanent redirect to `/projects` (308 or 301; follow off)
+8. `GET /articles/44_arc_agi_3_failure_architecture` → permanent redirect to `/articles/the-verification-gap` (308 or 301; follow off)
+9. `GET /articles/does-not-exist-verify-adityaai` → 404 (hard, not soft-200)
+10. `GET /llms.txt` → 200 and body contains `adityaai.dev`
+11. `GET /sitemap.xml` → 200 and body contains `www.adityaai.dev`
 
 If doctor fails, stop. Fix the site or the base URL before driving UI.
 
@@ -77,7 +79,7 @@ node .cursor/skills/verify-adityaai/scripts/http-probe.mjs /projects
 
 Drive the real visitor path in a desktop/browser subagent. Prefer:
 
-- Desktop viewport wide enough for the pill nav. Links named `Home`, `Essays`, `Projects`, `About`.
+- Desktop viewport wide enough for the pill nav. Links named `Home`, `Essays`, `Projects`, `Upstream`, `About`.
 - Mobile: `Open navigation menu` / `Close navigation menu`.
 - Direct route URLs for deep links.
 - Stable text anchors, not coordinates.

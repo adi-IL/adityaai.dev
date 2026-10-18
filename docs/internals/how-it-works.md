@@ -6,9 +6,9 @@
 2. Vercel rewrite serves prerendered `dist/articles/<slug>/index.html` when that file exists.
 3. Hashed JS/CSS load. React hydrates the SPA.
 4. Client router handles further navigation.
-5. `Home` defers loading `AtmosphericBackground` and `NetworkBackground` (`three` and `vanta`) via `requestIdleCallback`.
+5. `GlobalBackgrounds` in `src/App.tsx` defers loading `AtmosphericBackground` and `NetworkBackground` (`three` and `vanta`) on `/` via `requestIdleCallback`.
 
-Unknown paths fall through SPA `index.html` to React `NotFound` with `noindex`.
+Missing `/articles/:slug`, `/projects/:slug`, or unknown paths return HTTP 404 (`dist/404.html`, no SPA catch-all rewrite on Vercel). During client-side navigation or local `NODE_ENV=production` Express, unmatched routes render React `NotFound` with `noindex`.
 
 ## Essay shelf
 
@@ -24,6 +24,7 @@ scripts/generate-articles-meta.mjs
 scripts/articles-meta.json
         ├── src/lib/articles.ts (listing)
         ├── lib/site-context.ts (chat prompt)
+        ├── lib/handlers/feedback.ts (slug allowlist)
         └── scripts/prerender.mjs (HTML meta, sitemap, llms.txt)
 ```
 
@@ -45,16 +46,16 @@ SiteChatWidget  --POST /api/chat-->  api/chat.ts
                                  lib/vertex.ts → Gemini
                                  lib/site-context.ts prompt
                                        │
-                 { reply, model, functionCalls?, sources? }
+          { reply, model, functionCalls, usedSearch, sources? }
 ```
 
 - Default model `gemini-3.7-flash` (`GEMINI_MODEL`). `temperature: 0.4`, `maxOutputTokens: 1024`.
-- System prompt includes the essay list, project cards, and contact paths.
+- System prompt includes the essay list, project cards, upstream ledger summary, and contact paths.
 - Starter chips change with the active route.
 - The model may emit `navigateTo` with a `path`. If there is no text, the handler fills `Navigating to {path}...`.
 - If `CHAT_ENABLE_SEARCH` is true (default) and the last user message looks external, the request may include Google Search grounding. Citations come back as `sources`.
-- History is `sessionStorage` only, last 12 messages. No server-side chat log.
-- Honeypot field. 20 requests / hour / IP. Max 12 messages, 2,000 characters each.
+- Client history is `sessionStorage` only (last 12 messages, 2-second client send cooldown). The server accepts odd-length alternating `user`/`assistant` arrays ending in `user` and keeps the last 11 messages (`MAX_MESSAGES = 11`). No server-side chat log.
+- Honeypot fields (`website`, `_gotcha`, `company_url`). 3 requests / 10 seconds / IP burst and 20 requests / hour / IP. Max 11 messages per request, 2,000 characters each.
 
 ## Newsletter
 
@@ -97,11 +98,11 @@ POST /api/feedback { slug, title, reaction, comment?, email? }
         └─ Resend → owner
 ```
 
-`reaction` allowlist: `insightful`, `useful`, `needs-depth`.
+`reaction` allowlist: `insightful`, `useful`, `needs-depth`. `slug` allowlist: all slugs in `scripts/articles-meta.json` plus `friday`, `sentinel`, `midsphere`, and `general`.
 
 ## Projects
 
-Defined only in `src/lib/projects.ts`. Home, Projects list, LabStrip, and chat context all read that registry.
+Defined only in `src/lib/projects.ts`. Home, Projects list, ProjectDetail, About, LabStrip, chat context, and `scripts/prerender.mjs` all read that registry.
 
 Live hosts used today:
 
@@ -117,9 +118,10 @@ MidSphere source on GitHub is [adi-IL/MidSphere](https://github.com/adi-IL/MidSp
 
 | Step | Output |
 | --- | --- |
-| `generate-articles-meta.mjs` | `scripts/articles-meta.json` |
+| `sync-ledger.mjs` | `src/data/upstream-ledger.json` (manual via `npm run sync:ledger`) |
+| `generate-articles-meta.mjs` | `scripts/articles-meta.json` (`prebuild`) |
 | `vite build` | `dist/assets/*`, `dist/index.html` |
-| `prerender.mjs` | `dist/<route>/index.html`, `dist/sitemap.xml`, `public/llms.txt` and `dist/llms.txt` |
+| `prerender.mjs` | 21 `dist/<route>/index.html` pages, `dist/sitemap.xml` (21 URLs), `public/llms.txt` and `dist/llms.txt` |
 
 `scripts/prerender.mjs` injects title, description, canonical, OG, and JSON-LD per route, and injects semantic HTML inside `<noscript><div id="prerendered-content">`. `src/main.tsx` removes `#prerendered-content` before mounting into `#root`.
 
@@ -129,14 +131,14 @@ From `lib/rate-limit.ts` and inline checks in `lib/handlers/subscribe.ts`. In-me
 
 Local Express also wraps `/api/` with `express-rate-limit` at 30 / minute. That middleware is not in the Vercel functions.
 
-| Namespace | Window | Max |
+| Namespace (`checkRateLimit`) | Window | Max |
 | --- | --- | --- |
-| Chat | 1 hour | 20 / IP |
-| `chat-burst` | 10 seconds | 3 / IP |
-| Subscribe | 1 hour | 5 / IP |
-| Subscribe per email | 24 hours | 2 / address |
-| Subscribe confirm | 1 hour | 10 / (IP + email) |
-| Subscribe welcome + notify | 24 hours | 1 / email |
-| Virtual coffee | 1 hour | 5 / IP |
-| Feedback | 1 hour | 15 / IP |
+| `chat:hourly` | 1 hour | 20 / IP |
+| `chat:burst` | 10 seconds | 3 / IP |
+| `subscribe:ip` | 1 hour | 5 / IP |
+| `subscribe:email` | 24 hours | 2 / address |
+| `subscribe:confirm` | 1 hour | 10 / (IP + email) |
+| `subscribe:welcome` | 24 hours | 1 / email |
+| `virtual-coffee` | 1 hour | 5 / IP |
+| `feedback` | 1 hour | 15 / IP |
 | `c2h-report` | 1 hour | 15 / IP |

@@ -24,9 +24,9 @@ Request:
 
 | Field | Notes |
 | --- | --- |
-| `messages` | Required. Last turn must be `user`. Roles `user` or `assistant`. Max 12 turns, 2,000 characters each. |
+| `messages` | Required. Odd length, alternating `user`/`assistant` starting and ending with `user`. Slices to last 11 turns (`MAX_MESSAGES = 11`), 2,000 characters each. |
 | `forceSearch` | Optional. Hint to use Google Search grounding if enabled. |
-| `website` | Honeypot. Non-empty returns a fake success. |
+| `website` | Honeypot (`website`, `_gotcha`, or `company_url`). Non-empty returns a fake `200` success. |
 
 `200`:
 
@@ -40,14 +40,15 @@ Request:
 }
 ```
 
-`functionCalls` is optional. `sources` only appears when search grounding returned citations.
+`functionCalls` is an array (`[]` when none; omitted only on honeypot `200`). `sources` only appears when search grounding returned citations. Prompt-injection guardrail matches return `200` with `model: "guardrail"` and `functionCalls: []`.
 
 | Status | Meaning |
 | --- | --- |
 | 400 | Invalid messages |
 | 405 | Not POST |
 | 429 | 3 / 10s / IP (burst) and 20 / hour / IP |
-| 500 / 502 | Upstream failure, generic message |
+| 502 | Empty model reply without a valid `navigateTo` call |
+| 500 | Upstream or internal failure, generic message |
 
 ## `POST /api/subscribe`
 
@@ -57,7 +58,7 @@ Starts double opt-in.
 { "email": "you@example.com", "website": "" }
 ```
 
-`200` for any valid-shaped email:
+`200` for any valid-shaped email (and for honeypot hits or internal/provider errors so state never leaks):
 
 ```json
 {
@@ -70,12 +71,12 @@ Sends the confirm email only. Not welcome.
 
 | Status | Meaning |
 | --- | --- |
+| 200 | Generic success (valid email, honeypot, per-email rate limit, or provider error) |
 | 400 | Invalid email shape |
 | 405 | Not POST |
-| 429 | 5 / hour / IP |
-| 500 | Internal or provider error |
+| 429 | 5 / hour / IP (`subscribe:ip`) |
 
-Also 2 confirm-mails / 24 hours / address (`subscribe-email`).
+Also 2 confirm-mails / 24 hours / address (`subscribe:email`, configured as `RATE_LIMITS['subscribe-email']`).
 
 ## `GET /api/subscribe/confirm?token=…`
 
@@ -83,8 +84,8 @@ Handler also accepts POST. Local Express mounts GET only. Browsers hit this from
 
 - Verifies HMAC token (email + expiry, 48 hours).
 - Creates Resend contact (optional audience).
-- Welcome + owner notify at most once per email / 24 hours.
-- Redirects with `Cache-Control: no-store`.
+- Welcome + owner notify at most once per email / 24 hours (`subscribe:welcome`).
+- Redirects (`302`) with `Cache-Control: no-store`.
 
 | Token state | Redirect |
 | --- | --- |
@@ -92,7 +93,7 @@ Handler also accepts POST. Local Express mounts GET only. Browsers hit this from
 | Expired | `/?subscribed=expired` |
 | Invalid, rate-limited, or missing config | `/?subscribed=invalid` |
 
-Confirm attempts: 10 / hour / (IP + email). Rate-limited confirms redirect to `invalid`.
+Confirm attempts: 10 / hour / (IP + email) (`subscribe:confirm`). Rate-limited confirms redirect to `invalid`.
 
 ## `POST /api/virtual-coffee`
 
@@ -112,16 +113,16 @@ Confirm attempts: 10 / hour / (IP + email). Rate-limited confirms redirect to `i
 | `email` | Required | 200 chars |
 | `role` | Optional | 200 chars |
 | `message` | Optional | 2,000 chars |
-| `website` | Optional | Honeypot |
+| `website` | Optional | Honeypot (`website`, `_gotcha`, `company_url`) |
 
 `200`: `{ "success": true }`. Owner notification plus visitor confirmation.
 
 | Status | Meaning |
 | --- | --- |
-| 400 | Missing name or invalid email |
+| 400 | Missing name, invalid email, or Resend rejected owner email |
 | 405 | Not POST |
 | 429 | 5 / hour / IP |
-| 500 | Provider or internal failure |
+| 500 | Missing `RESEND_API_KEY` or unhandled exception |
 
 ## `POST /api/feedback`
 
@@ -136,16 +137,24 @@ Confirm attempts: 10 / hour / (IP + email). Rate-limited confirms redirect to `i
 }
 ```
 
-`reaction`: `insightful`, `useful`, or `needs-depth`.
+| Field | Requirement | Clamp / Allowlist |
+| --- | --- | --- |
+| `slug` | Required | 100 chars; must be in `scripts/articles-meta.json` or `friday`, `sentinel`, `midsphere`, `general` |
+| `reaction` | Required | 50 chars; `insightful`, `useful`, or `needs-depth` |
+| `title` | Optional | 200 chars (HTML stripped; defaults to `slug`) |
+| `comment` | Optional | 2,000 chars (HTML stripped) |
+| `email` | Optional | 200 chars; validated if non-empty |
+| `website` | Optional | Honeypot (`website`, `_gotcha`, `company_url`) |
 
 `200`: `{ "success": true }`.
 
 | Status | Meaning |
 | --- | --- |
-| 400 | Missing slug or disallowed reaction |
+| 400 | Missing/unknown slug, disallowed reaction, or invalid email |
 | 405 | Not POST |
 | 429 | 15 / hour / IP |
-| 500 | Provider or internal failure |
+| 502 | Resend returned an error object |
+| 500 | Missing `RESEND_API_KEY` or unhandled exception |
 
 ## `POST /api/c2h-report`
 
@@ -176,10 +185,10 @@ One owner email per call. Recipient + subject fixed server-side.
 
 | Status | Meaning |
 | --- | --- |
-| 400 | Missing hostname, supportUser, password, or externalIp |
+| 400 | Missing hostname, supportUser, password, externalIp, or Resend rejected email |
 | 405 | Not POST |
 | 429 | 15 / hour / IP |
-| 500 | Provider or internal failure |
+| 500 | Missing `RESEND_API_KEY` or unhandled exception |
 
 ## Handler map
 

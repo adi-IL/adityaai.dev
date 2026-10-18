@@ -18,6 +18,7 @@ npm run dev
 | --- | --- |
 | `npm run dev` | Meta, then Express + Vite middleware |
 | `npm run start` | `tsx server.ts` with no extra env. Vite middleware unless `NODE_ENV=production`, in which case it serves `dist/`. |
+| `npm run prebuild` | `node scripts/generate-articles-meta.mjs` (runs automatically before `npm run build`) |
 | `npm run build` | `prebuild` meta, Vite build, `scripts/prerender.mjs` |
 | `npm run preview` | Vite preview of the production build |
 | `npm run clean` | `rm -rf dist` |
@@ -25,6 +26,7 @@ npm run dev
 | `npm test` | `tsx --test tests/*.test.ts` |
 | `npm run meta` | Write `scripts/articles-meta.json` only |
 | `npm run sync:ledger` | `node scripts/sync-ledger.mjs`, refreshes `src/data/upstream-ledger.json` and runs the upstream guard |
+| `npm run doctor` | `node .cursor/skills/verify-adityaai/scripts/doctor.mjs` (11 HTTP route, redirect, 404, `llms.txt`, and `sitemap.xml` checks) |
 
 ## Environment
 
@@ -34,11 +36,11 @@ Names only. Values live in the host, never in git.
 
 | Variable | Required | Purpose |
 | --- | --- | --- |
-| `RESEND_API_KEY` | For email APIs | Newsletter, feedback, virtual coffee |
+| `RESEND_API_KEY` | For email APIs | Newsletter, feedback, virtual coffee, `c2h-report` |
 | `RESEND_AUDIENCE_ID` | No | Resend audience for confirmed subscribers |
 | `SUBSCRIBE_SECRET` | No | HMAC for confirm links. Defaults to `RESEND_API_KEY`. |
-| `APP_URL` | No | Origin in confirm emails. Default `https://www.adityaai.dev`. |
-| `NOTIFY_EMAIL` | No | Owner inbox. Default `aiexpert@adityaai.dev`. |
+| `APP_URL` | No | Origin in confirm emails (alias `SITE_URL`). Default `https://www.adityaai.dev`. |
+| `NOTIFY_EMAIL` | No | Owner inbox for leads, feedback, `c2h-report`, and confirmed subscribers. Default `aiexpert@adityaai.dev`. |
 
 ### Lab guide (Vertex / Gemini)
 

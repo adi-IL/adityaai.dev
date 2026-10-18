@@ -21,4 +21,4 @@
 
 Root [README](../README.md) is the short entry. These files are the map of the system.
 
-CI is `.github/workflows/ci.yml` (typecheck, tests, build on Node 20 / 22 / 24). Deploys are the Vercel Git integration on push to `main`.
+CI is `.github/workflows/ci.yml` (typecheck, build, tests, and artifact/dist guard on Node 20 / 22 / 24). Deploys are the Vercel Git integration on push to `main`.
