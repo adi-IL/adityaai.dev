@@ -20,9 +20,16 @@ Decision tools for people who design production AI systems.
 - Upstream: https://www.adityaai.dev/upstream (31 merged open-source PRs, generated from the GitHub profile ledger)
 
 ## Lab products
-- [FRIDAY](https://friday.adityaai.dev): Immersive Engineering Visual Intelligence — Generative 3D engineering visualization engine. Turn voice commands, sketches, or prompts into interactive mechanical assemblies in real time. Deep dive: https://www.adityaai.dev/projects/friday · Source: https://github.com/adi-IL/friday-visual-engine
-- [Sentinel](https://sentinel.adityaai.dev): Autonomous Competitive Intelligence — Five Gemini agents chained in a state machine. Hunts the web, performs scored SWOT, compiles a C-level strategic brief in under a minute. Deep dive: https://www.adityaai.dev/projects/sentinel · Source: https://github.com/adi-IL/sentinel
-- [MidSphere](https://midsphere.vercel.app): Autonomous Context Circuit-Breaker for Data Platforms — Closed-loop autonomous circuit-breaker engine for enterprise catalogs. Audits schema drift and PII leaks, scores selective blast radius, and applies advisory quarantine to protect downstream AI agents. Deep dive: https://www.adityaai.dev/projects/midsphere · Source: https://github.com/adi-IL/MidSphere
+- [FRIDAY](https://friday.adityaai.dev): Immersive Engineering Visual Intelligence. Generative 3D engineering visualization engine. Turn voice commands, sketches, or prompts into interactive mechanical assemblies in real time. Deep dive: https://www.adityaai.dev/projects/friday · Source: https://github.com/adi-IL/friday-visual-engine
+- [Sentinel](https://sentinel.adityaai.dev): Autonomous Competitive Intelligence. Five Gemini agents chained in a state machine. Hunts the web, performs scored SWOT, compiles a C-level strategic brief in under a minute. Deep dive: https://www.adityaai.dev/projects/sentinel · Source: https://github.com/adi-IL/sentinel
+- [MidSphere](https://midsphere.vercel.app): Autonomous Context Circuit-Breaker for Data Platforms. Closed-loop autonomous circuit-breaker engine for enterprise catalogs. Audits schema drift and PII leaks, scores selective blast radius, and applies advisory quarantine to protect downstream AI agents. Deep dive: https://www.adityaai.dev/projects/midsphere · Source: https://github.com/adi-IL/MidSphere
+
+## Open-source tools
+- [voltcrawl](https://github.com/adi-IL/voltcrawl): MCP server that gives coding agents verified web evidence and headless browser rendering. TypeScript, Playwright. MIT.
+- [hq-jr](https://github.com/adi-IL/hq-jr): Self-hosted GitHub App that reviews pull requests with Vertex AI, remembers past findings, and can reproduce bugs in a sandbox before it comments. Apache-2.0.
+- [ticking-plasmoid](https://github.com/adi-IL/ticking-plasmoid): Countdown, millisecond stopwatch and quote widget for KDE Plasma 6. KDE Store: https://store.kde.org/p/2370240/
+- [ticking-omarchy](https://github.com/adi-IL/ticking-omarchy): Countdown, world clock and stopwatch widget for Omarchy (Hyprland, Quickshell).
+- [bad_apple_rs](https://github.com/adi-IL/bad_apple_rs): Rust CLI that plays Bad Apple as ASCII art in the terminal.
 
 ## Critical impacts in open source
 Static curated receipts on /projects (not a live GitHub feed):

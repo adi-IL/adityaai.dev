@@ -571,7 +571,7 @@ const essayLinesForLlms = articles
 const productLines = projects
   .map(
     (p) =>
-      `- [${p.name}](${p.liveUrl}): ${p.tagline} — ${p.excerpt} Deep dive: ${SITE}/projects/${p.slug} · Source: ${p.codeUrl}`,
+      `- [${p.name}](${p.liveUrl}): ${p.tagline}. ${p.excerpt} Deep dive: ${SITE}/projects/${p.slug} · Source: ${p.codeUrl}`,
   )
   .join("\n");
 
@@ -598,6 +598,13 @@ Decision tools for people who design production AI systems.
 
 ## Lab products
 ${productLines}
+
+## Open-source tools
+- [voltcrawl](https://github.com/adi-IL/voltcrawl): MCP server that gives coding agents verified web evidence and headless browser rendering. TypeScript, Playwright. MIT.
+- [hq-jr](https://github.com/adi-IL/hq-jr): Self-hosted GitHub App that reviews pull requests with Vertex AI, remembers past findings, and can reproduce bugs in a sandbox before it comments. Apache-2.0.
+- [ticking-plasmoid](https://github.com/adi-IL/ticking-plasmoid): Countdown, millisecond stopwatch and quote widget for KDE Plasma 6. KDE Store: https://store.kde.org/p/2370240/
+- [ticking-omarchy](https://github.com/adi-IL/ticking-omarchy): Countdown, world clock and stopwatch widget for Omarchy (Hyprland, Quickshell).
+- [bad_apple_rs](https://github.com/adi-IL/bad_apple_rs): Rust CLI that plays Bad Apple as ASCII art in the terminal.
 
 ## Critical impacts in open source
 Static curated receipts on /projects (not a live GitHub feed):

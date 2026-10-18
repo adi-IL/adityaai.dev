@@ -7,7 +7,9 @@
     { "source": "/essays", "destination": "/articles", "permanent": true },
     { "source": "/essays/", "destination": "/articles", "permanent": true },
     { "source": "/articles/44_arc_agi_3_failure_architecture", "destination": "/articles/the-verification-gap", "permanent": true },
-    { "source": "/articles/44_arc_agi_3_failure_architecture/", "destination": "/articles/the-verification-gap", "permanent": true }
+    { "source": "/articles/44_arc_agi_3_failure_architecture/", "destination": "/articles/the-verification-gap", "permanent": true },
+    { "source": "/projects/opalserve", "destination": "/projects", "permanent": true },
+    { "source": "/projects/opalserve/", "destination": "/projects", "permanent": true }
   ],
   "rewrites": [
     { "source": "/api/:path*", "destination": "/api/:path*" },
