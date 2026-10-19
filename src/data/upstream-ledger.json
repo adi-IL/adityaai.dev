@@ -2,6 +2,16 @@
   "source": "adi-IL/adi-IL data/ledger.json",
   "items": [
     {
+      "url": "https://github.com/google/gvisor/pull/15948",
+      "repo": "google/gvisor",
+      "number": 15948,
+      "title": "Allow setting RLIMIT_MSGQUEUE",
+      "mergedAt": "2026-10-19T22:20:37Z",
+      "additions": 20,
+      "deletions": 3,
+      "test": null
+    },
+    {
       "url": "https://github.com/can1357/oh-my-pi/pull/16054",
       "repo": "can1357/oh-my-pi",
       "number": 16054,
