@@ -61,4 +61,17 @@ jobs:
             if (guardHits(upstreamHtml).length > 0 || /approv/i.test(upstreamHtml)) {
               throw new Error("dist/upstream/index.html failed upstream guard check");
             }
+            const indexAssets = fs.readdirSync("dist/assets").filter((f) => /^index-.*\.js$/.test(f));
+            if (indexAssets.length === 0) {
+              throw new Error("Missing dist/assets/index-*.js bundle");
+            }
+            for (const f of indexAssets) {
+              const js = fs.readFileSync(`dist/assets/${f}`, "utf8");
+              if (js.includes("import.meta.glob")) {
+                throw new Error(`dist/assets/${f} contains untransformed import.meta.glob`);
+              }
+              if (!js.includes("/src/content/articles/shared-caches-beat-sandbox-walls.md")) {
+                throw new Error(`dist/assets/${f} is missing article loader map`);
+              }
+            }
           '

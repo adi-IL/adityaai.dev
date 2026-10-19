@@ -4,6 +4,7 @@ import { readFileSync } from 'node:fs';
 import { guardHits } from '../scripts/upstream-guard.mjs';
 import { normalize } from '../scripts/sync-ledger.mjs';
 import { mergedPrs, monthStats, projectName, projectStats, type MergedPr } from '../src/lib/upstreamLedger.ts';
+import { articles, loadArticle } from '../src/lib/articles.ts';
 import { buildSiteContext } from '../lib/site-context.js';
 import { projects } from '../src/lib/projects.js';
 
@@ -117,3 +118,25 @@ describe('upstream tooltips stay inside a narrow viewport', () => {
     assert.doesNotMatch(monthTips.at(-1)!, /translate-x/);
   });
 });
+
+describe('articles loader', () => {
+  it('loads valid metadata and full markdown bodies for every essay without typeof import.meta.glob', async () => {
+    assert.ok(articles.length > 0);
+    for (const meta of articles) {
+      assert.ok(meta.slug.length > 0);
+      assert.ok(meta.title.length > 0);
+      assert.ok(meta.excerpt.length > 0);
+      assert.ok(meta.readingTime > 0);
+      assert.ok(meta.wordCount > 0);
+      const article = await loadArticle(meta.slug);
+      assert.ok(article, `loadArticle(${meta.slug}) returned null`);
+      assert.ok(article.content.length > 0, `empty body for ${meta.slug}`);
+      assert.ok(!article.content.startsWith('---\n'), `unstripped frontmatter for ${meta.slug}`);
+    }
+    assert.equal(await loadArticle('non-existent-slug'), null);
+
+    const src = read('src/lib/articles.ts');
+    assert.ok(!src.includes('typeof import.meta.glob'), 'src/lib/articles.ts must not gate import.meta.glob with typeof');
+  });
+});
+

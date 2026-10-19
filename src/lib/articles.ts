@@ -41,14 +41,16 @@ export const articles: ArticleMeta[] = (articlesMeta as ArticleMeta[]).map((a) =
 
 export const featuredArticles = articles.filter((a) => a.featured);
 
-const contentLoaders = (
-  typeof import.meta.glob === 'function'
-    ? import.meta.glob('/src/content/articles/*.md', {
-        query: '?raw',
-        import: 'default',
-      })
-    : {}
-) as Record<string, () => Promise<string>>;
+const contentLoaders = (() => {
+  try {
+    return import.meta.glob('/src/content/articles/*.md', {
+      query: '?raw',
+      import: 'default',
+    }) as Record<string, () => Promise<string>>;
+  } catch {
+    return {} as Record<string, () => Promise<string>>;
+  }
+})();
 
 function contentPathForSlug(slug: string): string {
   return `/src/content/articles/${slug}.md`;
@@ -71,11 +73,30 @@ export async function loadArticle(slug: string): Promise<Article | null> {
   if (!meta) return null;
 
   const loader = contentLoaders[contentPathForSlug(slug)];
-  if (!loader) return null;
+  if (loader) {
+    const raw = await loader();
+    return {
+      ...meta,
+      content: stripFrontmatter(raw),
+    };
+  }
 
-  const raw = await loader();
-  return {
-    ...meta,
-    content: stripFrontmatter(raw),
-  };
+  if (typeof process !== 'undefined' && Boolean(process.versions?.node)) {
+    try {
+      const { readFile } = await import(/* @vite-ignore */ 'node:fs/promises');
+      const { fileURLToPath } = await import(/* @vite-ignore */ 'node:url');
+      const filePath = fileURLToPath(
+        new URL(`../content/articles/${slug}.md`, import.meta.url),
+      );
+      const raw = await readFile(filePath, 'utf8');
+      return {
+        ...meta,
+        content: stripFrontmatter(raw),
+      };
+    } catch {
+      return null;
+    }
+  }
+
+  return null;
 }
