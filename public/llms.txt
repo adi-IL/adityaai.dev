@@ -17,7 +17,7 @@ Decision tools for people who design production AI systems.
 - About: https://www.adityaai.dev/about
 - Essays: https://www.adityaai.dev/articles (13 curated; not a high-volume blog)
 - Projects: https://www.adityaai.dev/projects
-- Upstream: https://www.adityaai.dev/upstream (32 merged open-source PRs, generated from the GitHub profile ledger)
+- Upstream: https://www.adityaai.dev/upstream (37 merged open-source PRs, generated from the GitHub profile ledger)
 
 ## Lab products
 - [FRIDAY](https://friday.adityaai.dev): Immersive Engineering Visual Intelligence. Generative 3D engineering visualization engine. Turn voice commands, sketches, or prompts into interactive mechanical assemblies in real time. Deep dive: https://www.adityaai.dev/projects/friday · Source: https://github.com/adi-IL/friday-visual-engine

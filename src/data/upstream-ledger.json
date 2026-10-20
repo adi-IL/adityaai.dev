@@ -2,6 +2,56 @@
   "source": "adi-IL/adi-IL data/ledger.json",
   "items": [
     {
+      "url": "https://github.com/can1357/oh-my-pi/pull/16485",
+      "repo": "can1357/oh-my-pi",
+      "number": 16485,
+      "title": "fix(read): keep requested lines when leading context exceeds the byte budget",
+      "mergedAt": "2026-10-20T14:20:51Z",
+      "additions": 115,
+      "deletions": 32,
+      "test": null
+    },
+    {
+      "url": "https://github.com/can1357/oh-my-pi/pull/16479",
+      "repo": "can1357/oh-my-pi",
+      "number": 16479,
+      "title": "fix(tui): keep wide-glyph table cells inside their column",
+      "mergedAt": "2026-10-20T13:57:27Z",
+      "additions": 43,
+      "deletions": 3,
+      "test": null
+    },
+    {
+      "url": "https://github.com/can1357/oh-my-pi/pull/16483",
+      "repo": "can1357/oh-my-pi",
+      "number": 16483,
+      "title": "fix(session): replay the active leaf after an off-branch entry",
+      "mergedAt": "2026-10-20T13:53:44Z",
+      "additions": 118,
+      "deletions": 29,
+      "test": null
+    },
+    {
+      "url": "https://github.com/can1357/oh-my-pi/pull/16481",
+      "repo": "can1357/oh-my-pi",
+      "number": 16481,
+      "title": "fix(utils): keep HTML comments in frontmatter bodies",
+      "mergedAt": "2026-10-20T13:16:13Z",
+      "additions": 41,
+      "deletions": 4,
+      "test": null
+    },
+    {
+      "url": "https://github.com/can1357/oh-my-pi/pull/16477",
+      "repo": "can1357/oh-my-pi",
+      "number": 16477,
+      "title": "fix(web): render the GitLab merge request description",
+      "mergedAt": "2026-10-20T13:10:28Z",
+      "additions": 47,
+      "deletions": 1,
+      "test": null
+    },
+    {
       "url": "https://github.com/google/gvisor/pull/15948",
       "repo": "google/gvisor",
       "number": 15948,
