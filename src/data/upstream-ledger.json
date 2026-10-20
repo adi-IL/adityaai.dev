@@ -2,6 +2,16 @@
   "source": "adi-IL/adi-IL data/ledger.json",
   "items": [
     {
+      "url": "https://github.com/grafana/grafana/pull/133723",
+      "repo": "grafana/grafana",
+      "number": 133723,
+      "title": "Dashboard: Preserve panel subtitle in V2 save model",
+      "mergedAt": "2026-10-20T22:20:57Z",
+      "additions": 37,
+      "deletions": 1,
+      "test": null
+    },
+    {
       "url": "https://github.com/can1357/oh-my-pi/pull/16485",
       "repo": "can1357/oh-my-pi",
       "number": 16485,
