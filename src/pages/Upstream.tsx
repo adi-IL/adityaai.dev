@@ -411,7 +411,7 @@ function TestGrid({ stats, items }: { stats: ProjectStat[]; items: MergedPr[] })
                           ? `${s.name} #${p.number}: regression test ${p.test.label}`
                           : `${s.name} #${p.number}: no regression test, opens the PR`
                       }
-                      className={`group flex h-7 w-7 sm:h-6 sm:w-6 items-center justify-center rounded-[5px] transition-all duration-150 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-electric-lime motion-safe:animate-[fadeIn_0.35s_ease-out_both] ${
+                      className={`group relative flex h-7 w-7 sm:h-6 sm:w-6 items-center justify-center rounded-[5px] transition-all duration-150 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-electric-lime motion-safe:animate-[fadeIn_0.35s_ease-out_both] ${
                         p.test
                           ? 'bg-electric-lime text-zinc-950 shadow-[0_0_10px_rgba(202,255,74,0.16)] hover:scale-110 hover:bg-white'
                           : 'border border-zinc-700 bg-zinc-900/60 hover:scale-105 hover:border-zinc-400'

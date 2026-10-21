@@ -71,7 +71,7 @@ export default function SignalSection() {
             <span className="size-1.5 rounded-full bg-electric-lime shadow-[0_0_8px_rgba(204,255,0,0.8)] animate-pulse" />
             Signal · shelf axioms
           </div>
-          <div role="group" aria-label="Select signal quote" className="flex items-center gap-1">
+          <div role="group" aria-label="Select signal quote" className="flex flex-wrap items-center">
             {signalQuotes.map((q, i) => {
               const active = i === idx;
               return (
@@ -81,7 +81,7 @@ export default function SignalSection() {
                   aria-pressed={active}
                   aria-label={`Quote ${i + 1}: ${q.quote}`}
                   onClick={() => setIdx(i)}
-                  className="group py-3 px-1.5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-electric-lime rounded"
+                  className="group flex min-w-7 justify-center py-3 px-1.5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-electric-lime rounded"
                 >
                   <span
                     aria-hidden
