@@ -160,7 +160,7 @@ export default function VirtualCoffeePopup() {
               type="button"
               onClick={dismiss}
               aria-label="Close virtual coffee popup"
-              className="absolute top-4 right-4 text-zinc-600 hover:text-zinc-200 transition-colors p-1 z-10"
+              className="absolute top-3.5 right-3.5 text-zinc-500 hover:text-zinc-200 transition-colors p-2 z-10"
             >
               <X size={18} />
             </button>

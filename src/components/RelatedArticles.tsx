@@ -43,7 +43,7 @@ export default function RelatedArticles({ currentSlug }: { currentSlug: string }
         </div>
         <Link
           to="/articles"
-          className="font-mono text-[10px] uppercase tracking-widest text-zinc-400 hover:text-electric-lime transition-colors inline-flex items-center gap-1"
+          className="font-mono text-[10px] uppercase tracking-widest text-zinc-400 hover:text-electric-lime transition-colors inline-flex items-center gap-1 py-2 px-2 -mr-2"
         >
           All essays <ArrowUpRight size={12} />
         </Link>

@@ -81,7 +81,7 @@ export default function SignalSection() {
                   aria-pressed={active}
                   aria-label={`Quote ${i + 1}: ${q.quote}`}
                   onClick={() => setIdx(i)}
-                  className="group py-2 px-1 focus-visible:outline focus-visible:outline-2 focus-visible:outline-electric-lime rounded"
+                  className="group py-3 px-1.5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-electric-lime rounded"
                 >
                   <span
                     aria-hidden
