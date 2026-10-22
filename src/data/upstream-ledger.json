@@ -2,6 +2,46 @@
   "source": "adi-IL/adi-IL data/ledger.json",
   "items": [
     {
+      "url": "https://github.com/can1357/oh-my-pi/pull/16654",
+      "repo": "can1357/oh-my-pi",
+      "number": 16654,
+      "title": "fix(coding-agent): write the migrated models.yml atomically with owner-only permissions",
+      "mergedAt": "2026-10-22T09:43:25Z",
+      "additions": 163,
+      "deletions": 20,
+      "test": null
+    },
+    {
+      "url": "https://github.com/can1357/oh-my-pi/pull/16655",
+      "repo": "can1357/oh-my-pi",
+      "number": 16655,
+      "title": "fix(ai): surface a thrown credential resolver instead of reporting a missing key",
+      "mergedAt": "2026-10-22T09:43:25Z",
+      "additions": 78,
+      "deletions": 2,
+      "test": null
+    },
+    {
+      "url": "https://github.com/can1357/oh-my-pi/pull/16657",
+      "repo": "can1357/oh-my-pi",
+      "number": 16657,
+      "title": "fix(coding-agent): scope /memory clear to the current project",
+      "mergedAt": "2026-10-22T09:43:25Z",
+      "additions": 122,
+      "deletions": 9,
+      "test": null
+    },
+    {
+      "url": "https://github.com/can1357/oh-my-pi/pull/16658",
+      "repo": "can1357/oh-my-pi",
+      "number": 16658,
+      "title": "fix(tui): honor GFM column alignment in markdown tables",
+      "mergedAt": "2026-10-22T09:43:25Z",
+      "additions": 106,
+      "deletions": 4,
+      "test": null
+    },
+    {
       "url": "https://github.com/grafana/grafana/pull/133723",
       "repo": "grafana/grafana",
       "number": 133723,
