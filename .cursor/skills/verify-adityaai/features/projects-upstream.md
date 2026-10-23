@@ -20,12 +20,12 @@
 Preconditions:
 
 - Doctor is green.
-- Feature map expects these four PRs (order locked): tensorflow#125859, tensorflow#126449, google/mug#130, grafana#131335.
+- Feature map expects these four PRs (order locked): gvisor#14401, tensorflow#127438, tensorflow#126688, gvisor#15301.
 
 - **Open strip.** Navigate to `$ADITYAAI_BASE_URL/projects`. Scroll until heading `Critical impacts in open source` is visible.
-- **Row shape.** For `tensorflow/tensorflow #125859`, confirm an `Issue` line and a `Fix` line stacked. Confirm an `Inspect` control.
-- **Inspect.** Activate `Inspect` on grafana#131335. Destination host is `github.com` and path contains `/grafana/grafana/pull/131335`.
-- **llms.txt.** Run `node .cursor/skills/verify-adityaai/scripts/http-probe.mjs /llms.txt --grep "Critical impacts in open source" --grep "125859"`. Exit `0`.
+- **Row shape.** For `google/gvisor #14401`, confirm an `Issue` line and a `Fix` line stacked. Confirm an `Inspect` control.
+- **Inspect.** Activate `Inspect` on gvisor#15301. Destination host is `github.com` and path contains `/google/gvisor/pull/15301`.
+- **llms.txt.** Run `node .cursor/skills/verify-adityaai/scripts/http-probe.mjs /llms.txt --grep "Critical impacts in open source" --grep "14401"`. Exit `0`.
 - **Proof.** Screenshot the strip to `$ADITYAAI_VERIFY_DIR/artifacts/projects-upstream/strip.png`. Note the four PR numbers in `notes.txt`.
 
 ## Gotchas

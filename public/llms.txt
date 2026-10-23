@@ -33,10 +33,10 @@ Decision tools for people who design production AI systems.
 
 ## Critical impacts in open source
 Static curated receipts on /projects (not a live GitHub feed):
-- tensorflow/tensorflow#125859 - invalid conv rank aborted the process; now raises ValueError
-- tensorflow/tensorflow#126449 - XLA Range missing half/bfloat16/integer paths under jit_compile
-- google/mug#130 - regex escape handling and Surefire suite naming
-- grafana/grafana#131335 - value-mapping range inputs rejected minus signs
+- google/gvisor#14401 - shmctl(IPC_RMID) let any user destroy another user's shared memory; now checks ownership
+- tensorflow/tensorflow#127438 - INT32_MAX index overflowed the TensorListScatter resize; now rejected
+- tensorflow/tensorflow#126688 - fused MatMul/Conv2D failed on [1, N] bias inside tf.function; CPU and GPU kernels now accept it
+- google/gvisor#15301 - one route delete could remove several routes in netstack; now removes only the first match
 
 ## Essays (shelf)
 Forms: Framework | Architecture | Principle.

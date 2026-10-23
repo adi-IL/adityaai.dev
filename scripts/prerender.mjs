@@ -19,6 +19,11 @@ const tsProjectsSource = fs.readFileSync(tsProjectsPath, "utf-8");
 const transformedProjects = esbuild.transformSync(tsProjectsSource, { loader: "ts", format: "esm" });
 const projectsDataUrl = "data:text/javascript;base64," + Buffer.from(transformedProjects.code).toString("base64");
 const { projects } = await import(projectsDataUrl);
+const tsUpstreamSource = fs.readFileSync(path.resolve(__dirname, "..", "src", "lib", "upstream.ts"), "utf-8");
+const transformedUpstream = esbuild.transformSync(tsUpstreamSource, { loader: "ts", format: "esm" });
+const { upstreamReceipts } = await import(
+  "data:text/javascript;base64," + Buffer.from(transformedUpstream.code).toString("base64")
+);
 const upstreamLedger = JSON.parse(
   fs.readFileSync(path.resolve(__dirname, "..", "src", "data", "upstream-ledger.json"), "utf-8"),
 );
@@ -575,6 +580,10 @@ const productLines = projects
   )
   .join("\n");
 
+const receiptLinesForLlms = upstreamReceipts
+  .map((r) => `- ${r.org}/${r.repo}#${r.pr} - ${r.short}`)
+  .join("\n");
+
 const llms = `# adityaai.dev
 
 Personal lab site for Aditya Gaurav - AI Engineer & Systems Architect.
@@ -608,10 +617,7 @@ ${productLines}
 
 ## Critical impacts in open source
 Static curated receipts on /projects (not a live GitHub feed):
-- tensorflow/tensorflow#125859 - invalid conv rank aborted the process; now raises ValueError
-- tensorflow/tensorflow#126449 - XLA Range missing half/bfloat16/integer paths under jit_compile
-- google/mug#130 - regex escape handling and Surefire suite naming
-- grafana/grafana#131335 - value-mapping range inputs rejected minus signs
+${receiptLinesForLlms}
 
 ## Essays (shelf)
 Forms: Framework | Architecture | Principle.
