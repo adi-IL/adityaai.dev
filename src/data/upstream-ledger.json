@@ -2,6 +2,16 @@
   "source": "adi-IL/adi-IL data/ledger.json",
   "items": [
     {
+      "url": "https://github.com/google/gvisor/pull/14401",
+      "repo": "google/gvisor",
+      "number": 14401,
+      "title": "Enforce ownership check on shmctl(IPC_RMID)",
+      "mergedAt": "2026-10-23T19:42:20Z",
+      "additions": 62,
+      "deletions": 5,
+      "test": null
+    },
+    {
       "url": "https://github.com/can1357/oh-my-pi/pull/16654",
       "repo": "can1357/oh-my-pi",
       "number": 16654,
