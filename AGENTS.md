@@ -72,6 +72,7 @@ Smallest proof that the change works.
 - `npm run lint` (`tsc --noEmit`) for type-bearing edits.
 - Essay or prerender changes: `npm run build` so `scripts/articles-meta.json` and `public/llms.txt` match what CI will diff.
 - Do not run the GitHub Actions Node 20/22/24 matrix locally unless asked. CI owns that.
+- Run `dagger check` before pushing. It runs typecheck, tests, and the build with CI's stale-file and dist checks in one Node 22 container (`.dagger/modules/site-ci`). Needs Docker and the pinned Dagger 1.0 beta: `curl -fsSL https://dl.dagger.io/dagger/install.sh | DAGGER_VERSION=1.0.0-beta.21 BIN_DIR=$HOME/.local/bin sh`. It is local only; CI still runs `.github/workflows/ci.yml`.
 
 Do not invent tests that only restate the implementation.
 

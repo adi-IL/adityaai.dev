@@ -1,0 +1,2 @@
+[modules.site-ci]
+source = ".dagger/modules/site-ci"
