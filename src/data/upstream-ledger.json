@@ -2,6 +2,16 @@
   "source": "adi-IL/adi-IL data/ledger.json",
   "items": [
     {
+      "url": "https://github.com/nightly-labs/openbot/pull/3029",
+      "repo": "nightly-labs/openbot",
+      "number": 3029,
+      "title": "Allow mixed-case usernames in server setup and update scripts",
+      "mergedAt": "2026-10-24T14:01:22Z",
+      "additions": 6,
+      "deletions": 3,
+      "test": null
+    },
+    {
       "url": "https://github.com/google/gvisor/pull/14401",
       "repo": "google/gvisor",
       "number": 14401,
