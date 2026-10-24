@@ -39,6 +39,7 @@ const PROJECT_NAMES: Record<string, string> = {
   'google/mug': 'Mug',
   'huggingface/peft': 'PEFT',
   'can1357/oh-my-pi': 'oh-my-pi',
+  'nightly-labs/openbot': 'OpenBot',
 };
 
 const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
