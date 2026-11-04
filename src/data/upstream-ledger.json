@@ -2,6 +2,19 @@
   "source": "adi-IL/adi-IL data/ledger.json",
   "items": [
     {
+      "url": "https://github.com/google/gvisor/pull/15949",
+      "repo": "google/gvisor",
+      "number": 15949,
+      "title": "netlink: do not ack a successful dump",
+      "mergedAt": "2026-10-30T22:26:18Z",
+      "additions": 37,
+      "deletions": 1,
+      "test": {
+        "label": "NetlinkRouteTest.GetLinkDumpWithAck",
+        "url": "https://github.com/google/gvisor/blob/7317e2f45ed1410ff688ebaaf9c0e4ff1c7ce6e9/test/syscalls/linux/socket_netlink_route.cc#L294"
+      }
+    },
+    {
       "url": "https://github.com/nightly-labs/openbot/pull/3029",
       "repo": "nightly-labs/openbot",
       "number": 3029,
