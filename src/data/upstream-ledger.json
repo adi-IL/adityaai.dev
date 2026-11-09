@@ -2,6 +2,32 @@
   "source": "adi-IL/adi-IL data/ledger.json",
   "items": [
     {
+      "url": "https://github.com/tensorflow/tensorflow/pull/129984",
+      "repo": "tensorflow/tensorflow",
+      "number": 129984,
+      "title": "Fix XLA truncated normal sampling in far one-sided tails",
+      "mergedAt": "2026-11-09T08:49:30Z",
+      "additions": 134,
+      "deletions": 25,
+      "test": {
+        "label": "testParameterizedTruncatedNormalFarRightTail",
+        "url": "https://github.com/tensorflow/tensorflow/blob/aad13d405493f75040cd8bf4fbf1a81a6db354f0/tensorflow/compiler/tests/stateless_random_ops_test.py#L504"
+      }
+    },
+    {
+      "url": "https://github.com/google/gvisor/pull/15760",
+      "repo": "google/gvisor",
+      "number": 15760,
+      "title": "Block semop with sem_op -32768 instead of wrapping the semaphore negative",
+      "mergedAt": "2026-11-04T20:06:10Z",
+      "additions": 37,
+      "deletions": 12,
+      "test": {
+        "label": "TestWaitMinInt16",
+        "url": "https://github.com/google/gvisor/blob/2ac0f43d3a755e63413471cf6a1f54e64e922cd9/pkg/sentry/kernel/semaphore/semaphore_test.go#L142"
+      }
+    },
+    {
       "url": "https://github.com/google/gvisor/pull/15949",
       "repo": "google/gvisor",
       "number": 15949,
