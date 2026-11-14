@@ -67,7 +67,7 @@ describe('scrollsilk legal pages', () => {
     assert.match(html, /<title>Scrollsilk Terms of Service<\/title>/);
     assert.ok(html.includes('Effective date: 15 November 2026.'));
     assert.ok(html.includes('Aditya Gaurav'));
-    assert.ok(html.includes('Sonipat, Haryana, India'));
+    assert.ok(html.includes('Jalandhar, Punjab, India'));
     assert.ok(html.includes('aiexpert@adityaai.dev'));
     assert.ok(html.includes('href="mailto:aiexpert@adityaai.dev"'));
   });
