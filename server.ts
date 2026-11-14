@@ -99,6 +99,24 @@ async function startServer() {
     next();
   });
 
+  // Scrollsilk legal pages: permanent redirects from .html, direct HTML otherwise.
+  const scrollsilkPage = (route: string) =>
+    process.env.NODE_ENV !== 'production'
+      ? path.join(process.cwd(), 'public', 'scrollsilk', route, 'index.html')
+      : path.join(process.cwd(), 'dist', 'scrollsilk', route, 'index.html');
+  app.get('/scrollsilk/privacy-policy.html', (_req, res) => {
+    res.redirect(308, '/scrollsilk/privacy-policy');
+  });
+  app.get('/scrollsilk/terms.html', (_req, res) => {
+    res.redirect(308, '/scrollsilk/terms');
+  });
+  app.get(['/scrollsilk/privacy-policy', '/scrollsilk/privacy-policy/'], (_req, res) => {
+    res.sendFile(scrollsilkPage('privacy-policy'));
+  });
+  app.get(['/scrollsilk/terms', '/scrollsilk/terms/'], (_req, res) => {
+    res.sendFile(scrollsilkPage('terms'));
+  });
+
   if (process.env.NODE_ENV !== 'production') {
     const vite = await createViteServer({
       server: { middlewareMode: true },
