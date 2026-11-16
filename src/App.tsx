@@ -16,6 +16,8 @@ import VirtualCoffeePopup from './components/VirtualCoffeePopup';
 import FloatingCoffeeButton from './components/FloatingCoffeeButton';
 import FloatingChatButton from './components/FloatingChatButton';
 import SiteChatWidget from './components/SiteChatWidget';
+import CommandPalette from './components/CommandPalette';
+import { Toast, ToastDescription, ToastRegion, ToastTitle } from '@ui-sdk/react/toast';
 
 // Lazy load heavy Three.js backgrounds
 const AtmosphericBackground = lazy(() => import('./components/AtmosphericBackground'));
@@ -133,6 +135,17 @@ export default function App() {
         <SiteChatWidget />
         <FloatingCoffeeButton />
         <VirtualCoffeePopup />
+        <CommandPalette />
+        <ToastRegion className="fixed bottom-6 left-1/2 -translate-x-1/2 z-[80] flex flex-col gap-2 w-[min(100vw-2rem,24rem)] pointer-events-none">
+          {() => (
+            <Toast className="pointer-events-auto liquid-glass rounded-2xl px-4 py-3 flex items-start justify-between gap-3 transition-[opacity,transform] duration-200 data-starting-style:opacity-0 data-starting-style:translate-y-2 data-ending-style:opacity-0 data-ending-style:translate-y-2">
+              <div className="min-w-0">
+                <ToastTitle className="font-mono text-[11px] uppercase tracking-wider text-electric-lime" />
+                <ToastDescription className="text-xs text-zinc-300 mt-0.5 truncate" />
+              </div>
+            </Toast>
+          )}
+        </ToastRegion>
       </div>
       </LazyMotion>
     </Router>

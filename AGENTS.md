@@ -64,6 +64,10 @@ Serves `http://localhost:3000`. Loads `.env.local` then `.env`. Chat and email n
 
 Details: `docs/user/local.md`.
 
+## UI SDK
+
+`@ui-sdk/*` is installed (core plus React, Vue, Svelte, Solid and web adapters). Before using it, follow the `ui-sdk` skill if your agent supports skills, and read `node_modules/@ui-sdk/react/docs/llms.txt`. Import components from their own entry, like `@ui-sdk/react/select`. The components ship no styles.
+
 ## Verifying
 
 Smallest proof that the change works.

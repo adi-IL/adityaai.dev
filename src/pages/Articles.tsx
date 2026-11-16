@@ -1,6 +1,12 @@
 import { useEffect, useMemo, useState } from 'react';
 import { ArrowUpRight, Search, X } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import {
+  SegmentedControl,
+  SegmentedControlIndicator,
+  SegmentedControlItem,
+} from '@ui-sdk/react/segmented-control';
+import { Toggle } from '@ui-sdk/react/toggle';
 import { articles, type ArticleMeta, type EssayForm } from '../lib/articles';
 import SEO from '../components/SEO';
 
@@ -148,46 +154,38 @@ export default function Articles() {
 
         {/* Interactive Shelf Toolbar */}
         <div className="mb-10 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-          <div role="group" aria-label="Filter essays by form" className="flex flex-wrap items-center gap-2">
-            {FORMS.map((form) => {
-              const active = filter === form;
-              return (
-                <button
+          <div className="flex flex-wrap items-center gap-2.5">
+            <SegmentedControl
+              aria-label="Filter essays by form"
+              value={filter}
+              onValueChange={(v) => {
+                if (v) setFilter(v as 'All' | EssayForm);
+              }}
+              className="relative isolate inline-flex flex-wrap items-center gap-1 rounded-2xl sm:rounded-full liquid-glass p-1"
+            >
+              <SegmentedControlIndicator className="pointer-events-none absolute -z-1 rounded-full bg-electric-lime shadow-[0_0_20px_rgba(202,255,74,0.22)] transition-[top,left,width,height] duration-200 ease-out [top:var(--segmented-control-indicator-top)] [left:var(--segmented-control-indicator-left)] [width:var(--segmented-control-indicator-width)] [height:var(--segmented-control-indicator-height)] motion-reduce:transition-none" />
+              {FORMS.map((form) => (
+                <SegmentedControlItem
                   key={form}
-                  type="button"
-                  aria-pressed={active}
-                  onClick={() => setFilter(form)}
-                  className={`inline-flex items-center gap-2 rounded-full border px-4 py-1.5 font-mono text-[10px] uppercase tracking-widest transition-all duration-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-electric-lime ${
-                    active
-                      ? 'border-electric-lime bg-electric-lime font-semibold text-zinc-950 shadow-[0_0_20px_rgba(202,255,74,0.2)]'
-                      : 'border-zinc-800 bg-[#0a0a0a] text-zinc-400 hover:border-zinc-600 hover:text-zinc-100'
-                  }`}
+                  value={form}
+                  className="inline-flex items-center gap-2 rounded-full px-3.5 py-1.5 font-mono text-[10px] uppercase tracking-widest text-zinc-400 transition-colors duration-200 hover:text-zinc-100 data-checked:font-semibold data-checked:text-zinc-950 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-electric-lime cursor-pointer"
                 >
                   <span>{form}</span>
-                  <span
-                    className={`rounded-full px-1.5 py-0.5 text-[9px] tabular-nums ${
-                      active ? 'bg-zinc-950/15 text-zinc-950' : 'bg-zinc-900 text-zinc-400'
-                    }`}
-                  >
+                  <span className="rounded-full bg-white/[0.08] px-1.5 py-0.5 text-[9px] tabular-nums text-zinc-400 in-data-checked:bg-zinc-950/15 in-data-checked:text-zinc-950">
                     {formCounts[form]}
                   </span>
-                </button>
-              );
-            })}
+                </SegmentedControlItem>
+              ))}
+            </SegmentedControl>
 
-            <button
-              type="button"
-              aria-pressed={onlyFeatured}
-              onClick={() => setOnlyFeatured((v) => !v)}
-              className={`inline-flex items-center gap-1.5 rounded-full border px-3.5 py-1.5 font-mono text-[10px] uppercase tracking-widest transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-electric-lime ${
-                onlyFeatured
-                  ? 'border-electric-lime bg-electric-lime/15 text-electric-lime'
-                  : 'border-zinc-800 bg-[#0a0a0a] text-zinc-400 hover:border-zinc-600 hover:text-zinc-200'
-              }`}
+            <Toggle
+              pressed={onlyFeatured}
+              onPressedChange={setOnlyFeatured}
+              className="inline-flex items-center gap-1.5 rounded-full border border-zinc-800 bg-[#0a0a0a] px-3.5 py-1.5 font-mono text-[10px] uppercase tracking-widest text-zinc-400 transition-colors hover:border-zinc-600 hover:text-zinc-200 data-pressed:border-electric-lime data-pressed:bg-electric-lime/15 data-pressed:text-electric-lime focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-electric-lime cursor-pointer"
             >
               <span aria-hidden className="size-1.5 rounded-full bg-electric-lime" />
               Start here ({articles.filter((a) => a.featured).length})
-            </button>
+            </Toggle>
           </div>
 
           <div className="flex flex-wrap items-center gap-3">

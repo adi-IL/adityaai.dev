@@ -1,6 +1,6 @@
 import { Link, useLocation } from 'react-router-dom';
 import { m, AnimatePresence, useScroll, useMotionValueEvent } from 'motion/react';
-import { Menu, X, ChevronRight } from 'lucide-react';
+import { Menu, X, ChevronRight, Search } from 'lucide-react';
 import { useState, useEffect } from 'react';
 
 export default function Navbar() {
@@ -72,7 +72,7 @@ export default function Navbar() {
       {/* Desktop Navigation */}
       <nav className="fixed top-6 left-1/2 -translate-x-1/2 z-50 hidden md:block group will-change-transform">
         <div className="relative p-[1px] rounded-full bg-gradient-to-r from-zinc-800/50 via-zinc-600/50 to-zinc-800/50 group-hover:from-electric-lime/40 group-hover:via-emerald-500/40 group-hover:to-electric-lime/40 transition-all duration-500 shadow-[0_0_20px_rgba(0,0,0,0.5)] group-hover:shadow-[0_0_30px_rgba(204,255,0,0.15)]">
-          <div className={`backdrop-blur-md bd-stable rounded-full px-6 py-2 flex items-center gap-8 transition-colors duration-500 ${scrolled ? 'bg-black/80 shadow-lg' : 'bg-transparent'}`}>
+          <div className={`liquid-glass bd-stable rounded-full px-6 py-2 flex items-center gap-7 transition-colors duration-500 ${scrolled ? 'bg-black/80 shadow-lg' : 'bg-black/40'}`}>
             {links.map((link) => {
               const isActive = location.pathname === link.path || (link.path !== '/' && location.pathname.startsWith(link.path));
               return (
@@ -94,6 +94,15 @@ export default function Navbar() {
                 </Link>
               );
             })}
+            <button
+              type="button"
+              onClick={() => window.dispatchEvent(new Event('open-command-palette'))}
+              aria-label="Open command palette"
+              className="inline-flex items-center gap-1.5 rounded-full border border-white/[0.1] bg-white/[0.04] px-2.5 py-1 font-mono text-[10px] tracking-widest text-zinc-400 hover:border-electric-lime/50 hover:text-electric-lime transition-colors"
+            >
+              <Search size={11} aria-hidden="true" />
+              <span>⌘K</span>
+            </button>
           </div>
         </div>
       </nav>
@@ -104,7 +113,7 @@ export default function Navbar() {
         onClick={() => setIsOpen(true)}
         aria-label="Open navigation menu"
         aria-expanded={isOpen}
-        className="fixed top-6 right-6 z-50 md:hidden bg-zinc-950/80 backdrop-blur-xl bd-stable border border-zinc-800/50 rounded-full p-3 text-zinc-400 hover:text-zinc-50 transition-colors shadow-lg"
+        className="fixed top-6 right-6 z-50 md:hidden liquid-orb bd-stable rounded-full p-3 text-zinc-300 hover:text-electric-lime transition-colors"
       >
         <Menu size={20} />
       </button>
@@ -117,18 +126,18 @@ export default function Navbar() {
             animate="open"
             exit="closed"
             variants={menuVariants}
-            className="fixed inset-0 z-50 bg-zinc-950/95 backdrop-blur-xl flex flex-col justify-center px-8"
+            className="fixed inset-0 z-50 bg-zinc-950/95 backdrop-blur-xl flex flex-col justify-between overflow-y-auto px-8 pt-24 pb-10"
           >
             <button
               type="button"
               onClick={() => setIsOpen(false)}
               aria-label="Close navigation menu"
-              className="absolute top-6 right-6 p-3 border border-zinc-800/50 rounded-full text-zinc-400 hover:text-electric-lime transition-colors bg-zinc-900/50"
+              className="fixed top-6 right-6 p-3 border border-zinc-800/50 rounded-full text-zinc-400 hover:text-electric-lime transition-colors bg-zinc-900/50"
             >
               <X size={24} />
             </button>
             
-            <div className="flex flex-col gap-6 w-full max-w-sm mx-auto">
+            <div className="flex flex-col gap-5 w-full max-w-sm mx-auto my-auto">
               <m.p 
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
@@ -162,13 +171,34 @@ export default function Navbar() {
                   </m.div>
                 );
               })}
+              <m.div 
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.55 }}
+                className="pt-4"
+              >
+                <button
+                  type="button"
+                  onClick={() => {
+                    setIsOpen(false);
+                    window.dispatchEvent(new Event('open-command-palette'));
+                  }}
+                  className="w-full flex items-center justify-between rounded-2xl liquid-glass px-4 py-3 font-mono text-xs uppercase tracking-widest text-zinc-300 hover:border-electric-lime/50 hover:text-electric-lime transition-colors"
+                >
+                  <span className="flex items-center gap-2.5">
+                    <Search size={14} aria-hidden="true" />
+                    Quick jump
+                  </span>
+                  <span className="text-[10px] text-zinc-500">⌘K</span>
+                </button>
+              </m.div>
             </div>
             
             <m.div 
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.6 }}
-              className="absolute bottom-12 left-8 right-8 text-center border-t border-zinc-800/50 pt-8"
+              className="w-full max-w-sm mx-auto text-center border-t border-zinc-800/50 pt-6 mt-8"
             >
               <p className="text-zinc-500 font-mono text-xs uppercase tracking-widest">
                 adityaai.dev
