@@ -140,3 +140,18 @@ describe('articles loader', () => {
   });
 });
 
+
+describe('projects receipts', () => {
+  it('only features merged PRs from the ledger, each listed in llms.txt', async () => {
+    const { upstreamReceipts } = await import('../src/lib/upstream.ts');
+    const merged = new Set(mergedPrs.map((p) => p.url));
+    const llms = read('public/llms.txt');
+    assert.ok(upstreamReceipts.length > 0);
+    for (const r of upstreamReceipts) {
+      assert.equal(r.url, `https://github.com/${r.org}/${r.repo}/pull/${r.pr}`);
+      assert.ok(merged.has(r.url), `${r.url} is not a merged ledger entry`);
+      assert.ok(llms.includes(`- ${r.org}/${r.repo}#${r.pr} - ${r.short}`), `${r.url} missing from llms.txt`);
+      assert.deepEqual(guardHits(`${r.issue} ${r.fix} ${r.short}`), [], r.url);
+    }
+  });
+});
