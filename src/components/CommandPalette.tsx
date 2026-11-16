@@ -90,7 +90,7 @@ export default function CommandPalette() {
       <DialogBackdrop className="fixed inset-0 z-[70] bg-black/70 backdrop-blur-sm transition-opacity duration-200 data-starting-style:opacity-0 data-ending-style:opacity-0" />
       <DialogContent
         aria-label="Command palette"
-        className="fixed left-1/2 top-[15vh] z-[71] w-[min(100vw-2rem,36rem)] -translate-x-1/2 rounded-2xl liquid-glass overflow-hidden transition-[opacity,transform] duration-200 data-starting-style:opacity-0 data-starting-style:scale-96 data-ending-style:opacity-0 data-ending-style:scale-96 data-[presentation=sheet]:top-auto data-[presentation=sheet]:bottom-0 data-[presentation=sheet]:left-0 data-[presentation=sheet]:right-0 data-[presentation=sheet]:w-full data-[presentation=sheet]:translate-x-0 data-[presentation=sheet]:rounded-b-none"
+        className="fixed left-1/2 top-[15vh] z-[71] w-[min(100vw-2rem,36rem)] -translate-x-1/2 rounded-2xl liquid-glass overflow-hidden transition-[opacity,transform] duration-200 data-starting-style:opacity-0 data-starting-style:scale-96 data-ending-style:opacity-0 data-ending-style:scale-96 data-[presentation=sheet]:bottom-auto data-[presentation=sheet]:left-0 data-[presentation=sheet]:right-0 data-[presentation=sheet]:w-full data-[presentation=sheet]:translate-x-0 data-[presentation=sheet]:rounded-b-none"
       >
         <DialogTitle className="sr-only">Lab Command Palette</DialogTitle>
         <Command onAction={runAction} className="flex flex-col">
