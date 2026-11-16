@@ -205,7 +205,7 @@ export default function SiteChatWidget() {
     <Dialog open={open} onOpenChange={setOpen} modal={false} presentation="auto">
       <DialogContent
         initialFocus={() => inputRef.current}
-        className="fixed bottom-20 right-4 md:bottom-20 md:right-6 z-[55] w-[min(100vw-2rem,24rem)] max-h-[min(70vh,32rem)] flex flex-col rounded-2xl liquid-glass overflow-hidden transition-[opacity,transform] duration-200 data-starting-style:opacity-0 data-starting-style:translate-y-3 data-starting-style:scale-96 data-ending-style:opacity-0 data-ending-style:translate-y-3 data-ending-style:scale-96 data-[presentation=sheet]:bottom-auto data-[presentation=sheet]:right-0 data-[presentation=sheet]:left-0 data-[presentation=sheet]:w-full data-[presentation=sheet]:max-h-[80vh] data-[presentation=sheet]:rounded-b-none"
+        className="fixed bottom-20 right-4 md:bottom-20 md:right-6 z-[55] w-[min(100vw-2rem,24rem)] max-h-[min(70vh,32rem)] flex flex-col rounded-2xl liquid-glass-panel overflow-hidden transition-[opacity,transform] duration-200 data-starting-style:opacity-0 data-starting-style:translate-y-3 data-starting-style:scale-96 data-ending-style:opacity-0 data-ending-style:translate-y-3 data-ending-style:scale-96 data-[presentation=sheet]:bottom-auto data-[presentation=sheet]:right-0 data-[presentation=sheet]:left-0 data-[presentation=sheet]:w-full data-[presentation=sheet]:max-h-[80vh] data-[presentation=sheet]:rounded-b-none"
       >
         <header className="flex items-center justify-between gap-3 px-4 py-3 border-b border-white/[0.08] bg-black/30">
           <div className="flex items-center gap-2 min-w-0">
