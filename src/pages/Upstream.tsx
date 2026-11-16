@@ -26,7 +26,7 @@ function Tip({ children, align = 'center' }: { children: ReactNode; align?: keyo
   return (
     <span
       role="tooltip"
-      className={`pointer-events-none absolute bottom-full ${tipAlign[align]} z-30 mb-2.5 w-max max-w-[min(16rem,calc(100vw-3rem))] rounded-lg border border-zinc-700/90 bg-zinc-950/95 px-3 py-2 text-left font-mono text-[11px] leading-snug text-zinc-200 opacity-0 shadow-[0_12px_32px_rgba(0,0,0,0.85)] backdrop-blur-md transition-opacity duration-150 group-hover:opacity-100 group-focus-visible:opacity-100`}
+      className={`pointer-events-none invisible absolute bottom-full ${tipAlign[align]} z-30 mb-2.5 w-max max-w-[min(16rem,calc(100vw-3rem))] rounded-lg border border-zinc-700/90 bg-zinc-950/95 px-3 py-2 text-left font-mono text-[11px] leading-snug text-zinc-200 opacity-0 shadow-[0_12px_32px_rgba(0,0,0,0.85)] backdrop-blur-md transition-opacity duration-150 group-hover:visible group-hover:opacity-100 group-focus-visible:visible group-focus-visible:opacity-100`}
     >
       {children}
     </span>
@@ -411,7 +411,7 @@ function TestGrid({ stats, items }: { stats: ProjectStat[]; items: MergedPr[] })
                           ? `${s.name} #${p.number}: regression test ${p.test.label}`
                           : `${s.name} #${p.number}: no regression test, opens the PR`
                       }
-                      className={`group relative flex h-5 w-5 items-center justify-center rounded-[5px] transition-all duration-150 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-electric-lime motion-safe:animate-[fadeIn_0.35s_ease-out_both] ${
+                      className={`group relative flex h-7 w-7 sm:h-6 sm:w-6 items-center justify-center rounded-[5px] transition-all duration-150 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-electric-lime motion-safe:animate-[fadeIn_0.35s_ease-out_both] ${
                         p.test
                           ? 'bg-electric-lime text-zinc-950 shadow-[0_0_10px_rgba(202,255,74,0.16)] hover:scale-110 hover:bg-white'
                           : 'border border-zinc-700 bg-zinc-900/60 hover:scale-105 hover:border-zinc-400'
@@ -511,7 +511,7 @@ export default function Upstream() {
   const hasActiveFilters = selected !== null || query.trim() !== '' || onlyTested;
 
   return (
-    <div className="min-h-screen pt-32 pb-24">
+    <div className="min-h-screen overflow-x-clip pt-32 pb-24">
       <SEO
         title="Upstream | Aditya Gaurav - Merged open-source fixes"
         description={`${mergedPrs.length} merged pull requests in TensorFlow, gVisor, Grafana and more, with the regression test behind each fix.`}
@@ -525,7 +525,7 @@ export default function Upstream() {
         <header className="relative mb-10 border-b border-zinc-800/60 pb-10">
           <div
             aria-hidden
-            className="pointer-events-none absolute -top-12 -left-12 h-64 w-96 rounded-full bg-electric-lime/[0.04] blur-3xl"
+            className="pointer-events-none absolute -top-12 -left-12 h-64 w-64 max-w-full rounded-full bg-electric-lime/[0.04] blur-3xl sm:w-96"
           />
           <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
             <p className={`${label} flex items-center gap-2.5 text-electric-lime`}>
@@ -540,7 +540,7 @@ export default function Upstream() {
                 <button
                   type="button"
                   onClick={() => setSelected(null)}
-                  className="inline-flex items-center gap-1.5 rounded-full border border-electric-lime/40 bg-electric-lime/10 px-3 py-1 font-mono text-[10px] uppercase tracking-widest text-electric-lime transition-colors hover:bg-electric-lime hover:text-zinc-950"
+                  className="inline-flex items-center gap-1.5 rounded-full border border-electric-lime/40 bg-electric-lime/10 px-3.5 py-1.5 font-mono text-[10px] uppercase tracking-widest text-electric-lime transition-colors hover:bg-electric-lime hover:text-zinc-950"
                 >
                   Scope: {projectName(selected)} <X size={11} />
                 </button>
@@ -549,7 +549,7 @@ export default function Upstream() {
                 type="button"
                 aria-expanded={showSummaryTable}
                 onClick={() => setShowSummaryTable((v) => !v)}
-                className="rounded-full border border-zinc-800 bg-[#0a0a0a] px-3 py-1 font-mono text-[10px] uppercase tracking-widest text-zinc-400 transition-colors hover:border-zinc-600 hover:text-zinc-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-electric-lime"
+                className="rounded-full border border-zinc-800 bg-[#0a0a0a] px-3.5 py-1.5 font-mono text-[10px] uppercase tracking-widest text-zinc-400 transition-colors hover:border-zinc-600 hover:text-zinc-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-electric-lime"
               >
                 {showSummaryTable ? 'Hide data table' : 'Table view'}
               </button>
@@ -733,7 +733,7 @@ export default function Upstream() {
                     type="button"
                     onClick={() => setQuery('')}
                     aria-label="Clear search query"
-                    className="absolute top-1/2 right-2.5 -translate-y-1/2 rounded-full p-0.5 text-zinc-500 hover:text-zinc-200"
+                    className="absolute top-1/2 right-1 -translate-y-1/2 flex size-7 items-center justify-center rounded-full text-zinc-500 hover:text-zinc-200"
                   >
                     <X size={12} />
                   </button>
@@ -763,7 +763,7 @@ export default function Upstream() {
                   type="button"
                   aria-pressed={sortBy === 'recent'}
                   onClick={() => setSortBy('recent')}
-                  className={`rounded-full px-3 py-1 font-mono text-[10px] uppercase tracking-widest transition-colors ${
+                  className={`rounded-full px-3 py-2 font-mono text-[10px] uppercase tracking-widest transition-colors ${
                     sortBy === 'recent' ? 'bg-zinc-800 text-zinc-100' : 'text-zinc-400 hover:text-zinc-200'
                   }`}
                 >
@@ -773,7 +773,7 @@ export default function Upstream() {
                   type="button"
                   aria-pressed={sortBy === 'diff'}
                   onClick={() => setSortBy('diff')}
-                  className={`rounded-full px-3 py-1 font-mono text-[10px] uppercase tracking-widest transition-colors ${
+                  className={`rounded-full px-3 py-2 font-mono text-[10px] uppercase tracking-widest transition-colors ${
                     sortBy === 'diff' ? 'bg-zinc-800 text-zinc-100' : 'text-zinc-400 hover:text-zinc-200'
                   }`}
                 >

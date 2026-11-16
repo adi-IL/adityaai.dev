@@ -101,10 +101,10 @@ export default function HomeProjectCard({ project, index }: { project: Project; 
         </div>
 
         <div className="px-6 pb-6 pt-3">
-          <div className="grid grid-cols-2 gap-px overflow-hidden rounded-xl border border-zinc-800/80 bg-zinc-800/60">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-px overflow-hidden rounded-xl border border-zinc-800/80 bg-zinc-800/60">
             {project.metrics.slice(0, 2).map((mItem) => (
               <div key={mItem.label} className="bg-zinc-950/90 px-3 py-2">
-                <div className="truncate font-mono text-[9px] uppercase tracking-wider text-zinc-500">
+                <div className="font-mono text-[9px] uppercase tracking-wider text-zinc-500">
                   {mItem.label}
                 </div>
                 <div className={`mt-0.5 font-mono text-xs font-semibold tabular-nums ${project.accent}`}>

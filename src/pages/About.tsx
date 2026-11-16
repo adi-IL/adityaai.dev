@@ -90,7 +90,7 @@ export default function About() {
   const totalCerts = oracleCertifications.length + otherCertifications.length;
 
   return (
-    <div className="min-h-screen pt-32 pb-24">
+    <div className="min-h-screen overflow-x-clip pt-32 pb-24">
       <SEO
         title="About | Aditya Gaurav - AI Engineer & Systems Architect"
         description="AI Engineer & Systems Architect building cognitive architectures, agentic workflows, and the MCP ecosystem. Kaggle winner, Oracle certified, research archive on AI systems."
@@ -112,7 +112,7 @@ export default function About() {
         >
           <div
             aria-hidden
-            className="pointer-events-none absolute -top-12 -left-12 h-64 w-96 rounded-full bg-electric-lime/[0.04] blur-3xl"
+            className="pointer-events-none absolute -top-12 -left-12 h-64 w-64 max-w-full rounded-full bg-electric-lime/[0.04] blur-3xl sm:w-96"
           />
 
           <div className="mb-4 flex flex-wrap items-center justify-between gap-3">

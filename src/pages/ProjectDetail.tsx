@@ -158,7 +158,7 @@ export default function ProjectDetail() {
                     href={project.award.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1.5 rounded-md border border-amber-500/30 bg-amber-500/10 px-2.5 py-1 text-amber-300 hover:border-amber-400 hover:text-amber-200 transition-colors"
+                    className="inline-flex items-center gap-1.5 rounded-md border border-amber-500/30 bg-amber-500/10 px-2.5 py-1.5 text-amber-300 hover:border-amber-400 hover:text-amber-200 transition-colors"
                   >
                     <Trophy size={12} className="shrink-0" />
                     <span>{project.award.label}</span>

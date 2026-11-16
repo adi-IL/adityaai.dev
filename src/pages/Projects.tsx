@@ -17,7 +17,7 @@ export default function Projects() {
   const awardedProjectsCount = projects.filter((p) => p.award).length;
 
   return (
-    <div className="min-h-screen pt-32 pb-24">
+    <div className="min-h-screen overflow-x-clip pt-32 pb-24">
       <SEO
         title="Projects | Aditya Gaurav - AI Engineer & Systems Architect"
         description="Shipping AI products: 3D engineering engine (FRIDAY), competitive intelligence (Sentinel), context circuit-breaker (MidSphere), and more."
@@ -37,7 +37,7 @@ export default function Projects() {
         >
           <div
             aria-hidden
-            className="pointer-events-none absolute -top-12 -left-12 h-64 w-96 rounded-full bg-electric-lime/[0.04] blur-3xl"
+            className="pointer-events-none absolute -top-12 -left-12 h-64 w-64 max-w-full rounded-full bg-electric-lime/[0.04] blur-3xl sm:w-96"
           />
           <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
             <p className={`${label} flex items-center gap-2.5 text-electric-lime`}>
@@ -49,7 +49,7 @@ export default function Projects() {
             </p>
             <Link
               to="/upstream"
-              className="inline-flex items-center gap-1.5 rounded-full border border-zinc-800 bg-[#0a0a0a] px-3 py-1 font-mono text-[10px] uppercase tracking-widest text-zinc-400 transition-colors hover:border-electric-lime hover:text-electric-lime"
+              className="inline-flex items-center gap-1.5 rounded-full border border-zinc-800 bg-[#0a0a0a] px-3.5 py-1.5 font-mono text-[10px] uppercase tracking-widest text-zinc-400 transition-colors hover:border-electric-lime hover:text-electric-lime"
             >
               Upstream ledger ({mergedPrs.length}) <ArrowUpRight size={12} />
             </Link>
@@ -85,7 +85,7 @@ export default function Projects() {
             </div>
             <div className="bg-[#0a0a0a] p-5 md:p-6">
               <dt className={`${label} text-zinc-400`}>Global recognition</dt>
-              <dd className="mt-2 font-sans text-3xl font-semibold tracking-tight text-amber-300 md:text-4xl">
+              <dd className="mt-2 font-sans text-2xl sm:text-3xl font-semibold tracking-tight text-amber-300 md:text-4xl">
                 {awardedProjectsCount > 0 ? 'Winner' : 'Shipped'}
               </dd>
               <p className="mt-1.5 font-mono text-[11px] text-zinc-400">
@@ -195,10 +195,7 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
       viewport={{ once: true, margin: '-50px' }}
       transition={{ duration: 0.7, delay: index * 0.08, ease: [0.32, 0.72, 0, 1] }}
     >
-      <Link
-        to={`/projects/${project.slug}`}
-        className="block group relative rounded-3xl overflow-hidden border border-zinc-800/70 bg-[#0a0a0a] hover:border-zinc-600 transition-all duration-500"
-      >
+      <div className="group relative rounded-3xl overflow-hidden border border-zinc-800/70 bg-[#0a0a0a] hover:border-zinc-600 transition-all duration-500">
         <div
           aria-hidden
           className="pointer-events-none absolute inset-x-10 top-0 z-20 h-px bg-gradient-to-r from-transparent via-zinc-700/60 to-transparent transition-opacity group-hover:via-electric-lime/50"
@@ -206,7 +203,10 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
 
         <div className="grid grid-cols-1 md:grid-cols-[1.15fr_1fr]">
           {/* Text side */}
-          <div className="p-8 md:p-10 lg:p-12 flex flex-col justify-between min-h-[380px]">
+          <Link
+            to={`/projects/${project.slug}`}
+            className="p-8 md:p-10 lg:p-12 flex flex-col justify-between min-h-[380px] focus-visible:outline focus-visible:outline-2 focus-visible:outline-electric-lime"
+          >
             <div>
               <div className="flex items-center gap-2.5 font-mono text-[10px] uppercase tracking-widest mb-6 flex-wrap">
                 <span className="rounded-md border border-zinc-800 bg-zinc-950 px-2.5 py-0.5 text-electric-lime">
@@ -243,10 +243,10 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
               </p>
 
               {/* Inline Project Telemetry Strip */}
-              <dl className="grid grid-cols-3 gap-px overflow-hidden rounded-xl border border-zinc-800/80 bg-zinc-800/60">
+              <dl className="grid grid-cols-1 sm:grid-cols-3 gap-px overflow-hidden rounded-xl border border-zinc-800/80 bg-zinc-800/60">
                 {project.metrics.map((mItem) => (
                   <div key={mItem.label} className="bg-zinc-950/90 p-3">
-                    <dt className="truncate font-mono text-[9px] uppercase tracking-wider text-zinc-500">
+                    <dt className="font-mono text-[9px] uppercase tracking-wider text-zinc-500">
                       {mItem.label}
                     </dt>
                     <dd className={`mt-1 font-mono text-xs md:text-sm font-semibold tabular-nums ${project.accent}`}>
@@ -277,16 +277,22 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
                 Read write-up <ArrowUpRight size={12} />
               </span>
             </div>
-          </div>
+          </Link>
 
           {/* Visual side */}
           <div className="relative bg-[#070707] border-t md:border-t-0 md:border-l border-zinc-800/60 overflow-hidden">
             <ProjectSignature slug={project.slug} />
             <div className="absolute inset-0 bg-gradient-to-br from-transparent via-transparent to-black/50 pointer-events-none" />
+            <Link
+              to={`/projects/${project.slug}`}
+              tabIndex={-1}
+              aria-label={`Open ${project.name} write-up`}
+              className="absolute inset-0 z-10"
+            />
 
-            <div className="relative z-10 h-full min-h-[240px] md:min-h-[380px] flex flex-col justify-between p-6 md:p-8 pointer-events-none">
+            <div className="relative z-20 h-full min-h-[240px] md:min-h-[380px] flex flex-col justify-between p-6 md:p-8 pointer-events-none">
               <div className="flex justify-end">
-                <div className="bg-zinc-950/85 backdrop-blur border border-zinc-800/80 rounded-full p-2.5 group-hover:border-electric-lime transition-colors pointer-events-auto">
+                <div className="bg-zinc-950/85 backdrop-blur border border-zinc-800/80 rounded-full p-2.5 group-hover:border-electric-lime transition-colors">
                   <ArrowUpRight
                     size={16}
                     className="text-zinc-400 group-hover:text-electric-lime transition-all duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
@@ -305,7 +311,7 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
             </div>
           </div>
         </div>
-      </Link>
+      </div>
     </m.div>
   );
 }

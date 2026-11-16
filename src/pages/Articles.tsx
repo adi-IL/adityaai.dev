@@ -68,7 +68,7 @@ export default function Articles() {
   const hasActiveFilters = filter !== 'All' || onlyFeatured || query.trim() !== '';
 
   return (
-    <div className="min-h-screen pt-32 pb-24">
+    <div className="min-h-screen overflow-x-clip pt-32 pb-24">
       <SEO
         title="Essays | Decision tools for AI systems designers"
         description="A small, curated shelf of frameworks, architecture maps, and principles for people who design production AI systems. Not a content firehose."
@@ -82,7 +82,7 @@ export default function Articles() {
         <header className="relative mb-10 border-b border-zinc-800/60 pb-10">
           <div
             aria-hidden
-            className="pointer-events-none absolute -top-12 -left-12 h-64 w-96 rounded-full bg-electric-lime/[0.04] blur-3xl"
+            className="pointer-events-none absolute -top-12 -left-12 h-64 w-64 max-w-full rounded-full bg-electric-lime/[0.04] blur-3xl sm:w-96"
           />
           <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
             <p className={`${label} flex items-center gap-2.5 text-electric-lime`}>
@@ -210,7 +210,7 @@ export default function Articles() {
                   type="button"
                   onClick={() => setQuery('')}
                   aria-label="Clear essay search"
-                  className="absolute top-1/2 right-2.5 -translate-y-1/2 rounded-full p-0.5 text-zinc-500 hover:text-zinc-200"
+                  className="absolute top-1/2 right-1 -translate-y-1/2 flex size-7 items-center justify-center rounded-full text-zinc-500 hover:text-zinc-200"
                 >
                   <X size={12} />
                 </button>
