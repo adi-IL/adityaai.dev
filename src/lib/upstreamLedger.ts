@@ -1,4 +1,5 @@
 import ledger from '../data/upstream-ledger.json';
+import { upstreamReceipts, type UpstreamReceipt } from './upstream';
 
 /** One merged upstream PR, copied from the adi-IL profile ledger by scripts/sync-ledger.mjs. */
 export interface MergedPr {
@@ -45,6 +46,26 @@ const PROJECT_NAMES: Record<string, string> = {
 const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
 export const mergedPrs: MergedPr[] = (ledger as { items: MergedPr[] }).items;
+
+/** A curated receipt paired with its ledger row, joined by pull request URL. */
+export interface ReceiptRow {
+  receipt: UpstreamReceipt;
+  pr: MergedPr | null;
+}
+
+const receiptsByUrl = new Map(upstreamReceipts.map((r) => [r.url, r]));
+const prsByUrl = new Map(mergedPrs.map((p) => [p.url, p]));
+
+/** The curated receipts joined to the ledger by pull request URL. Order matches upstreamReceipts. */
+export const receiptRows: ReceiptRow[] = upstreamReceipts.map((receipt) => ({
+  receipt,
+  pr: prsByUrl.get(receipt.url) ?? null,
+}));
+
+/** The curated receipt for a ledger row, when that PR is a curated one. */
+export function receiptFor(pr: MergedPr): UpstreamReceipt | undefined {
+  return receiptsByUrl.get(pr.url);
+}
 
 export function projectName(repo: string): string {
   return PROJECT_NAMES[repo] ?? repo;

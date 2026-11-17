@@ -7,6 +7,7 @@ import {
   monthStats,
   projectName,
   projectStats,
+  receiptFor,
   type MergedPr,
   type ProjectStat,
 } from '../lib/upstreamLedger';
@@ -807,6 +808,7 @@ export default function Upstream() {
               {ledgerItems.map((p) => {
                 const diffTotal = Math.max(1, p.additions + p.deletions);
                 const addPct = Math.round((p.additions / diffTotal) * 100);
+                const receipt = receiptFor(p);
                 return (
                   <li
                     key={p.url}
@@ -840,10 +842,31 @@ export default function Upstream() {
                             )}
                           </span>
                         </span>
+                        {receipt && (
+                          <span className="rounded-md border border-electric-lime/30 bg-electric-lime/10 px-2 py-0.5 text-[10px] text-electric-lime">
+                            Receipt
+                          </span>
+                        )}
                       </div>
                       <p className="font-sans text-sm font-medium leading-relaxed text-zinc-100 transition-colors group-hover:text-white md:text-base">
                         {p.title}
                       </p>
+                      {receipt && (
+                        <div className="mt-2 space-y-1.5 text-sm leading-relaxed">
+                          <p className="text-zinc-300">
+                            <span className="inline-block w-14 font-mono text-[10px] uppercase tracking-widest text-zinc-500">
+                              Issue
+                            </span>{' '}
+                            {receipt.issue}
+                          </p>
+                          <p className="text-zinc-200">
+                            <span className="inline-block w-14 font-mono text-[10px] uppercase tracking-widest text-electric-lime">
+                              Fix
+                            </span>{' '}
+                            {receipt.fix}
+                          </p>
+                        </div>
+                      )}
                       {p.test && (
                         <p className="mt-1.5 font-mono text-[11px] text-zinc-400">
                           Proof: <span className="text-zinc-300">{p.test.label}</span>

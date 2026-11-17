@@ -1,9 +1,8 @@
 import { m } from 'motion/react';
 import { Link } from 'react-router-dom';
-import { ArrowUpRight, ExternalLink, Github, Trophy } from 'lucide-react';
+import { ArrowUpRight, Check, ExternalLink, Github, Trophy } from 'lucide-react';
 import { projects, Project } from '../lib/projects';
-import { upstreamReceipts } from '../lib/upstream';
-import { mergedPrs, projectStats } from '../lib/upstreamLedger';
+import { mergedPrs, projectStats, receiptRows } from '../lib/upstreamLedger';
 import SEO from '../components/SEO';
 import ProjectSignature from '../components/ProjectSignature';
 
@@ -95,7 +94,18 @@ export default function Projects() {
             <div className="bg-[#0a0a0a] p-5 md:p-6">
               <dt className={`${label} text-zinc-400`}>Open-source impact</dt>
               <dd className="mt-2 font-sans text-4xl font-semibold tracking-tight text-electric-lime md:text-5xl">
-                {mergedPrs.length}
+                <Link
+                  to="/upstream"
+                  aria-label={`Open the upstream ledger, ${mergedPrs.length} merged pull requests`}
+                  className="group inline-flex items-center gap-1.5 transition-colors hover:text-white"
+                >
+                  {mergedPrs.length}
+                  <ArrowUpRight
+                    size={18}
+                    aria-hidden
+                    className="transition-transform duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
+                  />
+                </Link>
               </dd>
               <p className="mt-1.5 font-mono text-[11px] tabular-nums text-zinc-400">
                 Merged PRs across {upstreamReposCount} repos ({testedUpstreamCount} tested)
@@ -124,63 +134,63 @@ export default function Projects() {
             aria-hidden
             className="pointer-events-none absolute inset-x-10 top-0 h-px bg-gradient-to-r from-transparent via-zinc-700/60 to-transparent"
           />
-          <div className="mb-8 flex flex-col gap-4 border-b border-zinc-800/70 pb-6 sm:flex-row sm:items-end sm:justify-between">
-            <div>
-              <p className={`${label} mb-2 flex items-center gap-2 text-electric-lime`}>
-                <span aria-hidden className="size-1.5 rounded-full bg-electric-lime shadow-[0_0_8px_rgba(202,255,74,0.8)]" />
-                Selected upstream receipts
-              </p>
-              <h2 className="font-display font-semibold text-[clamp(1.5rem,3.5vw,2.25rem)] leading-tight tracking-[-0.02em] text-zinc-50">
-                Critical impacts in open source
-              </h2>
-            </div>
-            <Link
-              to="/upstream"
-              className="inline-flex items-center gap-2 rounded-full border border-electric-lime/35 bg-electric-lime/10 px-4 py-2 font-mono text-[10px] uppercase tracking-widest text-electric-lime transition-colors hover:bg-electric-lime hover:text-zinc-950 self-start sm:self-auto"
-            >
-              All {mergedPrs.length} merged fixes, charted <ArrowUpRight size={13} />
-            </Link>
+          <div className="mb-8 border-b border-zinc-800/70 pb-6">
+            <p className={`${label} mb-2 flex items-center gap-2 text-electric-lime`}>
+              <span aria-hidden className="size-1.5 rounded-full bg-electric-lime shadow-[0_0_8px_rgba(202,255,74,0.8)]" />
+              Selected upstream receipts
+            </p>
+            <h2 className="font-display font-semibold text-[clamp(1.5rem,3.5vw,2.25rem)] leading-tight tracking-[-0.02em] text-zinc-50">
+              Critical impacts in open source
+            </h2>
           </div>
 
           <ul className="divide-y divide-zinc-800/70">
-            {upstreamReceipts.map((receipt) => (
+            {receiptRows.map(({ receipt, pr }) => (
               <li
                 key={receipt.url}
-                className="group flex flex-col gap-4 py-6 transition-colors sm:flex-row sm:items-start sm:justify-between sm:gap-8 sm:px-3 sm:-mx-3 sm:rounded-2xl sm:hover:bg-zinc-900/35"
+                className="transition-colors sm:-mx-3 sm:rounded-2xl sm:hover:bg-zinc-900/35"
               >
-                <div className="min-w-0 flex-1">
-                  <p className="font-mono text-[11px] uppercase tracking-widest text-zinc-400 mb-3 flex flex-wrap items-center gap-2">
-                    <span className="rounded-md border border-zinc-800 bg-zinc-950 px-2 py-0.5 text-[10px] text-zinc-200">
-                      {receipt.org}/{receipt.repo}
-                    </span>
-                    <span className="text-electric-lime tabular-nums">#{receipt.pr}</span>
-                  </p>
-                  <div className="space-y-2 text-sm md:text-base leading-relaxed">
-                    <p className="text-zinc-300">
-                      <span className="inline-block w-14 font-mono text-[10px] uppercase tracking-widest text-zinc-500">
-                        Issue
-                      </span>{' '}
-                      {receipt.issue}
-                    </p>
-                    <p className="text-zinc-200">
-                      <span className="inline-block w-14 font-mono text-[10px] uppercase tracking-widest text-electric-lime">
-                        Fix
-                      </span>{' '}
-                      {receipt.fix}
-                    </p>
-                  </div>
-                </div>
                 <a
                   href={receipt.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex shrink-0 items-center gap-1.5 self-start rounded-full border border-zinc-800 bg-zinc-950 px-4 py-2 font-mono text-[10px] uppercase tracking-widest text-zinc-300 transition-colors hover:border-electric-lime hover:text-electric-lime"
+                  className="group flex flex-wrap items-center gap-x-2.5 gap-y-1.5 py-5 sm:px-3"
                 >
-                  Inspect <ArrowUpRight size={12} />
+                  <span className="rounded-md border border-zinc-800 bg-zinc-950 px-2 py-0.5 font-mono text-[10px] uppercase tracking-widest text-zinc-200">
+                    {receipt.org}/{receipt.repo}
+                  </span>
+                  <span className="font-mono text-[11px] uppercase tracking-widest tabular-nums text-electric-lime">
+                    #{receipt.pr}
+                  </span>
+                  <span className="order-last w-full font-sans text-sm leading-relaxed text-zinc-300 transition-colors group-hover:text-zinc-100 md:text-base">
+                    {receipt.short}
+                  </span>
+                  {pr?.test && (
+                    <span
+                      title="Ships a regression test"
+                      className="inline-flex items-center gap-1 rounded-md border border-electric-lime/30 bg-electric-lime/10 px-2 py-0.5 font-mono text-[10px] uppercase tracking-widest text-electric-lime"
+                    >
+                      <Check size={10} strokeWidth={3} aria-hidden />
+                      test
+                    </span>
+                  )}
+                  <ArrowUpRight
+                    size={14}
+                    aria-hidden
+                    className="ml-auto shrink-0 text-zinc-500 transition-colors group-hover:text-electric-lime"
+                  />
                 </a>
               </li>
             ))}
           </ul>
+
+          <p className="mt-6 font-mono text-[11px] text-zinc-400">
+            Full write-ups for all {mergedPrs.length} merged fixes live in{' '}
+            <Link to="/upstream" className="text-electric-lime transition-colors hover:underline">
+              the upstream ledger
+            </Link>
+            .
+          </p>
         </m.div>
       </section>
     </div>

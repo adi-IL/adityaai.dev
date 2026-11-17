@@ -237,13 +237,19 @@ ${items}
 
 function renderUpstreamBody(items) {
   const rows = items
-    .map(
-      (p) => `    <li>
+    .map((p) => {
+      const receipt = upstreamReceipts.find((r) => r.url === p.url);
+      const account = receipt
+        ? `
+      <p>Issue: ${escapeHtml(receipt.issue)}</p>
+      <p>Fix: ${escapeHtml(receipt.fix)}</p>`
+        : "";
+      return `    <li>
       <p><a href="${escapeHtml(p.url)}">${escapeHtml(p.repo)}#${p.number}</a>: ${escapeHtml(p.title)} (merged ${escapeHtml(p.mergedAt.slice(0, 10))}, +${p.additions} -${p.deletions})${
         p.test ? ` · <a href="${escapeHtml(p.test.url)}">regression test ${escapeHtml(p.test.label)}</a>` : ""
-      }</p>
-    </li>`
-    )
+      }</p>${account}
+    </li>`;
+    })
     .join("\n");
   const tested = items.filter((p) => p.test).length;
   return `<header>
@@ -616,7 +622,7 @@ ${productLines}
 - [bad_apple_rs](https://github.com/adi-IL/bad_apple_rs): Rust CLI that plays Bad Apple as ASCII art in the terminal.
 
 ## Critical impacts in open source
-Static curated receipts on /projects (not a live GitHub feed):
+Static curated receipts on /projects and /upstream (not a live GitHub feed):
 ${receiptLinesForLlms}
 
 ## Essays (shelf)

@@ -7,8 +7,18 @@ import { mergedPrs, monthStats, projectName, projectStats, type MergedPr } from 
 import { articles, loadArticle } from '../src/lib/articles.ts';
 import { buildSiteContext } from '../lib/site-context.js';
 import { projects } from '../src/lib/projects.js';
+import { upstreamReceipts } from '../src/lib/upstream.ts';
 
 const read = (p: string) => readFileSync(new URL(`../${p}`, import.meta.url), 'utf8');
+
+/** The five characters React escapes in text content. */
+const escapeText = (s: string) =>
+  s
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#x27;');
 
 function pr(over: Partial<MergedPr>): MergedPr {
   return {
@@ -152,6 +162,48 @@ describe('projects receipts', () => {
       assert.ok(merged.has(r.url), `${r.url} is not a merged ledger entry`);
       assert.ok(llms.includes(`- ${r.org}/${r.repo}#${r.pr} - ${r.short}`), `${r.url} missing from llms.txt`);
       assert.deepEqual(guardHits(`${r.issue} ${r.fix} ${r.short}`), [], r.url);
+    }
+  });
+});
+
+describe('receipt strip on /projects', () => {
+  it('renders one summary line per receipt, links its row, and keeps the Issue and Fix prose off the page', async () => {
+    const { createElement } = await import('react');
+    const { renderToStaticMarkup } = await import('react-dom/server');
+    const { MemoryRouter } = await import('react-router-dom');
+    const { HelmetProvider } = await import('react-helmet-async');
+    const { MotionConfig } = await import('motion/react');
+    const { default: Projects } = await import('../src/pages/Projects.tsx');
+
+    const html = renderToStaticMarkup(
+      createElement(
+        HelmetProvider,
+        null,
+        createElement(MemoryRouter, null, createElement(MotionConfig, null, createElement(Projects))),
+      ),
+    );
+
+    for (const r of upstreamReceipts) {
+      assert.ok(html.includes(escapeText(r.short)), `${r.url} summary missing from /projects`);
+      assert.ok(!html.includes(escapeText(r.issue)), `${r.url} Issue prose leaked onto /projects`);
+      assert.ok(!html.includes(escapeText(r.fix)), `${r.url} Fix prose leaked onto /projects`);
+      assert.ok(html.includes(`href="${r.url}"`), `${r.url} row does not link to the pull request`);
+    }
+  });
+});
+
+describe('receipt account on /upstream', () => {
+  it('carries the Issue and Fix prose on the matching ledger rows', async () => {
+    const { createElement } = await import('react');
+    const { renderToStaticMarkup } = await import('react-dom/server');
+    const { HelmetProvider } = await import('react-helmet-async');
+    const { default: Upstream } = await import('../src/pages/Upstream.tsx');
+
+    const html = renderToStaticMarkup(createElement(HelmetProvider, null, createElement(Upstream)));
+
+    for (const r of upstreamReceipts) {
+      assert.ok(html.includes(escapeText(r.issue)), `${r.url} Issue prose missing from /upstream`);
+      assert.ok(html.includes(escapeText(r.fix)), `${r.url} Fix prose missing from /upstream`);
     }
   });
 });

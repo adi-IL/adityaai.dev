@@ -32,7 +32,7 @@ Decision tools for people who design production AI systems.
 - [bad_apple_rs](https://github.com/adi-IL/bad_apple_rs): Rust CLI that plays Bad Apple as ASCII art in the terminal.
 
 ## Critical impacts in open source
-Static curated receipts on /projects (not a live GitHub feed):
+Static curated receipts on /projects and /upstream (not a live GitHub feed):
 - google/gvisor#14401 - shmctl(IPC_RMID) let any user destroy another user's shared memory; now checks ownership
 - tensorflow/tensorflow#127438 - INT32_MAX index overflowed the TensorListScatter resize; now rejected
 - tensorflow/tensorflow#126688 - fused MatMul/Conv2D failed on [1, N] bias inside tf.function; CPU and GPU kernels now accept it
