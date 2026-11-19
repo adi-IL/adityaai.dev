@@ -32,7 +32,7 @@ export const TIMELINE_START = '2026-07';
 
 const PROJECT_NAMES: Record<string, string> = {
   'tensorflow/tensorflow': 'TensorFlow',
-  'google/gvisor': 'gVisor',
+  'gvisor/gvisor': 'gVisor',
   'grafana/grafana': 'Grafana',
   'e2b-dev/herdr-e2b-sandbox': 'herdr E2B sandbox',
   'pvlib/pvlib-python': 'pvlib',

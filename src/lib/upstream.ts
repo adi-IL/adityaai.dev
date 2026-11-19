@@ -12,13 +12,13 @@ export interface UpstreamReceipt {
 /** Curated merged upstream PRs. Static list. Not a live GitHub feed. */
 export const upstreamReceipts: UpstreamReceipt[] = [
   {
-    org: 'google',
+    org: 'gvisor',
     repo: 'gvisor',
     pr: 14401,
     issue:
       'Any user in the sandbox could destroy another user\'s shared memory segment with shmctl(IPC_RMID). The ownership check Linux runs was missing.',
     fix: 'Allow removal only by the creator, the owner, or a caller with CAP_SYS_ADMIN, and return EPERM otherwise, as Linux does.',
-    url: 'https://github.com/google/gvisor/pull/14401',
+    url: 'https://github.com/gvisor/gvisor/pull/14401',
     short: 'shmctl(IPC_RMID) let any user destroy another user\'s shared memory; now checks ownership',
   },
   {
@@ -42,13 +42,13 @@ export const upstreamReceipts: UpstreamReceipt[] = [
     short: 'fused MatMul/Conv2D failed on [1, N] bias inside tf.function; CPU and GPU kernels now accept it',
   },
   {
-    org: 'google',
+    org: 'gvisor',
     repo: 'gvisor',
     pr: 15301,
     issue:
       'One RTM_DELROUTE request removed every matching route from the sandbox network stack. Linux removes only the first match.',
     fix: 'Stop after the first matching route, so each delete removes one route and an extra delete returns ESRCH.',
-    url: 'https://github.com/google/gvisor/pull/15301',
+    url: 'https://github.com/gvisor/gvisor/pull/15301',
     short: 'one route delete could remove several routes in netstack; now removes only the first match',
   },
 ];

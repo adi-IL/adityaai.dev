@@ -2,6 +2,58 @@
   "source": "adi-IL/adi-IL data/ledger.json",
   "items": [
     {
+      "url": "https://github.com/can1357/oh-my-pi/pull/16482",
+      "repo": "can1357/oh-my-pi",
+      "number": 16482,
+      "title": "fix(mcp): report the stdio subprocess exit status on EOF",
+      "mergedAt": "2026-11-16T10:18:49Z",
+      "additions": 131,
+      "deletions": 20,
+      "test": {
+        "label": "reports the subprocess exit code when it terminates before responding",
+        "url": "https://github.com/can1357/oh-my-pi/blob/9892b196a931eb3a7d3e486790b8ebb8dbb78c5d/packages/coding-agent/test/mcp-stdio-transport.test.ts#L702"
+      }
+    },
+    {
+      "url": "https://github.com/grafana/grafana/pull/137068",
+      "repo": "grafana/grafana",
+      "number": 137068,
+      "title": "Unified storage: Return the requested apiVersion on list items",
+      "mergedAt": "2026-11-16T10:17:47Z",
+      "additions": 104,
+      "deletions": 0,
+      "test": {
+        "label": "TestGetListItemsUseDeclaredVersion",
+        "url": "https://github.com/grafana/grafana/blob/de9ecd4663d32487b2525ed7236771d1a2824efa/pkg/storage/unified/apistore/list_apiversion_test.go#L14"
+      }
+    },
+    {
+      "url": "https://github.com/gvisor/gvisor/pull/14763",
+      "repo": "gvisor/gvisor",
+      "number": 14763,
+      "title": "cgroup: skip empty Docker BlockIO when blkio controller is missing",
+      "mergedAt": "2026-11-14T12:42:38Z",
+      "additions": 20,
+      "deletions": 1,
+      "test": {
+        "label": "TestOptional blkio: Docker 29 empty BlockIO and Docker 24 Weight=0",
+        "url": "https://github.com/gvisor/gvisor/blob/e45d53c763ac5f2278fbee07bcf7e0a5ab6dce5c/runsc/cgroup/cgroup_test.go#L948"
+      }
+    },
+    {
+      "url": "https://github.com/can1357/oh-my-pi/pull/16656",
+      "repo": "can1357/oh-my-pi",
+      "number": 16656,
+      "title": "fix(coding-agent): expand repeated @-import includes",
+      "mergedAt": "2026-11-14T06:34:05Z",
+      "additions": 104,
+      "deletions": 18,
+      "test": {
+        "label": "expands the same include every time it appears in one document",
+        "url": "https://github.com/can1357/oh-my-pi/blob/d304dafecdd7cf6c042b2095f6d93a1dd4b3f801/packages/coding-agent/test/discovery/at-imports.test.ts#L129"
+      }
+    },
+    {
       "url": "https://github.com/tensorflow/tensorflow/pull/129984",
       "repo": "tensorflow/tensorflow",
       "number": 129984,
@@ -15,8 +67,8 @@
       }
     },
     {
-      "url": "https://github.com/google/gvisor/pull/15760",
-      "repo": "google/gvisor",
+      "url": "https://github.com/gvisor/gvisor/pull/15760",
+      "repo": "gvisor/gvisor",
       "number": 15760,
       "title": "Block semop with sem_op -32768 instead of wrapping the semaphore negative",
       "mergedAt": "2026-11-04T20:06:10Z",
@@ -24,12 +76,12 @@
       "deletions": 12,
       "test": {
         "label": "TestWaitMinInt16",
-        "url": "https://github.com/google/gvisor/blob/2ac0f43d3a755e63413471cf6a1f54e64e922cd9/pkg/sentry/kernel/semaphore/semaphore_test.go#L142"
+        "url": "https://github.com/gvisor/gvisor/blob/2ac0f43d3a755e63413471cf6a1f54e64e922cd9/pkg/sentry/kernel/semaphore/semaphore_test.go#L142"
       }
     },
     {
-      "url": "https://github.com/google/gvisor/pull/15949",
-      "repo": "google/gvisor",
+      "url": "https://github.com/gvisor/gvisor/pull/15949",
+      "repo": "gvisor/gvisor",
       "number": 15949,
       "title": "netlink: do not ack a successful dump",
       "mergedAt": "2026-10-30T22:26:18Z",
@@ -37,7 +89,7 @@
       "deletions": 1,
       "test": {
         "label": "NetlinkRouteTest.GetLinkDumpWithAck",
-        "url": "https://github.com/google/gvisor/blob/7317e2f45ed1410ff688ebaaf9c0e4ff1c7ce6e9/test/syscalls/linux/socket_netlink_route.cc#L294"
+        "url": "https://github.com/gvisor/gvisor/blob/7317e2f45ed1410ff688ebaaf9c0e4ff1c7ce6e9/test/syscalls/linux/socket_netlink_route.cc#L294"
       }
     },
     {
@@ -51,8 +103,8 @@
       "test": null
     },
     {
-      "url": "https://github.com/google/gvisor/pull/14401",
-      "repo": "google/gvisor",
+      "url": "https://github.com/gvisor/gvisor/pull/14401",
+      "repo": "gvisor/gvisor",
       "number": 14401,
       "title": "Enforce ownership check on shmctl(IPC_RMID)",
       "mergedAt": "2026-10-23T19:42:20Z",
@@ -161,8 +213,8 @@
       "test": null
     },
     {
-      "url": "https://github.com/google/gvisor/pull/15948",
-      "repo": "google/gvisor",
+      "url": "https://github.com/gvisor/gvisor/pull/15948",
+      "repo": "gvisor/gvisor",
       "number": 15948,
       "title": "Allow setting RLIMIT_MSGQUEUE",
       "mergedAt": "2026-10-19T22:20:37Z",
@@ -271,8 +323,8 @@
       "test": null
     },
     {
-      "url": "https://github.com/google/gvisor/pull/15291",
-      "repo": "google/gvisor",
+      "url": "https://github.com/gvisor/gvisor/pull/15291",
+      "repo": "gvisor/gvisor",
       "number": 15291,
       "title": "tcp: update TS.Recent from a zero-window probe",
       "mergedAt": "2026-10-08T23:35:50Z",
@@ -281,8 +333,8 @@
       "test": null
     },
     {
-      "url": "https://github.com/google/gvisor/pull/15301",
-      "repo": "google/gvisor",
+      "url": "https://github.com/gvisor/gvisor/pull/15301",
+      "repo": "gvisor/gvisor",
       "number": 15301,
       "title": "netstack: remove only the first matching route on RTM_DELROUTE",
       "mergedAt": "2026-10-06T23:09:17Z",
@@ -301,8 +353,8 @@
       "test": null
     },
     {
-      "url": "https://github.com/google/gvisor/pull/14505",
-      "repo": "google/gvisor",
+      "url": "https://github.com/gvisor/gvisor/pull/14505",
+      "repo": "gvisor/gvisor",
       "number": 14505,
       "title": "devpts: return ESPIPE on positional read and write",
       "mergedAt": "2026-09-28T21:54:00Z",
@@ -310,7 +362,7 @@
       "deletions": 0,
       "test": {
         "label": "PtyTest.PositionalIO",
-        "url": "https://github.com/google/gvisor/blob/d327f2d30b04e5ba65b57d55b12b180130cac254/test/syscalls/linux/pty.cc#L2908"
+        "url": "https://github.com/gvisor/gvisor/blob/d327f2d30b04e5ba65b57d55b12b180130cac254/test/syscalls/linux/pty.cc#L2908"
       }
     },
     {
