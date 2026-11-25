@@ -107,8 +107,8 @@ export default function Home() {
                 <br />
                 Systems Architect
               </h1>
-              <p className="text-zinc-400 text-xl md:text-2xl font-light leading-relaxed max-w-2xl mt-6">
-                Building the layer between research and production.
+              <p className="text-zinc-400 text-lg md:text-xl font-light leading-relaxed max-w-xl mt-5">
+                I build agent harnesses, inference infrastructure, and production AI systems.
               </p>
               <div className="mt-8 flex flex-wrap items-center gap-3">
                 <Link
