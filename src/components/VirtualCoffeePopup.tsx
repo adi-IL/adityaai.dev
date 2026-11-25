@@ -42,7 +42,10 @@ function stampCooldown() {
 
 function shouldSkipRoute(): boolean {
   const path = window.location.pathname;
-  return path.startsWith('/articles/') && path !== '/articles' && path !== '/articles/';
+  return (
+    path === '/' ||
+    (path.startsWith('/articles/') && path !== '/articles' && path !== '/articles/')
+  );
 }
 
 export default function VirtualCoffeePopup() {
@@ -57,6 +60,7 @@ export default function VirtualCoffeePopup() {
     let timer: number | null = null;
     if (!isOnCooldown() && !shouldSkipRoute()) {
       timer = window.setTimeout(() => {
+        if (shouldSkipRoute()) return;
         wasAutoTriggered.current = true;
         setOpen(true);
       }, TRIGGER_MS);

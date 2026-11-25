@@ -88,7 +88,7 @@ POST /api/virtual-coffee { name, email, role?, message? }
         └─ Resend → visitor confirmation
 ```
 
-UI: auto-popup 25 seconds after mount, 7-day cooldown in `localStorage` key `adityaai:virtual-coffee`. Skipped on `/articles/<slug>` so a reader is not interrupted. Floating coffee button is separate.
+UI: auto-popup 25 seconds after mount, 7-day cooldown in `localStorage` key `adityaai:virtual-coffee`. Skipped on `/` and `/articles/<slug>` so visitors are not interrupted. Floating coffee button is separate.
 
 ## Article feedback
 
