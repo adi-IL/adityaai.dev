@@ -30,8 +30,8 @@ export default function TypewriterText({ text, delay = 0 }: { text: string, dela
   }, [text, delay]);
 
   return (
-    <div className="mb-6 min-h-[3rem] md:min-h-[3rem] leading-normal text-xl md:text-3xl">
-      <span className="font-mono font-semibold uppercase tracking-widest text-zinc-200 break-words">
+    <div className="mb-4 min-h-[2rem] md:min-h-[2.5rem] leading-normal text-base sm:text-lg md:text-2xl whitespace-nowrap">
+      <span className="font-mono font-semibold uppercase tracking-widest text-zinc-200">
         {displayText}
       </span>
       <m.span

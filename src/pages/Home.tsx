@@ -101,9 +101,11 @@ export default function Home() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, ease: [0.32, 0.72, 0, 1] }}
             >
-              <TypewriterText text="welcome to adityaai.dev" delay={500} />
-              <h1 className="font-display font-semibold text-[clamp(1.75rem,4.25vw,3rem)] leading-[1.15] tracking-[-0.03em] text-zinc-50">
-                AI Researcher <span className="text-zinc-500">·</span> Systems Architect
+              <TypewriterText text="Aditya Gaurav" delay={200} />
+              <h1 className="font-display font-semibold text-[clamp(1.75rem,4.25vw,3rem)] leading-[1.12] tracking-[-0.03em] text-zinc-50">
+                AI Researcher <span className="text-zinc-500">·</span>
+                <br />
+                Systems Architect
               </h1>
               <p className="text-zinc-400 text-xl md:text-2xl font-light leading-relaxed max-w-2xl mt-6">
                 Building the layer between research and production.
