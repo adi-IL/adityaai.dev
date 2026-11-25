@@ -36,14 +36,14 @@ export default function NetworkBackground() {
 
   return (
     <div
-      className="absolute top-0 bottom-0 left-0 right-0 min-h-[300vh] overflow-hidden pointer-events-none z-0"
+      className="absolute top-[90vh] bottom-0 left-0 right-0 overflow-hidden pointer-events-none z-0"
       style={{
-        maskImage: 'linear-gradient(to bottom, transparent 0, transparent 90vh, black 115vh, black calc(100% - 120px), transparent 100%)',
-        WebkitMaskImage: 'linear-gradient(to bottom, transparent 0, transparent 90vh, black 115vh, black calc(100% - 120px), transparent 100%)'
+        maskImage: 'linear-gradient(to bottom, transparent 0, black 25vh, black calc(100% - 120px), transparent 100%)',
+        WebkitMaskImage: 'linear-gradient(to bottom, transparent 0, black 25vh, black calc(100% - 120px), transparent 100%)'
       }}
     >
-      {/* Vanta Net Canvas Container */}
-      <div ref={vantaRef} className="absolute inset-0 z-0 pointer-events-auto opacity-20"></div>
+      {/* Viewport-sized sticky Vanta Net Canvas Container */}
+      <div ref={vantaRef} className="sticky top-0 h-screen w-full z-0 pointer-events-none opacity-20"></div>
 
       {/* Deep dark overlay to blend the glows into the background */}
       <div className="absolute inset-0 bg-black/60 z-10 pointer-events-none"></div>

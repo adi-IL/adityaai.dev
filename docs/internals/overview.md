@@ -87,7 +87,7 @@ docs/
 
 The `/projects` receipt strip shows the four curated receipts as one-line summaries while `/upstream` carries the full Issue and Fix account, joined by pull request URL.
 
-SEO is `react-helmet-async` plus prerendered HTML (title, OG, JSON-LD). `GlobalBackgrounds` in `src/App.tsx` defers loading `AtmosphericBackground` and `NetworkBackground` (`three` and `vanta`) on `/` via `requestIdleCallback`, while `src/lib/gpu` holds the standalone WebGPU/WebGL2 shader runtime tested in `tests/gpu.test.ts`.
+SEO is `react-helmet-async` plus prerendered HTML (title, OG, JSON-LD). `GlobalBackgrounds` in `src/App.tsx` renders a static CSS atmospheric fallback on `/` and defers loading `AtmosphericBackground` and `NetworkBackground` (`three` and `vanta`) on `/` via `requestIdleCallback` only on fine-pointer desktop viewports without `prefers-reduced-motion`, while `src/lib/gpu` holds the standalone WebGPU/WebGL2 shader runtime tested in `tests/gpu.test.ts`.
 
 ## Backend
 

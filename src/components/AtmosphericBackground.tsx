@@ -42,7 +42,7 @@ export default function AtmosphericBackground() {
       }}
     >
       {/* Vanta Fog Canvas Container */}
-      <div ref={vantaRef} className="absolute inset-0 z-0 pointer-events-auto"></div>
+      <div ref={vantaRef} className="absolute inset-0 z-0 pointer-events-none"></div>
 
       {/* SVG Noise/Grain Overlay for cinematic feel */}
       <div 

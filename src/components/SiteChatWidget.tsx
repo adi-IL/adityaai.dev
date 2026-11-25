@@ -71,12 +71,12 @@ function saveSession(messages: Msg[]) {
   }
 }
 
-export default function SiteChatWidget() {
+export default function SiteChatWidget({ defaultOpen = false }: { defaultOpen?: boolean }) {
   const location = useLocation();
   const navigate = useNavigate();
   const starters = getStartersForPath(location.pathname);
 
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(defaultOpen);
   const [messages, setMessages] = useState<Msg[]>([]);
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);

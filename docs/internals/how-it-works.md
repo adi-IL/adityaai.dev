@@ -6,7 +6,7 @@
 2. Vercel rewrite serves prerendered `dist/articles/<slug>/index.html` when that file exists.
 3. Hashed JS/CSS load. React hydrates the SPA.
 4. Client router handles further navigation.
-5. `GlobalBackgrounds` in `src/App.tsx` defers loading `AtmosphericBackground` and `NetworkBackground` (`three` and `vanta`) on `/` via `requestIdleCallback`.
+5. `GlobalBackgrounds` in `src/App.tsx` renders a static CSS atmospheric backdrop immediately and defers loading `AtmosphericBackground` and `NetworkBackground` (`three` and `vanta`) on `/` via `requestIdleCallback` only on fine-pointer desktop viewports without `prefers-reduced-motion`.
 
 Missing `/articles/:slug`, `/projects/:slug`, or unknown paths return HTTP 404 (`dist/404.html`, no SPA catch-all rewrite on Vercel). During client-side navigation or local `NODE_ENV=production` Express, unmatched routes render React `NotFound` with `noindex`.
 

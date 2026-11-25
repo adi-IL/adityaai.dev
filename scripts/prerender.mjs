@@ -42,7 +42,8 @@ const bodyContent = bodyMatch[1].trim();
 const viteHeadMatch = viteHtml.match(/<head>([\s\S]*)<\/head>/i);
 let viteAssetsHead = "";
 if (viteHeadMatch) {
-  const headContent = viteHeadMatch[1];
+  const headContent = viteHeadMatch[1].replace(/<noscript>[\s\S]*?<\/noscript>/gi, "");
+  const noscriptLinks = [...viteHeadMatch[1].matchAll(/<noscript>[\s\S]*?<\/noscript>/gi)].map((m) => m[0]);
   const keep = [];
   for (const m of headContent.matchAll(/<link[^>]*rel="stylesheet"[^>]*>/gi)) keep.push(m[0]);
   for (const m of headContent.matchAll(/<link[^>]*rel="modulepreload"[^>]*>/gi)) keep.push(m[0]);
@@ -51,6 +52,7 @@ if (viteHeadMatch) {
   }
   for (const m of headContent.matchAll(/<script[^>]*type="module"[^>]*src="[^"]*"[^>]*><\/script>/gi)) keep.push(m[0]);
   for (const m of headContent.matchAll(/<link[^>]*rel="preconnect"[^>]*>/gi)) keep.push(m[0]);
+  keep.push(...noscriptLinks);
   viteAssetsHead = keep.join("\n    ");
 }
 
