@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef, type FormEvent } from 'react';
-import { m } from 'motion/react';
+import { m, useReducedMotion } from 'motion/react';
 import { CheckCircle2, XCircle, ArrowUpRight } from 'lucide-react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { articles, featuredArticles, type ArticleMeta } from '../lib/articles';
@@ -12,6 +12,7 @@ import SignalSection from '../components/SignalSection';
 import HomeProjectCard from '../components/HomeProjectCard';
 
 export default function Home() {
+  const prefersReducedMotion = useReducedMotion();
   const [email, setEmail] = useState('');
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
   const [errorMessage, setErrorMessage] = useState('');
@@ -69,6 +70,7 @@ export default function Home() {
       <div className="relative z-10">
         <SEO
           title="Aditya Gaurav - AI Researcher · Systems Architect"
+          canonicalUrl="https://www.adityaai.dev/"
           description={`AI Researcher & Systems Architect. Decision tools for people who design production AI systems - ${articles.length} curated essays on architecture, agents, and the product surface.`}
         />
 
@@ -494,11 +496,11 @@ export default function Home() {
         </section>
 
         {/* Marquee Section */}
-        <section className="py-16 overflow-hidden border-y border-zinc-900 bg-[#050505]">
+        <section aria-hidden="true" className="py-16 overflow-hidden border-y border-zinc-900 bg-[#050505]">
           <div className="flex whitespace-nowrap">
             <m.div
-              animate={{ x: ["0%", "-50%"] }}
-              transition={{ repeat: Infinity, ease: "linear", duration: 20 }}
+              animate={prefersReducedMotion ? undefined : { x: ["0%", "-50%"] }}
+              transition={prefersReducedMotion ? undefined : { repeat: Infinity, ease: "linear", duration: 20 }}
               className="flex gap-16 px-8 font-display text-4xl md:text-6xl font-bold text-zinc-800 uppercase tracking-widest gpu"
             >
               <span className="hover:text-zinc-600 transition-colors cursor-default">Neural Networks</span>
@@ -617,7 +619,7 @@ export default function Home() {
               className="pointer-events-none absolute inset-x-10 top-0 h-px bg-gradient-to-r from-transparent via-zinc-700/60 to-transparent"
             />
             <div className="inline-flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.22em] text-electric-lime mb-4">
-              <span className="size-1.5 rounded-full bg-electric-lime shadow-[0_0_8px_rgba(202,255,74,0.8)] animate-pulse" />
+              <span className="size-1.5 rounded-full bg-electric-lime shadow-[0_0_8px_rgba(202,255,74,0.8)] motion-safe:animate-pulse" />
               Dispatches · zero noise
             </div>
             <h2 className="font-display font-semibold text-2xl md:text-3xl text-zinc-100 mb-3">

@@ -1,6 +1,6 @@
 import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { useEffect, useState, lazy, Suspense } from 'react';
-import { LazyMotion, domAnimation, m, AnimatePresence } from 'motion/react';
+import { LazyMotion, MotionConfig, domAnimation, m, AnimatePresence } from 'motion/react';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import Home from './pages/Home';
@@ -199,23 +199,30 @@ export default function App() {
   return (
     <Router>
       <ScrollToTop />
+      <MotionConfig reducedMotion="user">
       <LazyMotion features={domAnimation}>
       <div className="min-h-screen flex flex-col selection:bg-electric-lime selection:text-zinc-950 relative">
+        <a
+          href="#main-content"
+          className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[90] focus:rounded-full focus:bg-electric-lime focus:px-4 focus:py-2 focus:font-mono focus:text-xs focus:font-semibold focus:uppercase focus:tracking-widest focus:text-zinc-950 focus:outline-none"
+        >
+          Skip to content
+        </a>
         <GlobalBackgrounds />
         <Navbar />
-        <main className="flex-grow relative z-10">
+        <FloatingCoffeeButton />
+        <FloatingChatButton />
+        <main id="main-content" tabIndex={-1} className="flex-grow relative z-10 focus:outline-none">
           <AnimatedRoutes />
         </main>
         <div className="relative z-10">
           <Footer />
         </div>
-        <FloatingChatButton />
         {chatMounted && (
           <Suspense fallback={null}>
             <SiteChatWidget defaultOpen />
           </Suspense>
         )}
-        <FloatingCoffeeButton />
         <VirtualCoffeePopup />
         <CommandPalette />
         <ToastRegion className="fixed bottom-6 left-1/2 -translate-x-1/2 z-[80] flex flex-col gap-2 w-[min(100vw-2rem,24rem)] pointer-events-none">
@@ -230,6 +237,7 @@ export default function App() {
         </ToastRegion>
       </div>
       </LazyMotion>
+      </MotionConfig>
     </Router>
   );
 }

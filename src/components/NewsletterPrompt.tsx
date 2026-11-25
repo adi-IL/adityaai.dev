@@ -56,7 +56,7 @@ export default function NewsletterPrompt({
         className="pointer-events-none absolute inset-x-10 top-0 h-px bg-gradient-to-r from-transparent via-zinc-700/60 to-transparent"
       />
       <div className="flex items-center gap-2.5 mb-3 font-mono text-[10px] uppercase tracking-[0.22em] text-electric-lime">
-        <span className="size-1.5 rounded-full bg-electric-lime shadow-[0_0_8px_rgba(204,255,0,0.8)] animate-pulse" />
+        <span className="size-1.5 rounded-full bg-electric-lime shadow-[0_0_8px_rgba(204,255,0,0.8)] motion-safe:animate-pulse" />
         Newsletter · dispatches
       </div>
       <h3 className="font-display font-semibold text-xl md:text-2xl text-zinc-100 mb-2 leading-tight">

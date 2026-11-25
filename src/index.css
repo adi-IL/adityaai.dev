@@ -79,6 +79,12 @@ html {
   html {
     scroll-behavior: auto;
   }
+  .animate-float-glow-1,
+  .animate-float-glow-2,
+  .animate-float-glow-3,
+  .animate-fade-up {
+    animation: none;
+  }
 }
 
 body {

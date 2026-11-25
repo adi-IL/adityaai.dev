@@ -1,10 +1,16 @@
 import { useState, useEffect } from 'react';
-import { m } from 'motion/react';
+import { m, useReducedMotion } from 'motion/react';
 
-export default function TypewriterText({ text, delay = 0 }: { text: string, delay?: number }) {
-  const [displayText, setDisplayText] = useState('');
+export default function TypewriterText({ text, delay = 0 }: { text: string; delay?: number }) {
+  const prefersReducedMotion = useReducedMotion();
+  const [displayText, setDisplayText] = useState(() => (prefersReducedMotion ? text : ''));
 
   useEffect(() => {
+    if (prefersReducedMotion) {
+      setDisplayText(text);
+      return;
+    }
+
     let rafId = 0;
     let startTime = 0;
     const charDuration = 70;
@@ -27,7 +33,7 @@ export default function TypewriterText({ text, delay = 0 }: { text: string, dela
       window.clearTimeout(startId);
       cancelAnimationFrame(rafId);
     };
-  }, [text, delay]);
+  }, [text, delay, prefersReducedMotion]);
 
   return (
     <div className="mb-4 min-h-[2rem] md:min-h-[2.5rem] leading-normal text-base sm:text-lg md:text-2xl whitespace-nowrap">
@@ -35,8 +41,9 @@ export default function TypewriterText({ text, delay = 0 }: { text: string, dela
         {displayText}
       </span>
       <m.span
-        animate={{ opacity: [1, 1, 0, 0] }}
-        transition={{ repeat: Infinity, duration: 0.8, times: [0, 0.5, 0.5, 1] }}
+        aria-hidden="true"
+        animate={prefersReducedMotion ? undefined : { opacity: [1, 1, 0, 0] }}
+        transition={prefersReducedMotion ? undefined : { repeat: Infinity, duration: 0.8, times: [0, 0.5, 0.5, 1] }}
         className="inline-block w-[0.4em] h-[0.75em] bg-electric-lime ml-2 align-baseline"
       />
     </div>

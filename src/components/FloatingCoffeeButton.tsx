@@ -32,7 +32,7 @@ export default function FloatingCoffeeButton() {
           aria-hidden
           className="absolute -top-0.5 -right-0.5 size-2.5 rounded-full bg-electric-lime shadow-[0_0_8px_rgba(202,255,74,0.8)]"
         >
-          <span className="absolute inset-0 rounded-full bg-electric-lime animate-ping opacity-60" />
+          <span className="absolute inset-0 rounded-full bg-electric-lime motion-safe:animate-ping opacity-60" />
         </span>
       </TooltipTrigger>
       <TooltipContent

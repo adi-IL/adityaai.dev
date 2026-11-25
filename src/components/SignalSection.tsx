@@ -68,7 +68,7 @@ export default function SignalSection() {
 
         <div className="mb-8 flex flex-wrap items-center justify-between gap-4 border-b border-zinc-900 pb-4">
           <div className={`${label} flex items-center gap-2.5 text-electric-lime`}>
-            <span className="size-1.5 rounded-full bg-electric-lime shadow-[0_0_8px_rgba(204,255,0,0.8)] animate-pulse" />
+            <span className="size-1.5 rounded-full bg-electric-lime shadow-[0_0_8px_rgba(204,255,0,0.8)] motion-safe:animate-pulse" />
             Signal · shelf axioms
           </div>
           <div role="group" aria-label="Select signal quote" className="flex flex-wrap items-center">

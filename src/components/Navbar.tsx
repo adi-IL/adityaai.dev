@@ -79,7 +79,7 @@ export default function Navbar() {
                 <Link
                   key={link.name}
                   to={link.path}
-                  className={`relative block text-xs uppercase tracking-widest font-mono transition-colors duration-300 py-2 ${
+                  className={`relative block rounded-md text-xs uppercase tracking-widest font-mono transition-colors duration-300 py-2 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-electric-lime ${
                     isActive ? 'text-zinc-50' : 'text-zinc-500 hover:text-zinc-300'
                   }`}
                 >
@@ -98,7 +98,7 @@ export default function Navbar() {
               type="button"
               onClick={() => window.dispatchEvent(new Event('open-command-palette'))}
               aria-label="Open command palette"
-              className="inline-flex items-center gap-1.5 rounded-full border border-white/[0.1] bg-white/[0.04] px-2.5 py-1 font-mono text-[10px] tracking-widest text-zinc-400 hover:border-electric-lime/50 hover:text-electric-lime transition-colors"
+              className="inline-flex items-center gap-1.5 rounded-full border border-white/[0.1] bg-white/[0.04] px-2.5 py-1 font-mono text-[10px] tracking-widest text-zinc-400 hover:border-electric-lime/50 hover:text-electric-lime transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-electric-lime"
             >
               <Search size={11} aria-hidden="true" />
               <span>⌘K</span>
