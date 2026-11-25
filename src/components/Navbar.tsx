@@ -98,10 +98,11 @@ export default function Navbar() {
               type="button"
               onClick={() => window.dispatchEvent(new Event('open-command-palette'))}
               aria-label="Open command palette"
+              aria-keyshortcuts="Meta+k Control+k"
               className="inline-flex items-center gap-1.5 rounded-full border border-white/[0.1] bg-white/[0.04] px-2.5 py-1 font-mono text-[10px] tracking-widest text-zinc-400 hover:border-electric-lime/50 hover:text-electric-lime transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-electric-lime"
             >
               <Search size={11} aria-hidden="true" />
-              <span>⌘K</span>
+              <span aria-hidden="true">⌘K</span>
             </button>
           </div>
         </div>

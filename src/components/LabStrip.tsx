@@ -17,7 +17,7 @@ export default function LabStrip({
   return (
     <div className="border-t border-zinc-800/50 py-10">
       <div className="max-w-6xl mx-auto px-6 md:px-8 lg:px-12">
-        <div className="flex items-center gap-3 mb-6 font-mono text-[10px] uppercase tracking-[0.22em] text-zinc-500">
+        <div className="flex items-center gap-3 mb-6 font-mono text-[10px] uppercase tracking-[0.22em] text-zinc-400">
           <span className="size-1.5 rounded-full bg-electric-lime shadow-[0_0_8px_rgba(204,255,0,0.8)]" />
           Part of the adityaai.dev lab
         </div>
@@ -47,7 +47,7 @@ export default function LabStrip({
                   <div className="font-display font-medium text-zinc-100 text-sm truncate group-hover:text-white transition-colors">
                     {p.name}
                   </div>
-                  <div className="text-zinc-500 text-xs truncate font-light">{p.tagline}</div>
+                  <div className="text-zinc-400 text-xs truncate font-light">{p.tagline}</div>
                 </div>
                 <ArrowUpRight
                   size={14}

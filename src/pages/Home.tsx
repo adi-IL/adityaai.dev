@@ -198,80 +198,80 @@ export default function Home() {
             </p>
 
             {/* 4-Tile Lab Telemetry Bar */}
-            <dl className="grid grid-cols-2 gap-px overflow-hidden rounded-2xl border border-zinc-800/80 bg-zinc-800/60 lg:grid-cols-4">
-              <div className="bg-[#0a0a0a]">
+            <ul className="grid grid-cols-2 gap-px overflow-hidden rounded-2xl border border-zinc-800/80 bg-zinc-800/60 lg:grid-cols-4">
+              <li className="bg-[#0a0a0a]">
                 <Link
                   to="/articles"
                   aria-label={`Decision tools: ${articles.length} curated systems essays`}
                   className="group block h-full p-5 md:p-6 transition-colors hover:bg-zinc-900/50"
                 >
-                  <dt className="font-mono text-[10px] uppercase tracking-[0.22em] text-zinc-400 flex items-center justify-between">
+                  <span className="font-mono text-[10px] uppercase tracking-[0.22em] text-zinc-400 flex items-center justify-between">
                     <span>Decision tools</span>
                     <ArrowUpRight size={12} className="text-zinc-600 group-hover:text-electric-lime transition-colors" />
-                  </dt>
-                  <dd className="mt-2 font-sans text-4xl font-semibold tracking-tight text-zinc-50 md:text-5xl">
+                  </span>
+                  <p className="mt-2 font-sans text-4xl font-semibold tracking-tight text-zinc-50 md:text-5xl">
                     {articles.length}
-                  </dd>
+                  </p>
                   <p className="mt-1.5 font-mono text-[11px] text-zinc-400">
                     Curated systems essays
                   </p>
                 </Link>
-              </div>
-              <div className="bg-[#0a0a0a]">
+              </li>
+              <li className="bg-[#0a0a0a]">
                 <Link
                   to="/projects"
                   aria-label={`Production lab: ${projects.length} shipped systems (${projects.map((p) => p.name).join(', ')})`}
                   className="group block h-full p-5 md:p-6 transition-colors hover:bg-zinc-900/50"
                 >
-                  <dt className="font-mono text-[10px] uppercase tracking-[0.22em] text-zinc-400 flex items-center justify-between">
+                  <span className="font-mono text-[10px] uppercase tracking-[0.22em] text-zinc-400 flex items-center justify-between">
                     <span>Production lab</span>
                     <ArrowUpRight size={12} className="text-zinc-600 group-hover:text-electric-lime transition-colors" />
-                  </dt>
-                  <dd className="mt-2 font-sans text-4xl font-semibold tracking-tight text-zinc-50 md:text-5xl">
+                  </span>
+                  <p className="mt-2 font-sans text-4xl font-semibold tracking-tight text-zinc-50 md:text-5xl">
                     {projects.length}
-                  </dd>
+                  </p>
                   <p className="mt-1.5 font-mono text-[11px] text-zinc-400">
                     {projects.map((p) => p.name).join(' · ')}
                   </p>
                 </Link>
-              </div>
-              <div className="bg-[#0a0a0a]">
+              </li>
+              <li className="bg-[#0a0a0a]">
                 <Link
                   to="/upstream"
                   aria-label={`Upstream ledger: ${mergedPrs.length} merged open-source fixes`}
                   className="group block h-full p-5 md:p-6 transition-colors hover:bg-zinc-900/50"
                 >
-                  <dt className="font-mono text-[10px] uppercase tracking-[0.22em] text-zinc-400 flex items-center justify-between">
+                  <span className="font-mono text-[10px] uppercase tracking-[0.22em] text-zinc-400 flex items-center justify-between">
                     <span>Upstream ledger</span>
                     <ArrowUpRight size={12} className="text-zinc-600 group-hover:text-electric-lime transition-colors" />
-                  </dt>
-                  <dd className="mt-2 font-sans text-4xl font-semibold tracking-tight text-electric-lime md:text-5xl">
+                  </span>
+                  <p className="mt-2 font-sans text-4xl font-semibold tracking-tight text-electric-lime md:text-5xl">
                     {mergedPrs.length}
-                  </dd>
+                  </p>
                   <p className="mt-1.5 font-mono text-[11px] tabular-nums text-zinc-400">
                     Merged open-source fixes
                   </p>
                 </Link>
-              </div>
-              <div className="bg-[#0a0a0a]">
+              </li>
+              <li className="bg-[#0a0a0a]">
                 <Link
                   to="/about"
                   aria-label="Global recognition: Winner, DeepMind × Kaggle Hackathon"
                   className="group block h-full p-5 md:p-6 transition-colors hover:bg-zinc-900/50"
                 >
-                  <dt className="font-mono text-[10px] uppercase tracking-[0.22em] text-zinc-400 flex items-center justify-between">
+                  <span className="font-mono text-[10px] uppercase tracking-[0.22em] text-zinc-400 flex items-center justify-between">
                     <span>Global recognition</span>
                     <ArrowUpRight size={12} className="text-zinc-600 group-hover:text-electric-lime transition-colors" />
-                  </dt>
-                  <dd className="mt-2 font-sans text-3xl font-semibold tracking-tight text-amber-300 md:text-4xl">
+                  </span>
+                  <p className="mt-2 font-sans text-3xl font-semibold tracking-tight text-amber-300 md:text-4xl">
                     Winner
-                  </dd>
+                  </p>
                   <p className="mt-1.5 font-mono text-[11px] text-zinc-400">
                     DeepMind × Kaggle Hackathon
                   </p>
                 </Link>
-              </div>
-            </dl>
+              </li>
+            </ul>
           </m.div>
         </section>
 
@@ -501,7 +501,7 @@ export default function Home() {
             <m.div
               animate={prefersReducedMotion ? undefined : { x: ["0%", "-50%"] }}
               transition={prefersReducedMotion ? undefined : { repeat: Infinity, ease: "linear", duration: 20 }}
-              className="flex gap-16 px-8 font-display text-4xl md:text-6xl font-bold text-zinc-800 uppercase tracking-widest gpu"
+              className="flex gap-16 px-8 font-display text-4xl md:text-6xl font-bold text-[#63636e] uppercase tracking-widest gpu"
             >
               <span className="hover:text-zinc-600 transition-colors cursor-default">Neural Networks</span>
               <span>•</span>

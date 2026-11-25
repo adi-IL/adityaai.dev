@@ -108,7 +108,7 @@ export default function SignalSection() {
               “{current.quote}”
             </blockquote>
             <div className="flex flex-wrap items-center justify-between gap-4">
-              <div className="flex items-center gap-2.5 font-mono text-[10px] uppercase tracking-widest text-zinc-500">
+              <div className="flex items-center gap-2.5 font-mono text-[10px] uppercase tracking-widest text-zinc-400">
                 <span className="rounded-md border border-zinc-800 bg-zinc-950 px-2 py-0.5 text-electric-lime">
                   {current.form}
                 </span>
