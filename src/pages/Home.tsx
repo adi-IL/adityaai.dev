@@ -122,6 +122,35 @@ export default function Home() {
                   Read the essays <ArrowUpRight size={14} />
                 </Link>
               </div>
+              <p className="mt-5 flex flex-wrap items-center gap-x-2.5 gap-y-1 font-mono text-xs text-zinc-400">
+                <Link
+                  to="/articles"
+                  className="py-1 hover:text-electric-lime transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-electric-lime rounded"
+                >
+                  <span className="text-zinc-200 tabular-nums">{articles.length}</span> essays
+                </Link>
+                <span aria-hidden className="text-zinc-600">·</span>
+                <Link
+                  to="/projects"
+                  className="py-1 hover:text-electric-lime transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-electric-lime rounded"
+                >
+                  <span className="text-zinc-200 tabular-nums">{projects.length}</span> systems
+                </Link>
+                <span aria-hidden className="text-zinc-600">·</span>
+                <Link
+                  to="/upstream"
+                  className="py-1 hover:text-electric-lime transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-electric-lime rounded"
+                >
+                  <span className="text-electric-lime tabular-nums">{mergedPrs.length}</span> upstream fixes
+                </Link>
+                <span aria-hidden className="text-zinc-600">·</span>
+                <Link
+                  to="/about"
+                  className="py-1 text-amber-300/90 hover:text-amber-300 transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-electric-lime rounded"
+                >
+                  DeepMind × Kaggle Winner
+                </Link>
+              </p>
             </m.div>
 
             <m.div
