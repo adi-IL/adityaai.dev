@@ -94,8 +94,8 @@ export default function Home() {
         )}
 
         {/* Hero Section */}
-        <section className="max-w-6xl mx-auto px-6 md:px-8 lg:px-12 py-20 md:py-32">
-          <div className="grid grid-cols-1 md:grid-cols-[60%_1fr] gap-12 md:gap-20 items-center">
+        <section className="max-w-6xl mx-auto px-6 md:px-8 lg:px-12 py-16 md:py-24 lg:py-28">
+          <div className="grid grid-cols-1 lg:grid-cols-[60%_1fr] gap-12 lg:gap-20 items-center">
             <m.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -114,23 +114,23 @@ export default function Home() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.1, ease: [0.32, 0.72, 0, 1] }}
-              className="flex flex-col items-center md:items-start gap-6 md:ml-12"
+              className="flex flex-col items-center lg:items-start gap-6 lg:ml-12"
             >
               <img
                 src="https://res.cloudinary.com/dpdttqyow/image/upload/f_auto,q_auto,w_400/v1768512786/Screenshot_2026-01-198_v3bwry.png"
                 alt="Aditya Gaurav"
-                className="w-48 md:w-64 h-auto object-contain"
+                className="w-44 sm:w-48 lg:w-64 h-auto object-contain"
                 referrerPolicy="no-referrer"
                 loading="eager"
                 decoding="async"
                 fetchPriority="high"
                 width={400}
-                height={400}
+                height={296}
               />
 
               <Link
                 to="/articles"
-                className="flex items-center justify-center gap-2 py-2 text-zinc-400 hover:text-electric-lime font-mono text-xs uppercase tracking-widest transition-colors active:scale-[0.98] w-48 md:w-64"
+                className="flex items-center justify-center gap-2 py-2 text-zinc-400 hover:text-electric-lime font-mono text-xs uppercase tracking-widest transition-colors active:scale-[0.98] w-48 lg:w-64"
               >
                 Start with the essays <ArrowUpRight size={14} />
               </Link>
