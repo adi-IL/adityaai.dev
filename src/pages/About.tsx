@@ -162,14 +162,13 @@ export default function About() {
                   className="pointer-events-none absolute inset-x-8 top-0 h-px bg-gradient-to-r from-transparent via-zinc-700/60 to-transparent"
                 />
                 <img
-                  src="https://res.cloudinary.com/dpdttqyow/image/upload/f_auto,q_auto,w_500/v1768512786/Screenshot_2026-01-198_v3bwry.png"
+                  src="/assets/aditya-gaurav.webp"
                   alt="Aditya Gaurav"
-                  className="w-auto h-auto max-w-[240px] md:max-w-[260px] object-contain opacity-95 hover:opacity-100 transition-opacity duration-500 mx-auto"
-                  referrerPolicy="no-referrer"
+                  className="aspect-square w-full max-w-[240px] md:max-w-[260px] rounded-2xl object-cover object-center opacity-95 hover:opacity-100 transition-opacity duration-500 mx-auto"
                   loading="lazy"
                   decoding="async"
-                  width={500}
-                  height={500}
+                  width={800}
+                  height={800}
                 />
                 <div className="mt-4 border-t border-zinc-900 pt-3 flex items-center justify-between font-mono text-[10px] uppercase tracking-widest text-zinc-400">
                   <span>Aditya Gaurav</span>
