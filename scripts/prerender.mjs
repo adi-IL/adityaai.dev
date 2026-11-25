@@ -118,12 +118,12 @@ function renderHomeBody(articlesList, projectsList) {
   return `<header>
   ${renderNav()}
   <h1>Aditya Gaurav</h1>
-  <p>AI Engineer &amp; Systems Architect</p>
+  <p>AI Researcher &amp; Systems Architect</p>
 </header>
 <main>
   <section aria-labelledby="bio-heading">
     <h2 id="bio-heading">About Aditya Gaurav</h2>
-    <p>AI Engineer &amp; Systems Architect specializing in agentic systems, cognitive architectures, and MCP. Focused on building production-ready AI systems that reason, plan, and execute reliably.</p>
+    <p>AI Researcher &amp; Systems Architect specializing in agentic systems, cognitive architectures, and MCP. Focused on building production-ready AI systems that reason, plan, and execute reliably.</p>
   </section>
   <section aria-labelledby="hero-heading">
     <h2 id="hero-heading">Systems &amp; Cognitive Architecture</h2>
@@ -430,21 +430,21 @@ const articleCountLabel = `${articleCount} research articles`;
 const buildDate = new Date().toISOString().slice(0, 10);
 
 // Homepage - no fake SearchAction (site has no search endpoint).
-writePage(".", "Aditya Gaurav - AI Engineer · Systems Architect",
-  `AI Engineer & Systems Architect specializing in agentic systems, cognitive architectures, and MCP. ${articleCountLabel} on building production-ready AI systems.`,
+writePage(".", "Aditya Gaurav - AI Researcher · Systems Architect",
+  `AI Researcher & Systems Architect specializing in agentic systems, cognitive architectures, and MCP. ${articleCountLabel} on building production-ready AI systems.`,
   `${SITE_URL}/`, "website", {
     "@context": "https://schema.org", "@type": "WebSite",
     name: "adityaai.dev",
-    headline: "Aditya Gaurav - AI Engineer · Systems Architect",
-    description: "AI Engineer & Systems Architect. Building agentic systems, cognitive architectures, and the MCP ecosystem.",
+    headline: "Aditya Gaurav - AI Researcher · Systems Architect",
+    description: "AI Researcher & Systems Architect. Building agentic systems, cognitive architectures, and the MCP ecosystem.",
     url: `${SITE_URL}/`, inLanguage: "en",
     author: { "@type": "Person", name: "Aditya Gaurav", url: `${SITE_URL}/`, jobTitle: "AI Researcher & Systems Architect",
       sameAs: ["https://x.com/adityaaidev", "https://www.linkedin.com/in/adityaai/", "https://github.com/adi-IL"] },
   }, renderHomeBody(articles, projects));
 count++;
 
-writePage("about", "About | Aditya Gaurav - AI Engineer & Systems Architect",
-  `AI Engineer & Systems Architect building cognitive architectures, agentic workflows, and the MCP ecosystem. Kaggle winner, Oracle certified, ${articleCount} articles.`,
+writePage("about", "About | Aditya Gaurav - AI Researcher & Systems Architect",
+  `AI Researcher & Systems Architect building cognitive architectures, agentic workflows, and the MCP ecosystem. Kaggle winner, Oracle certified, ${articleCount} articles.`,
   `${SITE_URL}/about`, "profile", {
     "@context": "https://schema.org", "@type": "BreadcrumbList",
     itemListElement: [
@@ -594,12 +594,12 @@ const receiptLinesForLlms = upstreamReceipts
 
 const llms = `# adityaai.dev
 
-Personal lab site for Aditya Gaurav - AI Engineer & Systems Architect.
+Personal lab site for Aditya Gaurav - AI Researcher & Systems Architect.
 Decision tools for people who design production AI systems.
 
 ## Person
 - Name: Aditya Gaurav
-- Role: AI Engineer & Systems Architect
+- Role: AI Researcher & Systems Architect
 - Location: Sonipat, Haryana, India
 - Site: ${SITE_URL}
 - GitHub: https://github.com/adi-IL

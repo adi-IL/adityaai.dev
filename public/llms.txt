@@ -1,11 +1,11 @@
 # adityaai.dev
 
-Personal lab site for Aditya Gaurav - AI Engineer & Systems Architect.
+Personal lab site for Aditya Gaurav - AI Researcher & Systems Architect.
 Decision tools for people who design production AI systems.
 
 ## Person
 - Name: Aditya Gaurav
-- Role: AI Engineer & Systems Architect
+- Role: AI Researcher & Systems Architect
 - Location: Sonipat, Haryana, India
 - Site: https://www.adityaai.dev
 - GitHub: https://github.com/adi-IL

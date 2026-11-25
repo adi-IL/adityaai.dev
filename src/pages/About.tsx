@@ -92,8 +92,8 @@ export default function About() {
   return (
     <div className="min-h-screen overflow-x-clip pt-32 pb-24">
       <SEO
-        title="About | Aditya Gaurav - AI Engineer & Systems Architect"
-        description="AI Engineer & Systems Architect building cognitive architectures, agentic workflows, and the MCP ecosystem. Kaggle winner, Oracle certified, research archive on AI systems."
+        title="About | Aditya Gaurav - AI Researcher · Systems Architect"
+        description="AI Researcher & Systems Architect building cognitive architectures, agentic workflows, and the MCP ecosystem. Kaggle winner, Oracle certified, research archive on AI systems."
         canonicalUrl="https://www.adityaai.dev/about"
         ogType="profile"
         breadcrumbs={[

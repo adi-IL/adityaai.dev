@@ -18,7 +18,7 @@ export default function Projects() {
   return (
     <div className="min-h-screen overflow-x-clip pt-32 pb-24">
       <SEO
-        title="Projects | Aditya Gaurav - AI Engineer & Systems Architect"
+        title="Projects | Aditya Gaurav - AI Researcher · Systems Architect"
         description="Shipping AI products: 3D engineering engine (FRIDAY), competitive intelligence (Sentinel), context circuit-breaker (MidSphere), and more."
         canonicalUrl="https://www.adityaai.dev/projects"
         breadcrumbs={[

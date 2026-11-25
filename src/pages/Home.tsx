@@ -68,8 +68,8 @@ export default function Home() {
     <div className="min-h-screen pt-32 pb-16 relative">
       <div className="relative z-10">
         <SEO
-          title="Aditya Gaurav - AI Engineer · Systems Architect"
-          description={`AI Engineer & Systems Architect. Decision tools for people who design production AI systems - ${articles.length} curated essays on architecture, agents, and the product surface.`}
+          title="Aditya Gaurav - AI Researcher · Systems Architect"
+          description={`AI Researcher & Systems Architect. Decision tools for people who design production AI systems - ${articles.length} curated essays on architecture, agents, and the product surface.`}
         />
 
         {confirmBanner && (
