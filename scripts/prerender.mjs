@@ -397,7 +397,7 @@ function headTags(title, description, canonical, ogType, jsonLd) {
     <meta name="twitter:image" content="${OG_IMAGE}" />
     <meta name="twitter:creator" content="@adityaaidev" />
     <meta name="twitter:site" content="@adityaaidev" />
-${jsonLd ? `    <script type="application/ld+json">${JSON.stringify(jsonLd).replace(/</g, "\\u003c")}</script>` : ""}
+${jsonLd ? `    <script type="application/ld+json" data-prerender-ld="true">${JSON.stringify(jsonLd).replace(/</g, "\\u003c")}</script>` : ""}
 ${viteAssetsHead}`;
 }
 
