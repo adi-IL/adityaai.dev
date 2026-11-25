@@ -43,7 +43,7 @@ export default function SEO({
   description = 'Building the layer between research and production. Infrequent, high-signal Research on AI architecture and systems design.',
   canonicalUrl = SITE_URL,
   ogType = 'website',
-  ogImage = 'https://res.cloudinary.com/df95kzdir/image/upload/v1768829921/Frame_11_2_i0mo2o.png',
+  ogImage = 'https://www.adityaai.dev/og-image.png',
   twitterHandle = '@adityaaidev',
   author = 'Aditya Gaurav',
   publishDate,

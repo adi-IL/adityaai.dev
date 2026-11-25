@@ -58,7 +58,7 @@ if (viteHeadMatch) {
 
 const SITE_URL = "https://www.adityaai.dev";
 const SITE = SITE_URL;
-const OG_IMAGE = "https://res.cloudinary.com/df95kzdir/image/upload/v1768829921/Frame_11_2_i0mo2o.png";
+const OG_IMAGE = "https://www.adityaai.dev/og-image.png";
 
 function escapeHtml(value) {
   return String(value ?? "")
