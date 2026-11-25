@@ -108,18 +108,32 @@ export default function Home() {
               <p className="text-zinc-400 text-xl md:text-2xl font-light leading-relaxed max-w-2xl mt-6">
                 Building the layer between research and production.
               </p>
+              <div className="mt-8 flex flex-wrap items-center gap-3">
+                <Link
+                  to="/projects"
+                  className="inline-flex min-h-11 items-center gap-2 rounded-full bg-electric-lime px-5 py-2.5 font-mono text-xs font-semibold uppercase tracking-widest text-zinc-950 transition-colors hover:bg-electric-lime/90 active:scale-[0.98] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-electric-lime"
+                >
+                  Inspect shipped systems <ArrowUpRight size={14} />
+                </Link>
+                <Link
+                  to="/articles"
+                  className="inline-flex min-h-11 items-center gap-2 rounded-full border border-zinc-800 bg-[#0a0a0a] px-5 py-2.5 font-mono text-xs uppercase tracking-widest text-zinc-300 transition-colors hover:border-electric-lime hover:text-electric-lime active:scale-[0.98] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-electric-lime"
+                >
+                  Read the essays <ArrowUpRight size={14} />
+                </Link>
+              </div>
             </m.div>
 
             <m.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.1, ease: [0.32, 0.72, 0, 1] }}
-              className="flex flex-col items-center lg:items-start gap-6 lg:ml-12"
+              className="flex flex-col items-center lg:items-end"
             >
               <img
                 src="https://res.cloudinary.com/dpdttqyow/image/upload/f_auto,q_auto,w_400/v1768512786/Screenshot_2026-01-198_v3bwry.png"
                 alt="Aditya Gaurav"
-                className="w-44 sm:w-48 lg:w-64 h-auto object-contain"
+                className="w-40 sm:w-48 lg:w-64 h-auto object-contain"
                 referrerPolicy="no-referrer"
                 loading="eager"
                 decoding="async"
@@ -127,13 +141,6 @@ export default function Home() {
                 width={400}
                 height={296}
               />
-
-              <Link
-                to="/articles"
-                className="flex items-center justify-center gap-2 py-2 text-zinc-400 hover:text-electric-lime font-mono text-xs uppercase tracking-widest transition-colors active:scale-[0.98] w-48 lg:w-64"
-              >
-                Start with the essays <ArrowUpRight size={14} />
-              </Link>
             </m.div>
           </div>
         </section>
