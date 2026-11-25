@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef, type FormEvent } from 'react';
+import { useEffect, useState, type FormEvent } from 'react';
 import { m } from 'motion/react';
 import { CheckCircle2, Coffee, X, XCircle } from 'lucide-react';
 import {
@@ -14,77 +14,24 @@ import { Input } from '@ui-sdk/react/input';
 import { Textarea } from '@ui-sdk/react/textarea';
 import { toast } from '@ui-sdk/react/toast';
 
-const STORAGE_KEY = 'adityaai:virtual-coffee';
-const COOLDOWN_DAYS = 7;
-const TRIGGER_MS = 25_000;
-
 type Status = 'idle' | 'loading' | 'success' | 'error';
-
-function isOnCooldown(): boolean {
-  try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    if (!raw) return false;
-    const stamped = parseInt(raw, 10);
-    if (Number.isNaN(stamped)) return false;
-    return Date.now() - stamped < COOLDOWN_DAYS * 24 * 60 * 60 * 1000;
-  } catch {
-    return false;
-  }
-}
-
-function stampCooldown() {
-  try {
-    localStorage.setItem(STORAGE_KEY, String(Date.now()));
-  } catch {
-    /* ignore */
-  }
-}
-
-function shouldSkipRoute(): boolean {
-  const path = window.location.pathname;
-  return (
-    path === '/' ||
-    (path.startsWith('/articles/') && path !== '/articles' && path !== '/articles/')
-  );
-}
 
 export default function VirtualCoffeePopup() {
   const [open, setOpen] = useState(false);
   const [status, setStatus] = useState<Status>('idle');
   const [errorMsg, setErrorMsg] = useState('');
   const [form, setForm] = useState({ name: '', email: '', role: '', message: '' });
-  // Only auto-triggered opens stamp the cooldown on dismiss so manual clicks stay repeatable.
-  const wasAutoTriggered = useRef(false);
 
   useEffect(() => {
-    let timer: number | null = null;
-    if (!isOnCooldown() && !shouldSkipRoute()) {
-      timer = window.setTimeout(() => {
-        if (shouldSkipRoute()) return;
-        wasAutoTriggered.current = true;
-        setOpen(true);
-      }, TRIGGER_MS);
-    }
     const manualOpen = () => {
-      wasAutoTriggered.current = false;
       setStatus('idle');
       setErrorMsg('');
       setForm({ name: '', email: '', role: '', message: '' });
       setOpen(true);
     };
     window.addEventListener('open-virtual-coffee', manualOpen);
-    return () => {
-      if (timer !== null) window.clearTimeout(timer);
-      window.removeEventListener('open-virtual-coffee', manualOpen);
-    };
+    return () => window.removeEventListener('open-virtual-coffee', manualOpen);
   }, []);
-
-  function handleOpenChange(nextOpen: boolean) {
-    setOpen(nextOpen);
-    if (!nextOpen && wasAutoTriggered.current) {
-      stampCooldown();
-    }
-  }
 
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -102,7 +49,6 @@ export default function VirtualCoffeePopup() {
       const data = await response.json().catch(() => ({} as { error?: string }));
       if (response.ok) {
         setStatus('success');
-        stampCooldown();
         toast.success('Virtual coffee request sent', {
           description: 'Confirmation email is on its way.',
         });
@@ -119,7 +65,7 @@ export default function VirtualCoffeePopup() {
   }
 
   return (
-    <Dialog open={open} onOpenChange={handleOpenChange} presentation="auto">
+    <Dialog open={open} onOpenChange={setOpen} presentation="auto">
       <DialogBackdrop className="fixed inset-0 z-[60] bg-black/80 backdrop-blur-sm transition-opacity duration-200 data-starting-style:opacity-0 data-ending-style:opacity-0" />
       <DialogContent
         className="fixed left-1/2 top-1/2 z-[61] w-[min(100vw-2rem,28rem)] -translate-x-1/2 -translate-y-1/2 rounded-2xl liquid-glass-panel max-h-[90vh] overflow-y-auto transition-[opacity,transform] duration-200 data-starting-style:opacity-0 data-starting-style:scale-96 data-ending-style:opacity-0 data-ending-style:scale-96 data-[presentation=sheet]:bottom-auto data-[presentation=sheet]:left-0 data-[presentation=sheet]:right-0 data-[presentation=sheet]:w-full data-[presentation=sheet]:translate-x-0 data-[presentation=sheet]:translate-y-0 data-[presentation=sheet]:rounded-b-none"
